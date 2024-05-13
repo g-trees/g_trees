@@ -1,0 +1,87 @@
+html {
+    font-size: 19.2px;
+}
+
+/* Start implementing L1 */
+
+body {
+    
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+}
+
+.toc {
+    
+    display: none;
+}
+
+.marginale, .sidenoteCounter {
+    
+    display: none;
+}
+
+/* Start implementing L2 */
+
+@media (min-width:662.12px) {
+    #wrapContent {
+        
+        width: 32rem;
+        margin: 0 auto;
+    }
+}
+
+/* Start implementing L3 */
+
+@media (min-width:961.64px) {
+    #wrapContent {
+        width: 47.6rem;
+
+        >* {
+            max-width: 32rem;
+        }
+
+        > .wide {
+          max-width: 47.6rem;
+          clear: right;
+        }
+    }
+
+    .marginale {
+      display: initial;
+      float: right;
+      clear: right;
+      position: relative;
+      width: 14rem;
+      margin-right: -15.6rem;
+    }
+
+    .sidenoteCounter {
+        display: initial;
+    }
+}
+
+/* Start implementing L4 */
+
+@media (min-width:1522.28px) {
+    .toc {
+        display: initial;
+        width: 13rem;
+
+        position: fixed;
+        top: 1.6rem;
+        transform: translateX(-14.6rem);
+    }
+}
+
+/* Other styling */
+
+.previewContainer {
+  max-width: min(33.6rem, 100vw);
+}
+
+@media (min-width:961.64px) {
+  .previewContainer.wide {
+    max-width: min(calc(49.2rem + 18px), 100vw);
+  }
+}
+

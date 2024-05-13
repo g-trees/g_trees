@@ -1,0 +1,360 @@
+/*
+Entrypoint for the main stylesheet.
+
+To tweak the appearence, change values in `variables.css`
+*/
+@import "reset.css";
+@import "textFonts.css";
+@import "layout.css";
+@import "variables.css";
+@import "authors.css";
+
+
+body {
+  color: var(--main-fg);
+  background-color: var(--main-bg);
+
+  text-align: justify;
+  padding-bottom: var(--default-spacing);
+  margin-top: var(--default-spacing);
+}
+
+body,
+.normalText {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  margin: 0;
+  margin-top: calc(2.5 * var(--default-spacing));
+  margin-bottom: calc(0.5 * var(--default-spacing));
+  font-weight: bold;
+}
+
+:is(h1, h2, h3, h4, h5, h6) a {
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.2em;
+  margin-top: 3rem;
+}
+
+h2 {
+  font-size: 1.7em;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 1.4em;
+}
+
+h5 {
+  font-size: 1.3em;
+}
+
+h6 {
+  font-size: 1.2em;
+}
+
+p {
+  margin: var(--default-spacing) 0;
+}
+
+.abstract::before {
+  content: "Abstract";
+  display: block;
+  font-weight: bold;
+  text-align: center;
+  margin-top: calc(2 * var(--default-spacing));
+}
+
+.abstract {
+  margin: 0 2rem;
+}
+
+a[data-preview-anchor] {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--main-subtle);
+}
+
+dfn {
+  font-style: italic;
+}
+
+dfn>a[data-preview-anchor] {
+  text-decoration: none;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.marginale {
+  font-size: 0.85em;
+  line-height: 1.2;
+  margin-bottom: var(--default-spacing);
+
+  >.sidenoteCounter {
+    margin-right: 0.2rem;
+  }
+}
+
+.sidenoteCounter {
+  vertical-align: super;
+  font-size: 0.7em;
+}
+
+.clearRight {
+  clear: right;
+}
+
+.marginale>img {
+  padding: 0;
+  margin: 0;
+}
+
+
+
+/**************************/
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.previewContainer {
+  position: absolute;
+  background: inherit;
+  box-shadow: 5px 5px 10px 0px rgba(68, 68, 68, 0.80);
+  overflow: hidden;
+  animation: fadeIn 0.4s;
+  width: 100%;
+}
+
+iframe {
+  display: block;
+  border: none;
+  width: inherit;
+  height: inherit;
+}
+
+.previewFadeout {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.2s, opacity 0.2s linear;
+}
+
+[data-hl][data-preview-anchor] {
+  padding: 0.12em;
+  border-radius: 5px;
+  transition: background-color 0.5s ease;
+}
+
+.isPreview {
+  overflow: hidden;
+}
+
+/***********************/
+
+em,
+i {
+  font-style: italic;
+}
+
+strong,
+b {
+  font-weight: bold;
+}
+
+code {
+  font-family: var(--font-mono);
+  background-color: var(--code-bg);
+  border-radius: 4px;
+  padding: 0.1rem;
+  font-size: 0.85em;
+}
+
+ul,
+ol {
+  margin: var(--default-spacing) 0;
+  display: block;
+}
+
+img {
+  margin-top: calc(2 * var(--default-spacing));
+  margin-bottom: var(--default-spacing);
+  display: block;
+}
+
+li> :is(ul, ol) {
+  margin-top: 0;
+}
+
+ul,
+ol {
+  list-style-position: inside;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+li {
+  margin-left: var(--default-spacing);
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+figure {
+  margin-top: calc(2 * var(--default-spacing));
+  margin-left: var(--default-spacing);
+  margin-right: var(--default-spacing);
+  margin-bottom: var(--default-spacing);
+
+  >figcaption {
+    text-align: center;
+    font-size: 0.92em;
+  }
+}
+
+figure:not(.theoremlike)>figcaption>*:not(*:first-child) {
+  margin-top: calc(0.25 * var(--default-spacing));
+}
+
+figure.theoremlike {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+
+  >figcaption {
+    order: -1;
+    text-align: left;
+    font-weight: bold;
+    transform: translate(-0.12em
+        /*offset the highlighting margin for the title*/
+        , 0);
+  }
+
+  >* {
+    margin-top: calc(0.25 * var(--default-spacing));
+  }
+
+  >*:first-child {
+    margin-top: 0;
+  }
+}
+
+span.katex {
+  font-size: 1em;
+}
+
+.katex-display {
+  margin: var(--default-spacing) 0 !important;
+}
+
+.normalText {
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+.katex a {
+  text-decoration: none;
+}
+
+
+/* Hack to prevent katex blocking mouse interaction with invisible rectangles */
+/* .vlist-t.vlist-t2 > .vlist-r > .vlist:only-child {
+  pointer-events: none;
+  background: rgba(255, 0, 0, 0.5);
+} */
+
+
+
+.toc {
+  font-size: 0.85rem;
+  text-align: left;
+
+  ol {
+    margin: 0;
+  }
+}
+
+.toc li {
+  list-style: none;
+  line-height: 1.1;
+  margin-top: 0.3rem;
+}
+
+.toc li>a {
+  text-decoration: none;
+  color: var(--main-subtle);
+  transition: color 0.5s ease-in-out;
+}
+
+li.tocVisible>a,
+.toc li>a:hover {
+  color: var(--main-fg);
+}
+
+.csl-bib-body.hangingindent {
+  text-indent: 2em hanging;
+}
+
+.csl-bib-body {
+  margin: var(--default-spacing) 0;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+a.bib {
+  text-decoration: none;
+
+  .bibText {
+    text-decoration: underline solid;
+  }
+
+  .bibCitation {
+    color: var(--main-subtle);
+  }
+}
+
+.csl-bib-body:is(.flush, .margin) {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  justify-items: start;
+  column-gap: 0.5em;
+}
