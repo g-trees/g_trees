@@ -414,6 +414,12 @@ const exp = (
 
         <PreviewScope>
           <P>
+            If <R n="tree_t" /> is a binary tree, we refer to its first child as its <Def n="left"/> child, and to its second child as its <Def n="right"/> child.
+          </P>
+        </PreviewScope>
+
+        <PreviewScope>
+          <P>
             Let <M><Def n="item_lte" r="\preceq" /></M> be a <A href="https://en.wikipedia.org/wiki/Total_order">total order</A> on <R n="tree_u" />, and let <M><Def n="tree_d" r="d" /></M> be the <R n="degree" /> of <R n="tree_t" />.
             Then <R n="tree_t" /> is a <Def n="search_tree" r="search tree" rs="search trees" /> <Marginale>
               In a <R n="search_tree" />, intuitively speaking, the <Rs n="item" /> are sorted from left to right. That is, an <A href="https://en.wikipedia.org/wiki/Tree_traversal#In-order,_LNR">in-order traversal</A> yields a sorted sequence.
@@ -464,7 +470,11 @@ const exp = (
       >
         <PreviewScope>
           <P>
-            Let <M><Def n="geo_p" r="p" /></M> be a probability.
+            Let <M><Def n="geo_p" r="p" /></M> be a probability.<Marginale>
+              In plain language: take a coin that shows tails with probability <R n="geo_p"/>.
+              Flip until it shows heads.
+              Count the number of flips, and add one.
+            </Marginale>
             A <Def
               n="geometric_distribution"
               r="geometric distribution"
@@ -489,12 +499,41 @@ const exp = (
         </PreviewScope>
 
         <P>
-          In practice, <Rank p={<R n="geo_p" />}><R n="geo_arg_u" /></Rank> can be implemented by hashing <R n="geo_arg_u" /> with a secure hash function and counting the number of trailing zeros in the binary representation of the digest.
+          In practice, <Rank p={<>\frac<Curly>1</Curly><Curly>2</Curly></>}><R n="geo_arg_u" /></Rank> can be implemented by hashing <R n="geo_arg_u" /> with a secure hash function and counting the number of trailing zeros in the binary representation of the digest.
           This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh<Bib item="pugh1989incremental" />.
           Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers.
         </P>
       </Hsection>
+
+      <Hsection title="Zip-Trees" n="prelims_zip_trees">
+        <PreviewScope>
+          <P>
+            We can now give a formal definition of <Rs n="zip_tree"/><Bib item="tarjan2021zip"/>.
+            Let <Rank p={<>\frac<Curly>1</Curly><Curly>2</Curly></>}/> be a rank function.
+            The <Def n="zip_tree" r="zip tree" rs="zip trees"/> of some set <M><Def n="zip_s" r="S"/></M> is the unique <R n="search_tree"/> whose set of <Rs n="item"/> is <R n="zip_s"/>, and which is a <R n="heap"/> when ordering by <R n="rank"/> first, <R n="item"/> second.
+            Equivalently, it must be a <R n="heap"/> with respect to <Rs n="rank"/> such that <R n="left"/> <Rs n="child"/> always have strictly lesser <R n="rank"/> than their parents.
+            {" "}<Rcb n="fig_ziptree_basic"/> gives an example. 
+          </P>
+        </PreviewScope>
+
+        <Fig
+          n="fig_ziptree_basic"
+          title="A Zip-Tree"
+          caption={
+            <P>
+              <Rsb n="item"/> are the numbers in the vertices, <Rs n="rank"/> are the gray numbers above the vertices. 
+            </P>
+          }
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "ziptreeBasic.svg"]} />}
+            alt="A drawing of a zip tree."
+          />
+        </Fig>
+      </Hsection>
     </Hsection>
+
+    
   </ArticleTemplate>
 );
 
