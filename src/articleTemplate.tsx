@@ -148,7 +148,7 @@ export function ArticleTemplate(
                 items={bib}
               >
                 <Html5
-                  title="Macromania Demo"
+                  title="Geometric Search Trees"
                   headContents={`<meta name="viewport" content="width=device-width, initial-scale=1"><script>
   /*to prevent Firefox FOUC, this must be here*/
   let FF_FOUC_FIX;

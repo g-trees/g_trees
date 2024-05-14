@@ -56,7 +56,19 @@ import {
   WaitForMarginales,
 } from "../deps.ts";
 import { ArticleTemplate } from "./articleTemplate.tsx";
-import { BigO } from "./macros.tsx";
+import {
+  BigO,
+  Curly,
+  MFunDef,
+  NoWrap,
+  Np,
+  Rank,
+  TreeChild,
+  TreeChildren,
+  TreeItem,
+} from "./macros.tsx";
+import { TreeItems } from "./macros.tsx";
+import { GeoDistribution } from "./macros.tsx";
 
 const ctx = new Context();
 
@@ -550,6 +562,306 @@ const exp = (
         <Bib item="messeguer1997skip" />{" "}
         are essentially the radix-two specialization of <Rs n="mst" />.
       </P>
+    </Hsection>
+
+    <Hsection title="Preliminaries" n="preliminaries">
+      <P>
+        Here, we define fundamental terminology, and provide proper definitions
+        and background for <Rs n="zip_informal" />.
+      </P>
+
+      <Hsection title="Data Structures" n="prelims_data_structures">
+        <PreviewScope>
+          <P>
+            A <Def n="tree" rs="trees" />{" "}
+            data structure for items from some universe{" "}
+            <M>
+              <Def n="tree_u" r="U" />
+            </M>{" "}
+            is either the{" "}
+            <Def n="tree_empty" r="empty tree" rs="empty trees" />, or a{" "}
+            <Def n="vertex" rs="vertices" /> consisting of a sequence of{" "}
+            <M>k - 1</M> <Def n="item" rs="items">items</Def> from{" "}
+            <R n="tree_u" /> and a sequence of <M>k</M> <Rs n="tree" />{" "}
+            called its <Def n="child" rs="children">children</Def>.
+          </P>
+
+          <P>
+            We write{" "}
+            <TreeItems>
+              <R n="tree_t" />
+            </TreeItems>{" "}
+            for the <Rs n="item" /> of{" "}
+            <NoWrap>
+              <R n="tree_t" />,
+            </NoWrap>{" "}
+            and{" "}
+            <TreeItem tree={<R n="tree_t" />}>
+              <M>i</M>
+            </TreeItem>{" "}
+            for the <M>i</M>-th <R n="item" /> of{" "}
+            <NoWrap>
+              <R n="tree_t" />.
+            </NoWrap>{" "}
+            We write{" "}
+            <TreeChildren>
+              <R n="tree_t" />
+            </TreeChildren>{" "}
+            for the <Rs n="child" /> of{" "}
+            <NoWrap>
+              <R n="tree_t" />,
+            </NoWrap>{" "}
+            and{" "}
+            <TreeChild tree={<R n="tree_t" />}>
+              <M>i</M>
+            </TreeChild>{" "}
+            for the <M>i</M>-th <R n="child" /> of{" "}
+            <NoWrap>
+              <R n="tree_t" />.
+            </NoWrap>{" "}
+            Indexing always starts at zero.
+          </P>
+        </PreviewScope>
+
+        <PreviewScope>
+          <P>
+            Let{" "}
+            <M>
+              <Def n="tree_t" r="t" />
+            </M>{" "}
+            be a <R n="tree" />. The set of <R n="tree_t" />, its{" "}
+            <Rs n="child" />, <Em>their</Em>{" "}
+            <Rs n="child" />, and so on, is called the set of{" "}
+            <Def n="subtree" rs="subtrees">subtrees</Def> of{" "}
+            <R n="tree_t" />. We say <R n="tree_t" /> is of{" "}
+            <Def n="tree_arity" r="arity" rs="arities" /> <M>k</M> if all{" "}
+            <Rs n="subtree" /> of <R n="tree_t" /> have at most <M>k</M>{" "}
+            <Rs n="child" />. We say <R n="tree_t" /> is of{" "}
+            <Def n="degree" r="degree" rs="degrees" /> <M>d</M> if it has{" "}
+            <M>k</M> <Rs n="child" />.
+          </P>
+        </PreviewScope>
+
+        <PreviewScope>
+          <P>
+            Let{" "}
+            <M>
+              <Def n="item_lte" r="\preceq" />
+            </M>{" "}
+            be a{" "}
+            <A href="https://en.wikipedia.org/wiki/Total_order">total order</A>
+            {" "}
+            on <R n="tree_u" />, and let{" "}
+            <M>
+              <Def n="tree_d" r="d" />
+            </M>{" "}
+            be the <R n="degree" /> of <R n="tree_t" />. Then <R n="tree_t" />
+            {" "}
+            is a <Def n="search_tree" r="search tree" rs="search trees" />
+            <Marginale>
+              In a <R n="search_tree" />, intuitively speaking, the{" "}
+              <Rs n="item" /> are sorted from left to right. That is, an{" "}
+              <A href="https://en.wikipedia.org/wiki/Tree_traversal#In-order,_LNR">
+                in-order traversal
+              </A>{" "}
+              yields a sorted sequence.
+            </Marginale>{" "}
+            (with respect to <R n="tree_u" />) if it is the{" "}
+            <R n="tree_empty" />, or if<Ul>
+              <Li>
+                <TreeItems>
+                  <R n="tree_t" />
+                </TreeItems>{" "}
+                is sorted with respect to <R n="tree_u" />,
+              </Li>
+              <Li>
+                all <Rs n="item" /> in{" "}
+                <TreeChild tree={<R n="tree_t" />}>
+                  <M>0</M>
+                </TreeChild>{" "}
+                are less than{" "}
+                <TreeItem tree={<R n="tree_t" />}>
+                  <M>0</M>
+                </TreeItem>,
+              </Li>
+              <Li>
+                For all{" "}
+                <M post=",">
+                  0 \lt <Def n="searchtree_i" r="i" /> \lt <R n="tree_d" /> - 1
+                </M>{" "}
+                all <Rs n="item" /> in{" "}
+                <TreeChild tree={<R n="tree_t" />}>
+                  <M>
+                    <R n="searchtree_i" />
+                  </M>
+                </TreeChild>{" "}
+                are less than{" "}
+                <TreeItem tree={<R n="tree_t" />}>
+                  <M>
+                    <R n="searchtree_i" /> - 1
+                  </M>
+                </TreeItem>{" "}
+                and greater than{" "}
+                <NoWrap>
+                  <TreeItem tree={<R n="tree_t" />}>
+                    <M>
+                      <R n="searchtree_i" /> - 1
+                    </M>
+                  </TreeItem>,
+                </NoWrap>{" "}
+                and
+              </Li>
+              <Li>
+                all <Rs n="item" /> in{" "}
+                <TreeChild tree={<R n="tree_t" />}>
+                  <M>
+                    <R n="tree_d" /> - 1
+                  </M>
+                </TreeChild>{" "}
+                are greater than{" "}
+                <TreeItem tree={<R n="tree_t" />}>
+                  <M>
+                    <R n="tree_d" /> - 2
+                  </M>
+                </TreeItem>.
+              </Li>
+            </Ul>
+          </P>
+        </PreviewScope>
+
+        <PreviewScope>
+          <P>
+            We call <R n="tree_t" /> a <Def n="heap" rs="heaps" />
+            <Marginale>
+              In a <R n="heap" />, intuitively speaking, no <R n="item" />{" "}
+              is a descendant of a lesser item.
+            </Marginale>{" "}
+            if it is the <R n="tree_empty" />, or if<Ul>
+              <Li>
+                the greatest <R n="item" /> in all strict <Rs n="subtree" /> of
+                {" "}
+                <R n="tree_t" /> is less than or equal to the least{" "}
+                <R n="item" /> amongst{" "}
+                <TreeItems>
+                  <R n="tree_t" />
+                </TreeItems>, and
+              </Li>
+              <Li>
+                all <Rs n="child" /> of <R n="tree_t" /> are themselves{" "}
+                <Rs n="heap" />.
+              </Li>
+            </Ul>
+          </P>
+        </PreviewScope>
+
+        <P>
+          <Alj inline>
+            You put balancing (deterministic and probabilistic) into your
+            preliminaries. Should we also put them into the final paper? I think
+            we don't necessarily need them, since the definitions are not formal
+            anyways.
+          </Alj>
+        </P>
+      </Hsection>
+
+      <Hsection
+        title="Pseudorandom Geometric Distributions"
+        n="prelim_geometric_distribution"
+      >
+        <PreviewScope>
+          <P>
+            Let{" "}
+            <M>
+              <Def n="geo_p" r="p" />
+            </M>{" "}
+            be a probability. A{" "}
+            <Def
+              n="geometric_distribution"
+              r="geometric distribution"
+              rs="geometric distributions"
+              math="\mathcal{G}"
+            />{" "}
+            <GeoDistribution>
+              <R n="geo_p" />
+            </GeoDistribution>{" "}
+            is a disrete probability distribution where the random variable{" "}
+            <M>
+              <Def n="rand_x" r="X" />
+            </M>{" "}
+            takes on value{" "}
+            <M>
+              <Def n="rand_k" r="k" /> \in <Np />
+            </M>{" "}
+            with probability{" "}
+            <M>
+              P(<R n="rand_x" /> = <R n="rand_k" />) = (1 -{" "}
+              <R n="geo_p" />)^{`{`}
+              <R n="rand_k" /> - 1{`}`}
+            </M>
+            <Alj>Is this correct?</Alj>. We can interpret <R n="rand_k" />{" "}
+            as the outcome of a series of Bernoulli trials with success
+            probability <R n="geo_p" />, where the rank <R n="rand_k" />{" "}
+            represents the number of failures before the first success, plus
+            one.
+          </P>
+        </PreviewScope>
+
+        <PreviewScope>
+          <P>
+            We often wish to pseudorandomly map items from some universe{" "}
+            <M>
+              <Def n="geo_u" r="U" />
+            </M>{" "}
+            to geometrically distributed{" "}
+            <Def n="rank" rs="ranks">ranks</Def>. To this end, we require a rank
+            function{" "}
+            <MFunDef
+              n="fn_rank"
+              dom={<R n="geo_u" />}
+              co="\N"
+              sub={<R n="geo_p" />}
+            >
+              rank
+            </MFunDef>, such that{" "}
+            <Rank p={<R n="geo_p" />}>
+              <R n="geo_arg_u" />
+            </Rank>{" "}
+            for any{" "}
+            <M>
+              <Def n="geo_arg_u" r="u" /> \in <R n="geo_u" />
+            </M>{" "}
+            is drawn independently from a geometric distribution{" "}
+            <GeoDistribution>
+              <R n="geo_p" />
+            </GeoDistribution>. We simply write{" "}
+            <Rank>
+              <R n="geo_arg_u" />
+            </Rank>{" "}
+            when <R n="geo_p" /> is unimportant or clear from context.
+          </P>
+        </PreviewScope>
+
+        <P>
+          In practice,{" "}
+          <Rank p={<R n="geo_p" />}>
+            <R n="geo_arg_u" />
+          </Rank>{" "}
+          can be implemented by hashing <R n="geo_arg_u" />{" "}
+          with a secure hash function and counting the number of trailing zeros
+          in the binary representation of the hash. This can also be interpreted
+          as the largest power of two that divides the hash value of{" "}
+          <R n="geo_arg_u" />, as used by
+          Pugh<Bib item="pugh1989incremental" />. Auvolat and
+          Taïani<Bib item="auvolat2019merkle" />{" "}
+          generalize this construction to distributions{" "}
+          <GeoDistribution>
+            \frac<Curly>1</Curly>
+            <Curly>k</Curly>
+          </GeoDistribution>{" "}
+          by counting trailing or leading zeroes in the base-<M>k</M>{" "}
+          representation of uniformly distributed pseudorandom integers.
+        </P>
+      </Hsection>
     </Hsection>
   </ArticleTemplate>
 );

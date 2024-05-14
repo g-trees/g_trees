@@ -217,7 +217,7 @@ li> :is(ul, ol) {
 
 ul,
 ol {
-  list-style-position: inside;
+  list-style-position: outside;
 }
 
 ul {
