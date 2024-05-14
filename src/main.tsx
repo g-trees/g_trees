@@ -60,6 +60,7 @@ import {
   BigO,
   Curly,
   MFunDef,
+  MSet,
   NoWrap,
   Np,
   Rank,
@@ -108,13 +109,13 @@ const Fig = makeFigureMacro(ctx, {
 // A counter shared by several theorem-like blocks.
 const thmCounter = new Counter("thm-counter", 0);
 
-const Theorem = makeFigureMacro(ctx, {
+const Definition = makeFigureMacro(ctx, {
   figureCounter: thmCounter,
   numberingInfo: {
-    r: "Theorem",
-    rb: "Theorem",
-    rs: "Theorems",
-    rsb: "Theorems",
+    r: "Definition",
+    rb: "Definition",
+    rs: "Definition",
+    rsb: "Definition",
     render: makeNumberingRenderer(),
   },
   isTheoremLike: true,
@@ -471,17 +472,17 @@ const exp = (
         <PreviewScope>
           <P>
             Let <M><Def n="geo_p" r="p" /></M> be a probability.<Marginale>
-              In plain language: take a coin that shows tails with probability <R n="geo_p"/>.
+              In plain language: take a coin that shows heads with probability <R n="geo_p"/>.
               Flip until it shows heads.
-              Count the number of flips, and add one.
+              Count the number of total flips.
             </Marginale>
-            A <Def
+            {" "}A <Def
               n="geometric_distribution"
               r="geometric distribution"
               rs="geometric distributions"
               math="\mathcal{G}"
-            /> <GeoDistribution><R n="geo_p" /></GeoDistribution> is a disrete probability distribution where the random variable <M><Def n="rand_x" r="X" /></M> takes on value <M><Def n="rand_k" r="k" /> \in <Np /></M> with probability <M>P(<R n="rand_x" /> = <R n="rand_k" />) = (1 -<R n="geo_p" />)^{`{`}<R n="rand_k" /> - 1{`}`}</M><Alj>Is this correct?</Alj>.
-            We can interpret <R n="rand_k" /> as the outcome of a series of Bernoulli trials with success probability <R n="geo_p" />, where the rank <R n="rand_k" /> represents the number of failures before the first success, plus one.
+            /> <GeoDistribution><R n="geo_p" /></GeoDistribution> is a discrete probability distribution where the random variable <M><Def n="rand_x" r="X" /></M> takes on value <M><Def n="rand_k" r="k" /> \in <Np /></M> with probability <M>P(<R n="rand_x" /> = <R n="rand_k" />) = (1 -<R n="geo_p" />)^{`{`}<R n="rand_k" /> - 1{`}`}</M><Alj>Is this correct?</Alj>.
+            We can interpret <R n="rand_k" /> as the outcome of a series of Bernoulli trials with success probability <R n="geo_p" />, where the rank <R n="rand_k" /> represents the total number of trials until (and including) a first success.
           </P>
         </PreviewScope>
 
@@ -500,7 +501,7 @@ const exp = (
 
         <P>
           In practice, <Rank p={<>\frac<Curly>1</Curly><Curly>2</Curly></>}><R n="geo_arg_u" /></Rank> can be implemented by hashing <R n="geo_arg_u" /> with a secure hash function and counting the number of trailing zeros in the binary representation of the digest.
-          This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh<Bib item="pugh1989incremental" />.
+          This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh and Teitelbaum<Bib item="pugh1989incremental" />.
           Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers.
         </P>
       </Hsection>
@@ -522,18 +523,101 @@ const exp = (
           caption={
             <P>
               <Rsb n="item"/> are the numbers in the vertices, <Rs n="rank"/> are the gray numbers above the vertices. 
+              {" "}<Rsb n="item"/> are increasing from left to right (the tree is a <R n="search_tree"/> with respect to <Rs n="item"/>), <Rs n="rank"/> are decreasing from top to bottom (the tree is a <R n="heap"/> with respect to <Rs n="rank"/> ), and no <R n="vertex"/> has a <R n="left"/> <R n="child"/> of equal <R n="rank"/> (yielding a unique tree shape).
             </P>
           }
         >
           <Img
             src={<ResolveAsset asset={["graphics", "ziptreeBasic.svg"]} />}
-            alt="A drawing of a zip tree."
+            alt="A rendering of a zip tree."
           />
         </Fig>
       </Hsection>
     </Hsection>
 
-    
+    <Hsection title="G-Trees" n="sec_gtrees">
+      <P>
+        We derive our <Rs n="gtree_informal"/> by generalizing <Rs n="zip_tree"/>. To do so, we start with a non-standard definition of <Rs n="zip_tree"/>:
+      </P>
+
+      <Definition n="zip_tree_recursive" title="Zip-Tree, Recursively">
+          <P>
+            Define the <Def n="pivot" r="pivot item" rs="pivot items"/> of a set <M><Def n="pivot_s" r="S"/>\subseteq <R n="tree_u"/></M> as the least element of <R n="pivot_s"/> among those of maximal <R n="rank"/>.
+            The <Def n="zip_tree_rec" r="zip-tree" rs="zip-trees"/> of any set <R n="pivot_s"/> with <R n="pivot"/> <M><Def n="pivot_p" r="p"/></M> is the binary <R n="tree"/> whose <R n="item"/> is <R n="pivot_p"/>, whose <R n="left"/> <R n="child"/> is the <R n="zip_tree_rec"/> of <M><MSet>s \in <R n="pivot_s"/> : s \prec <R n="pivot_p"/></MSet></M>, and whose <R n="right"/> <R n="child"/> is the <R n="zip_tree_rec"/> of <M><MSet>s \in <R n="pivot_s"/> : s \succ <R n="pivot_p"/></MSet></M>.
+          </P>
+      </Definition>
+
+      <PreviewScope>
+        <P>
+          From this definition, it is easy to see that the <Rs n="item"/> of maximal <R n="rank"/> form a linked list of <R n="right"/> <Rs n="child"/> at the root of the <R n="zip_tree_rec"/>.
+          The same holds recursively in all <Rs n="subtree"/> as well.
+          We can characterize these linked lists of <Rs n="item"/> of equal <R n="rank"/>: a sequence <M><Def n="colliding_q" r="Q"/> = <Def n="colliding_q0" r="q_0"/> \prec <Def n="colliding_q1" r="q_1"/> \prec \ldots <Def n="colliding_qk" r="q_k"/></M> of <Rs n="item"/> is <Def n="colliding"/> in a superset <M><Def n="colliding_s" r="S"/> \supseteq <R n="colliding_q"/></M> if all <R n="item"/> in <R n="colliding_q"/> have equal <R n="rank"/>, and there is no <M><Def n="colliding_nope" r="s"/> \in <R n="colliding_s"/></M> of greater <R n="rank"/> such that <M post="."><R n="colliding_q0"/> \prec <R n="colliding_nope"/> \prec <R n="colliding_qk"/></M>
+          {" "}<Rcb n="fig_ziptree_colliding"/> visualizes the linked lists formed by maximal sets of <R n="colliding"/> <Rs n="item"/> in a <R n="zip_tree"/>.
+        </P>
+      </PreviewScope>
+
+      <Fig
+          n="fig_ziptree_colliding"
+          title="Colliding Sequences"
+          caption={
+            <P>
+              The same <R n="zip_tree"/> as in <Rc n="fig_ziptree_basic"/>, highlighting linked lists of <R n="colliding"/> <Rs n="item"/> of <Rs n="rank"/> <Span style="color: #ff8000">three</Span>, <Span style="color: #fb3199">two</Span>, <Span style="color: #00b9f2;">two</Span>, and <Span style="color: #ffbfbf;">one</Span>.
+              All other <Rs n="vertex"/> form <R n="colliding"/> sequences of length one.
+            </P>
+          }
+        >
+        <Img
+          src={<ResolveAsset asset={["graphics", "ziptreeColliding.svg"]} />}
+          alt="A rendering of a zip tree, highlighting maximal colliding sequences in different colors."
+        />
+      </Fig>
+
+      <P>
+        We can even <Em>define</Em> <Rs n="zip_tree"/> in terms of maximal <R n="colliding"/> <R n="item"/> sequences, by using all <Rs n="item"/> of maximal <R n="rank"/> as <Rs n="pivot"/> in a single construction step:
+      </P>
+
+      <Definition n="zip_tree_colliding" title="Zip-Tree, Via Colliding Sequences">
+          <P>
+            Let <M><Def n="zip_colliding_s" r="S"/> \subseteq <R n="tree_u"/></M> be a set, and let <M><Def n="zip_colliding_m" r="M"/> = (m_0, m_1, \ldots, m_<Curly>|<R n="zip_colliding_m"/>| - 1</Curly>)</M> be the <Rs n="item"/> of maximal <R n="rank"/> in <R n="zip_colliding_s"/>.
+            The <Def n="zip_tree_col" r="zip-tree" rs="zip-trees"/> of <R n="zip_colliding_s"/> is a pair of<Ul>
+              <Li>
+                a linked list of the <Rs n="item"/> in <R n="zip_colliding_m"/> in ascending order, paired with their <Rs n="zip_colliding_left_subtree"/>, where the <Def n="zip_colliding_left_subtree" r="left subtree" rs="left subtrees"/> of <R n="item"/> <M>m_i</M> is the <R n="zip_tree_col"/> of <M><MSet>s \in <R n="pivot_s"/> : m_<Curly>i - 1</Curly> \succ s \succ m_i</MSet></M>, and
+              </Li>
+              <Li>
+                a single <Def n="zip_colliding_right_subtree" r="right subtree" rs="right subtrees"/>, which is the <R n="zip_tree_col"/> of <M><MSet>s \in <R n="pivot_s"/> : m_<Curly>|<R n="zip_colliding_m"/>| - 1</Curly> \prec s</MSet></M>.
+              </Li>
+            </Ul> 
+          </P>
+      </Definition>
+
+      <P>
+        <Rcb n="fig_ziptree_lists"/> viualizes this perspective on <Rs n="zip_tree"/>.
+        Note how the linked-list pointers are exactly the pointers between <Rs n="item"/> of equal <R n="rank"/>, whereas both <R n="zip_colliding_left_subtree">left</R> and <R n="zip_colliding_right_subtree">right child</R> pointers always involve a strict decrease in <R n="rank"/>.
+        In that sense, the <R n="zip_tree_col">list-based definition</R> fixes an asymmetry of the <R n="zip_tree">original definition</R>, which only requires strictly decreasing <Rs n="rank"/> for <R n="left"/> <Rs n="child"/>.
+      </P>
+
+      <Fig
+          n="fig_ziptree_lists"
+          wrapperTagProps={{clazz: "wide"}}
+          title="Ziptrees as Lists"
+          caption={
+            <P>
+              A <R n="zip_tree_col"/>, interpreted as a collection of sorted linked lists. Linked list pointers are <Span style="color: #808080;">dashed</Span>, child pointers are solid.
+              The three layers of the layout correspond to the three different <Rs n="rank"/>. Note that the graph is still isomorphic to that of <Rc n="fig_ziptree_basic"/>, we simply interpret its structure in a different way.
+            </P>
+          }
+        >
+        <Img
+          src={<ResolveAsset asset={["graphics", "ziptreeOfLists.svg"]} />}
+          alt="A rendering of a zip tree as a collection of maximal colliding lists."
+        />
+      </Fig>
+
+      <P>
+      From this non-standard characterization of <Rs n="zip_tree_col"/>, there is a natural generalization: rather than representing maximal sequences of <R n="colliding"/> <Rs n="item"/> (and the <Rs n="item"/>’ <Rs n="zip_colliding_left_subtree"/>) as sorted linked lists, we can represent them as arbitrary set data structures.
+      </P>
+
+    </Hsection>
   </ArticleTemplate>
 );
 

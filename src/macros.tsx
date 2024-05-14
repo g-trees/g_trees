@@ -12,6 +12,12 @@ export function Curly({ children }: { children?: Expressions }): Expression {
   );
 }
 
+export function MSet({ children }: { children?: Expressions }): Expression {
+  return (
+    <>{"\\{"}<exps x={children}/>{"\\}"}</>
+  );
+}
+
 export function BigO({ children }: { children?: Expressions }): Expression {
   return (
     <M>

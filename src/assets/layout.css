@@ -36,11 +36,11 @@ body {
     #wrapContent {
         width: 47.6rem;
 
-        >* {
+        >*:not(section), section>*:not(section)  {
             max-width: 32rem;
         }
 
-        > .wide {
+        .wide {
           max-width: 47.6rem;
           clear: right;
         }

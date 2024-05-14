@@ -126,11 +126,11 @@ body {
     #wrapContent {
         width: ${maxMain + paddingMarginalia + marginalia}rem;
 
-        >* {
+        >*:not(section), section>*:not(section)  {
             max-width: ${maxMain}rem;
         }
 
-        > .wide {
+        .wide {
           max-width: ${maxMain + paddingMarginalia + marginalia}rem;
           clear: right;
         }
