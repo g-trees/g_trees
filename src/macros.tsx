@@ -6,6 +6,24 @@ import { Expression, Expressions, M } from "../deps.ts";
 // General-purpose //
 /////////////////////
 
+export function Mathcal({ children }: { children?: Expressions }): Expression {
+  return (
+    <M>\mathcal<Curly><exps x={children}/></Curly></M>
+  );
+}
+
+export function Mathfrak({ children }: { children?: Expressions }): Expression {
+  return (
+    <M>\mathfrak<Curly><exps x={children}/></Curly></M>
+  );
+}
+
+export function MFrac({ num, de }: { num: Expressions, de: Expressions }): Expression {
+  return (
+    <M>\frac<Curly><exps x={num}/></Curly><Curly><exps x={de}/></Curly></M>
+  );
+}
+
 export function Curly({ children }: { children?: Expressions }): Expression {
   return (
     <>{"{"}<exps x={children}/>{"}"}</>
@@ -14,14 +32,15 @@ export function Curly({ children }: { children?: Expressions }): Expression {
 
 export function MSet({ children }: { children?: Expressions }): Expression {
   return (
-    <>{"\\{"}<exps x={children}/>{"\\}"}</>
+    <M>{"\\{"}<exps x={children}/>{"\\}"}</M>
   );
 }
 
 export function BigO({ children }: { children?: Expressions }): Expression {
   return (
     <M>
-      {`\\mathcal{O}(`}
+      <Mathcal>O</Mathcal>
+      {"("}
       <exps x={children} />
       {")"}
     </M>

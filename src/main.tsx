@@ -59,6 +59,9 @@ import { ArticleTemplate } from "./articleTemplate.tsx";
 import {
   BigO,
   Curly,
+  Mathcal,
+  Mathfrak,
+  MFrac,
   MFunDef,
   MSet,
   NoWrap,
@@ -379,7 +382,7 @@ const exp = (
 
       <P>
         A rare exception are the <Rs n="mst">merkle-search-trees</Rs> (<Rs n="mst" />)<Bib item="auvolat2019merkle" />.
-        <Rsb n="mst" /> use a simple construction to approximate the distribution of items in a B-tree.
+        {" "}<Rsb n="mst" /> use a simple construction to approximate the distribution of items in a B-tree.
         Unfortunately, <Rs n="mst" /> cannot provide a non-probabilistic upper bound on the number of items per vertex.
         This hampers efficient implementation; and adversarial data suppliers can trivially produce <M>n</M> items in <BigO>n</BigO> expected time that must all be stored in the same vertex.
         The <Rs n="skip_tree" /><Bib item="messeguer1997skip" /> are essentially the radix-two specialization of <Rs n="mst" />.
@@ -474,14 +477,14 @@ const exp = (
             Let <M><Def n="geo_p" r="p" /></M> be a probability.<Marginale>
               In plain language: take a coin that shows heads with probability <R n="geo_p"/>.
               Flip until it shows heads.
-              Count the number of total flips.
+              Count the total number of flips.
             </Marginale>
             {" "}A <Def
               n="geometric_distribution"
               r="geometric distribution"
               rs="geometric distributions"
               math="\mathcal{G}"
-            /> <GeoDistribution><R n="geo_p" /></GeoDistribution> is a discrete probability distribution where the random variable <M><Def n="rand_x" r="X" /></M> takes on value <M><Def n="rand_k" r="k" /> \in <Np /></M> with probability <M>P(<R n="rand_x" /> = <R n="rand_k" />) = (1 -<R n="geo_p" />)^{`{`}<R n="rand_k" /> - 1{`}`}</M><Alj>Is this correct?</Alj>.
+            /> <GeoDistribution><R n="geo_p" /></GeoDistribution> is a discrete probability distribution where the random variable <M><Def n="rand_x" r="X" /></M> takes on value <M><Def n="rand_k" r="k" /> \in <Np /></M> with probability <M>P(<R n="rand_x" /> = <R n="rand_k" />) = p \cdot (1 -<R n="geo_p" />)^{`{`}<R n="rand_k" /> - 1{`}`}</M>.
             We can interpret <R n="rand_k" /> as the outcome of a series of Bernoulli trials with success probability <R n="geo_p" />, where the rank <R n="rand_k" /> represents the total number of trials until (and including) a first success.
           </P>
         </PreviewScope>
@@ -581,10 +584,13 @@ const exp = (
             Let <M><Def n="zip_colliding_s" r="S"/> \subseteq <R n="tree_u"/></M> be a set, and let <M><Def n="zip_colliding_m" r="M"/> = (m_0, m_1, \ldots, m_<Curly>|<R n="zip_colliding_m"/>| - 1</Curly>)</M> be the <Rs n="item"/> of maximal <R n="rank"/> in <R n="zip_colliding_s"/>.
             The <Def n="zip_tree_col" r="zip-tree" rs="zip-trees"/> of <R n="zip_colliding_s"/> is a pair of<Ul>
               <Li>
-                a linked list of the <Rs n="item"/> in <R n="zip_colliding_m"/> in ascending order, paired with their <Rs n="zip_colliding_left_subtree"/>, where the <Def n="zip_colliding_left_subtree" r="left subtree" rs="left subtrees"/> of <R n="item"/> <M>m_i</M> is the <R n="zip_tree_col"/> of <M><MSet>s \in <R n="pivot_s"/> : m_<Curly>i - 1</Curly> \succ s \succ m_i</MSet></M>, and
+                <Marginale>
+                  To emphasize: the linked list is not a list of <Rs n="item"/> only, but a list of <R n="item"/>-<R n="zip_colliding_left_subtree">subtree</R>-pairs.
+                </Marginale>
+                a linked list of the <Rs n="item"/> in <R n="zip_colliding_m"/> in ascending order, paired with their <Rs n="zip_colliding_left_subtree"/>, where the <Def n="zip_colliding_left_subtree" r="left subtree" rs="left subtrees"/> of <R n="item"/> <M>m_i</M> is the <R n="zip_tree_col"/> of <M><MSet>s \in <R n="zip_colliding_s"/> : m_<Curly>i - 1</Curly> \succ s \succ m_i</MSet></M>, and
               </Li>
               <Li>
-                a single <Def n="zip_colliding_right_subtree" r="right subtree" rs="right subtrees"/>, which is the <R n="zip_tree_col"/> of <M><MSet>s \in <R n="pivot_s"/> : m_<Curly>|<R n="zip_colliding_m"/>| - 1</Curly> \prec s</MSet></M>.
+                a single <Def n="zip_colliding_right_subtree" r="right subtree" rs="right subtrees"/>, which is the <R n="zip_tree_col"/> of <M><MSet>s \in <R n="zip_colliding_s"/> : m_<Curly>|<R n="zip_colliding_m"/>| - 1</Curly> \prec s</MSet></M>.
               </Li>
             </Ul> 
           </P>
@@ -603,7 +609,8 @@ const exp = (
           caption={
             <P>
               A <R n="zip_tree_col"/>, interpreted as a collection of sorted linked lists. Linked list pointers are <Span style="color: #808080;">dashed</Span>, child pointers are solid.
-              The three layers of the layout correspond to the three different <Rs n="rank"/>. Note that the graph is still isomorphic to that of <Rc n="fig_ziptree_basic"/>, we simply interpret its structure in a different way.
+              The white vertices are linked lists of length one.
+              The three layers of the layout correspond to the three different <Rs n="rank"/>. Note that the graph is isomorphic to that of <Rc n="fig_ziptree_colliding"/>, we simply interpret its structure in a different way.
             </P>
           }
         >
@@ -614,10 +621,151 @@ const exp = (
       </Fig>
 
       <P>
-      From this non-standard characterization of <Rs n="zip_tree_col"/>, there is a natural generalization: rather than representing maximal sequences of <R n="colliding"/> <Rs n="item"/> (and the <Rs n="item"/>’ <Rs n="zip_colliding_left_subtree"/>) as sorted linked lists, we can represent them as arbitrary set data structures.
+      From this non-standard characterization of <Rs n="zip_tree_col"/>, there is a natural generalization: rather than representing maximal sequences of <R n="colliding"/> <Rs n="item"/> (and the <Rs n="item"/>’ <Rs n="zip_colliding_left_subtree"/>) with sorted linked lists, we can represent them with arbitrary set data structures:
       </P>
 
+      <Definition n="def_gtree" title="Geometric Search Tree">
+          <P>
+            Let <M><Def n="gtree_s" r="S"/> \subseteq <R n="tree_u"/></M> be a set, and let <M><Def n="gtree_m" r="M"/> = (m_0, m_1, \ldots, m_<Curly>|<R n="gtree_m"/>| - 1</Curly>)</M> be the <Rs n="item"/> of maximal <R n="rank"/> in <R n="gtree_s"/>, and let <M><Def n="gtree_g" r={<Mathfrak>S</Mathfrak>}/></M> be a data structure for representing sets.
+            The <Def n="gtree" r="G-tree" rs="G-trees">geometric search tree</Def> (<Def n="gtree" fake>G-tree</Def>) of <R n="gtree_s"/> using <R n="gtree_g"/> is a pair of<Ul>
+              <Li>
+                <Marginale>
+                  To emphasize: <R n="gtree_g"/> does not store <Rs n="item"/> only, but a list of <R n="item"/>-<R n="gtree_left_subtree">subtree</R>-pairs.
+                </Marginale>
+                an instance of <R n="gtree_g"/> storing the <Rs n="item"/> in <R n="gtree_m"/> in ascending order, paired with their <Rs n="gtree_left_subtree"/>, where the <Def n="gtree_left_subtree" r="left subtree" rs="left subtrees"/> of <R n="item"/> <M>m_i</M> is the <R n="gtree"/> of <M><MSet>s \in <R n="gtree_s"/> : m_<Curly>i - 1</Curly> \succ s \succ m_i</MSet></M>, and
+              </Li>
+              <Li>
+                a single <Def n="gtree_right_subtree" r="right subtree" rs="right subtrees"/>, which is the <R n="gtree"/> of <M><MSet>s \in <R n="gtree_s"/> : m_<Curly>|<R n="gtree_m"/>| - 1</Curly> \prec s</MSet></M>.
+              </Li>
+            </Ul> 
+          </P>
+      </Definition>
+
+      <P>
+        This generalization turns out to be remarkably powerful.
+        We can express several well-known data structures as <Rs n="gtree"/> (<Rc n="old_gtrees"/>), we find novel, cache-efficient data structures amongst the <Rs n="gtree"/> (<Rc n="new_gtrees"/>), and we can derive efficient implementation techniques for all of them (<Rc n="implementation"/>).
+      </P>
+
+      <PreviewScope>
+        <P>
+          We can regard any <R n="gtree"/> from two perspectives.
+          First, as a high-level tree of maximal <R n="colliding"/> sequences.
+          We refer to the nodes of this conceptual tree as <Def n="gnode" r="G-node" rs="G-nodes">G-nodes</Def>.
+          The height of this tree is equal to the number of distinct ranks of the underlying set, which is in <BigO>\log(n)</BigO> with high probability (we give an analysis in <Rc n="analysis"/>).
+          {" "}<Rcb n="fig_gnodes"/> visualizes our running example from this perspective.
+        </P>
+
+        <P>
+          And second, given a specific set data structure <R n="gtree_g"/>, we can study the resulting in-memory graphs with pointers as edges.
+          If <R n="gtree_g"/> is the type of sorted linked lists, for example, these concrete graphs are isomorphic to the <Rs n="zip_tree"/> (compare <Rc n="fig_ziptree_lists"/>, which we can interpret as depicting a <R n="gtree"/> using sorted linked lists).
+        </P>
+      </PreviewScope>
+
+      <Fig
+          n="fig_gnodes"
+          title="High-Level View — G-Nodes"
+          caption={
+            <P>
+              A <R n="gtree"/> from a high-level view: we disregard the internal structure of its <Rs n="gnode"/>, rendering them as single vertices. 
+              We neither know nor care about the choice of <R n="gtree_g"/>.
+              The set of <Rs n="item"/> is identical to that of <Rc n="fig_ziptree_lists"/>.
+            </P>
+          }
+        >
+        <Img
+          src={<ResolveAsset asset={["graphics", "gtree.svg"]} />}
+          alt="A rendering of a G-tree, collapsing each G-node into a single vertex."
+        />
+      </Fig>
+
+      <P>
+        When we select the <R n="rank"/> of each item <R n="item"/> as a pseudorandom function of the <R n="item"/>, a tree of <Rs n="gnode"/> is uniquely determined by the set of its <Rs n="item"/>.
+        Hence, if <R n="gtree_g"/> is <R n="history_independent"/>, so is the <R n="gtree"/>.
+      </P>
+
+      <P>
+        <Rsb n="gtree"/>, when interpreted as trees of <Rs n="gnode"/>, are highly similar to Auvolat & Taïani’s <Rs n="mst">merkle-search-trees</Rs> — <Rc n="fig_gnodes"/> could directly serve as a depiction of an <R n="mst"/>.
+        Structurally, the only difference is that <Rs n="mst"/> insert empty nodes uphold the invariant that the difference in <R n="rank"/> bewteen a parent and a child node is at most one.
+        {" "}<Rsb n="gtree"/>, in contrast, collapse missing <Rs n="rank"/>.
+        More importantly, however, Auvolat and Taïani treat <Rs n="gnode"/> as atomic, never considering how they might be represented on a machine, and how that representation might affect asymptotic performance.
+        Whereas we determine the common interface of all possible realizations of <Rs n="gnode"/> to be that of set datastructures and then explore the impact of various reifications, they disregard the issue and their reference implementation simply uses the dynamic array type of their programming language.
+        Hence, they miss the useful instantiations that we discuss next.
+      </P>
+
+      <Hsection title="Well-Known G-Trees" n="old_gtrees">
+        <P>
+          We now discuss how several well-known probabilistic data structures can be expressed as <Rs n="gtree"/>.
+        </P>
+
+        <Hsection title="Zip-Trees as G-Trees" n="gtree_zip_trees">
+          <P>
+            As we described in our derivation of the <Rs n="gtree"/>, instantiating <Rs n="gtree"/> with sorted linked lists yields the <Rs n="zip_tree"/>.
+            Aside from mentioning <Rs n="zip_tree"/> here for the sake of completeness, we want to point out an interesting implementation detail: whereas <Rs n="zip_tree"/> store the <R n="rank"/> of every <R n="item"/> in its <R n="vertex"/>, a sorted linked list <R n="gtree"/> only needs to store one <R n="rank"/> per linked list that it contains, i.e., one <R n="rank"/> per <R n="gnode"/>.
+          </P>
+        </Hsection>
+
+        <Hsection title="Zip-Zip-Trees and Beyond" n="gtree_zipzip_trees">
+          <P>
+            Instantiation of <Rs n="gtree"/> requires a set data structure.
+            {" "}<Rsb n="gtree"/> <Em>are</Em> set data structures themselves.
+            How about some recursion?
+          </P>
+
+          <P>
+            Instantiating <Rs n="gtree"/> with <Rs n="zip_tree"/>, i.e., with <Rs n="gtree"/> instantiated with sorted linked lists, yields exactly the <Rs n="zipzip"/>.
+            {" "}<Rsb n="zipzip"/><Bib item="gila2023zip"/> were initially introduced as a modification of the tie-breaking algorithm of <Rs n="zip_tree"/>.
+            This modification is essentially an ad-hoc variation, whereas our description of <Rs n="zipzip"/> highlights them as a (highly relevant) member of a family of <Rs n="gtree"/> obtained from recursive self-instantiation.
+            In particular, once <Rs n="gtree"/> and sorted linked lists have been implemented, the difference between implementing <Rs n="zip_tree"/> and <Rs n="zipzip"/> consists of a single type-level operation, whereas the algorithmic definition of <Rs n="zipzip"/> requires manual adjustment of all tree manipulation algorithms.
+          </P>
+
+          <PreviewScope>
+            <P>
+              More generally, we can instantiate <Rs n="gtree"/> with <Rs n="gtree"/> that are themselves recursively instantiated, to an arbitrary depth and choice of recursion anchor.
+              Using sorted linked lists as recursion anchors yields a family of <Def n="zipk_tree" r={<><M>\text<Curly>zip</Curly>^k</M>-tree</>} rs={<><M>\text<Curly>zip</Curly>^k</M>-trees</>}><><M>\mathit<Curly>zip</Curly>^k</M>-trees</></Def> whose first two members are the <Rs n="zip_tree"/> and the <Rs n="zipzip"/>.<Alj>At the end of the analysis chapter, harken back to this familiy and describe how many bits are needed at each level of nesting to store ranks.</Alj>
+            </P>
+          </PreviewScope>
+        </Hsection>
+
+        <Hsection title="Treaps as G-Trees" n="gtree_treaps">
+          <P>
+            We end this section with a fun observation: if we restrict each nested tree structure in the <Rs n="zipk_tree"/> to store ranks in a single bit (i.e., we cap the <R n="geometric_distribution"/> at two), we obtain exactly the <Rs n="treap"/> with k-bit <Rs n="priority"/>.
+            We doubt that this has any practical applications, but it shows that the family of recursively instantiated <Rs n="gtree"/> is interesting beyond just the <Rs n="zipzip"/>.
+          </P>
+        </Hsection>
+      </Hsection>
+
+      <Hsection title="Novel G-Trees" n="new_gtrees">
+        <P>
+          Having shown that the <Rs n="gtree"/> encompass several useful and well-known data structures, we now give some members of the family that have <Em>not</Em> been independently described before.
+          In particular, we tackle the problem of finding <R n="history_independent"/> data structures that are efficient on secondary storage (or in terms of cpu caches) by storing up to <M>k</M> items in a single vertex.
+          Previous solutions<Bib item={["golovin2009b", "golovin2010b", "bender2016anti", "safavi2023b"]}/> all incur a significant overhead in terms of conceptual complexity compared to their binary counterparts.
+          With <Rs n="gtree"/>, we merely need to change the underlying set datastructure <R n="gtree_g"/> to one that stores <Rs n="item"/> in blocks of <M>k</M>.
+        </P>
+
+        <P>
+          A key intuition behind classic <Rs n="zip_tree"/> is that of choosing <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M><R n="geo_p"/> = <MFrac num="1" de="2"/></M> because this is the distribution of the height of a randomly chosen vertex in a perfectly balanced binary <R n="tree"/>.
+          For <M>k</M>-ary trees, the same intuition instructs us to draw <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M post=","><R n="geo_p"/> = <MFrac num="1" de="k - 1"/></M> as this is the distribution of heights in a perfectly balanced <M>k</M>-ary <R n="tree"/>. We give a proper analysis to justify this choice in <Rc n="analysis"/>, for now we shall simply trust our intuition that — with high probability — the resulting trees are of logarithmic height and their <Rs n="gnode"/> store <BigO>k</BigO> <Rs n="item"/>.
+        </P>
+
+        <P>
+          The second key insight toward an efficient <M>k</M>-ary data structure is, paradoxically, that there is no need to be clever about it.
+          Sorted linked lists are naïve, inefficient data structures, yet <Rs n="zip_tree"/> are efficient. We can be similarly naïve for our <M>k</M>-ary construction.
+        </P>
+
+          <PreviewScope>
+            <P>
+              We simply use a sorted linked list in which every node stores up to <M>k</M> <Rs n="item"/>.
+              To achieve <R n="history_independent">history-independence</R>, we require all <Rs n="item"/> to be stored as early in the list as possible.
+              In other words, the only node to store fewer than <M>k</M> <Rs n="item"/> is the final node. We call such a list a <Def n="k_list" r={<><M>k</M>-list</>} rs={<><M>k</M>-lists</>}/> (see <Rc n="fig_klist"/>).
+            </P>
+          </PreviewScope>
+      </Hsection>
+
     </Hsection>
+
+    <Hsection title="Analysis" n="analysis"></Hsection>
+
+    <Hsection title="Algorithms" n="implementation"></Hsection>
   </ArticleTemplate>
 );
 
