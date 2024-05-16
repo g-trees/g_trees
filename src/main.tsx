@@ -248,7 +248,7 @@ const exp = (
 
       <PreviewScope>
         <P>
-          We present the <Def n="gtree_informal" r="G-tree" rs="G-trees">geometric search trees</Def> (<Def n="gtree_informal" fake>G-trees</Def>), a general family of randomized search trees that provides a unified perspective on several independently researched data structures, including <Rs n="zip_informal" />, <Def
+          We present the <Def n="gtree_informal" r="G-tree" rs="G-trees">geometric search trees</Def> (<Def n="gtree_informal" fake>G-trees</Def>), a family of randomized search trees that provides a unified perspective on several independently researched data structures, including <Rs n="zip_informal" />, <Def
             n="zipzip"
             r="zip-zip-tree"
             rs="zip-zip-trees"
@@ -324,9 +324,9 @@ const exp = (
     <Hsection title="Related Work" n="related-work">
       <P>
         Data structures whose exact shape is determined solely by their contents and not by the order of insertion and deletion operations have been studied for decades.
-        This property has been given several names such as <Bib item="snyder1977uniquely">unique representation</Bib>, <Bib item="auvolat2019merkle">structural unicity</Bib>, <Bib item="driscoll1994fully">confluent persistence</Bib>, and <Bib item="naor2001anti">anti-persistence or history-independence</Bib>.
+        This property has been given several names, such as <Bib item="snyder1977uniquely">unique representation</Bib>, <Bib item="auvolat2019merkle">structural unicity</Bib>, <Bib item="driscoll1994fully">confluent persistence</Bib>, and <Bib item="naor2001anti">anti-persistence or history-independence</Bib>.
         Deterministically self-balancing <R n="history_independent" /> set data structures necessarily take super-logarithmic time to update under arbitrary insertions and deletions<Bib item="snyder1977uniquely" />.
-        Hence, several probabilistic <R n="history_independent" /> data structures have been devised which support membership queries and update operations in logarithmic time with high probability.
+        Hence, several <Em>probabilistic</Em> <R n="history_independent" /> data structures have been devised which support membership queries and update operations in logarithmic time with high probability.
       </P>
 
       <P>
@@ -370,7 +370,7 @@ const exp = (
 
       <PreviewScope>
         <P>
-          Bender et al<Bib item="bender2016anti" /> first specify a history-independent <Def n="pma" r="PMS" rs="PMAs">packed-memory array</Def> (<Def n="pma" fake>PMA</Def>), and then build a <R n="history_independent" /> B-tree analogon and an external-memory skip-list on top of the <R n="pma" />.
+          Bender et al<Bib item="bender2016anti" /> first specify a history-independent <Def n="pma" r="PMA" rs="PMAs">packed-memory array</Def> (<Def n="pma" fake>PMA</Def>), and then build a <R n="history_independent" /> B-tree analogon and an external-memory skip-list on top of the <R n="pma" />.
           So there is again a two-layered aproach; the <R n="pma" /> introduces a significant chunk of conceptual complexity that is not part of regular <Rs n="treap" /> or <Rs n="skip_list" />.
         </P>
       </PreviewScope>
@@ -605,12 +605,14 @@ const exp = (
       <Fig
           n="fig_ziptree_lists"
           wrapperTagProps={{clazz: "wide"}}
-          title="Ziptrees as Lists"
+          title="Zip-Trees as Lists"
           caption={
             <P>
-              A <R n="zip_tree_col"/>, interpreted as a collection of sorted linked lists. Linked list pointers are <Span style="color: #808080;">dashed</Span>, child pointers are solid.
-              The white vertices are linked lists of length one.
-              The three layers of the layout correspond to the three different <Rs n="rank"/>. Note that the graph is isomorphic to that of <Rc n="fig_ziptree_colliding"/>, we simply interpret its structure in a different way.
+              A <R n="zip_tree_col"/>, interpreted as a collection of sorted linked lists.
+              Linked list pointers are <Span style="color: #808080;">dashed</Span>, child pointers are solid.
+              The colorless vertices are linked lists of length one.
+              The three layers of the layout correspond to the three different <Rs n="rank"/>.
+              Note that the graph is isomorphic to that of <Rc n="fig_ziptree_colliding"/>, we simply interpret its structure in a different way.
             </P>
           }
         >
@@ -754,11 +756,58 @@ const exp = (
 
           <PreviewScope>
             <P>
-              We simply use a sorted linked list in which every node stores up to <M>k</M> <Rs n="item"/>.
-              To achieve <R n="history_independent">history-independence</R>, we require all <Rs n="item"/> to be stored as early in the list as possible.
+              We use a sorted linked list in which every node stores up to <M>k</M> <Rs n="item"/>.
+              We require all <Rs n="item"/> to be stored as early in the list as possible; this is the simplemost way of achieving <R n="history_independent">history-independence</R>.
               In other words, the only node to store fewer than <M>k</M> <Rs n="item"/> is the final node. We call such a list a <Def n="k_list" r={<><M>k</M>-list</>} rs={<><M>k</M>-lists</>}/> (see <Rc n="fig_klist"/>).
             </P>
           </PreviewScope>
+
+          <Fig
+              n="fig_klist"
+              title="A 3-List"
+              caption={
+                <P>
+                  The sorted <R n="k_list"><M>3</M>-list</R> containing <M>1, 4, 5, 8, 23, 26, 32, 35</M>.
+                  Sometimes, things are just that simple.
+                </P>
+              }
+            >
+            <Img
+              src={<ResolveAsset asset={["graphics", "klist.svg"]} />}
+              alt="A rendering of a 3-list."
+            />
+          </Fig>
+
+          <PreviewScope>
+            <P>
+              Instantiating <Rs n="gtree"/> with the <Rs n="k_list"/> and a <R n="geometric_distribution"/> of <M><R n="geo_p"/> = <MFrac num="1" de="k"/></M> yields a family of data structures we call the <Def n="kzip_tree" r={<><M>k</M>-zip-tree</>} rs={<><M>k</M>-zip-trees</>}><M>k</M>-zip-trees</Def>.
+              {" "}<Rcb n="fig_2ziptree"/> depicts the <R n="kzip_tree"><M>2</M>-zip-tree</R> for our running example set.
+            </P>
+          </PreviewScope>
+
+          <Fig
+            n="fig_2ziptree"
+            title="2-Zip-Tree"
+            wrapperTagProps={{clazz: "wide"}}
+            caption={
+              <P>
+                A <R n="kzip_tree"><M>2</M>-zip-tree</R>.
+                Linked list pointers are <Span style="color: #808080;">dashed</Span>, child pointers are solid.
+                The three layers of the layout correspond to the three different <Rs n="rank"/>.
+                Observe how contracting the multi-vertex linked lists effectively yields <Rc n="fig_gnodes"/>.
+              </P>
+            }
+          >
+          <Img
+            src={<ResolveAsset asset={["graphics", "kziptree.svg"]} />}
+            alt="A rendering of a 2-zip-tree."
+          />
+        </Fig>
+
+          <P>
+            The <Rs n="k_list"/> are inefficient data structures — inserting or deleting the first item requires <BigO>n</BigO> time in a <R n="k_list"/> of <M>n</M> items.
+            The <Rs n="kzip_tree"/> are nevertheless efficient, because the expected size of the <Rs n="gnode"/>, and hence, the expected length of the <Rs n="k_list"/>, is constant for any <R n="geo_p"/>.
+          </P>
       </Hsection>
 
     </Hsection>
