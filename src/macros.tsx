@@ -6,6 +6,12 @@ import { Expression, Expressions, M } from "../deps.ts";
 // General-purpose //
 /////////////////////
 
+export function MLog({ children, base }: { base?: Expressions, children?: Expressions }): Expression {
+  return (
+    <M>\log{base ? <>_<Curly><exps x={base}/></Curly></> : ""}(<exps x={children}/>)</M>
+  );
+}
+
 export function Mathcal({ children }: { children?: Expressions }): Expression {
   return (
     <M>\mathcal<Curly><exps x={children}/></Curly></M>
@@ -40,6 +46,28 @@ export function BigO({ children }: { children?: Expressions }): Expression {
   return (
     <M>
       <Mathcal>O</Mathcal>
+      {"("}
+      <exps x={children} />
+      {")"}
+    </M>
+  );
+}
+
+export function BigTheta({ children }: { children?: Expressions }): Expression {
+  return (
+    <M>
+      \Theta
+      {"("}
+      <exps x={children} />
+      {")"}
+    </M>
+  );
+}
+
+export function BigOmega({ children }: { children?: Expressions }): Expression {
+  return (
+    <M>
+      \Omega
       {"("}
       <exps x={children} />
       {")"}
@@ -116,6 +144,12 @@ export function NoWrap({ children }: { children: Expressions }): Expression {
     <Span clazz="nowrap">
       <exps x={children} />
     </Span>
+  );
+}
+
+export function Quotes({ children }: { children: Expressions }): Expression {
+  return (
+    <>“<exps x={children} />”</>
   );
 }
 
@@ -219,5 +253,37 @@ export function Rank(
         </>
       )}
     </M>
+  );
+}
+
+export function Orange({ children }: { children: Expressions }): Expression {
+  return (
+    <Span style="color: #ff8000">
+      <exps x={children} />
+    </Span>
+  );
+}
+
+export function Magenta({ children }: { children: Expressions }): Expression {
+  return (
+    <Span style="color: #fb3199">
+      <exps x={children} />
+    </Span>
+  );
+}
+
+export function Cyan({ children }: { children: Expressions }): Expression {
+  return (
+    <Span style="color: #00b9f2">
+      <exps x={children} />
+    </Span>
+  );
+}
+
+export function Pink({ children }: { children: Expressions }): Expression {
+  return (
+    <Span style="color: #ffbfbf">
+      <exps x={children} />
+    </Span>
   );
 }

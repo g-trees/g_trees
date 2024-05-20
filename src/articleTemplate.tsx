@@ -36,7 +36,7 @@ import {
   ServerRoot,
 } from "../deps.ts";
 import { LayoutStyles } from "./layoutStyles.tsx";
-import { bib } from "./bib.ts";
+import { bib } from "./bib.tsx";
 
 export type ArticleTemplateProps = {
   title: Expression;

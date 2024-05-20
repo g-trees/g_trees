@@ -361,4 +361,25 @@ a.bib {
   grid-template-columns: max-content 1fr;
   justify-items: start;
   column-gap: 0.5em;
+
+  .bibBlurb {
+    grid-column: 1 / 3;
+  }
+}
+
+.bibBlurb {
+  text-indent: initial;
+  margin-top: 1em;
+  font-size: 0.9rem;
+  background-color: #eeeeee;
+  border-radius: 2px;
+  padding: 2px;
+
+  *:first-child {
+    margin-top: 0;
+  }
+
+  *:last-child {
+    margin-bottom: 0;
+  }
 }

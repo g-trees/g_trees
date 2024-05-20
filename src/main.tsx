@@ -59,13 +59,19 @@ import { ArticleTemplate } from "./articleTemplate.tsx";
 import {
   BigO,
   Curly,
+  Cyan,
+  Magenta,
   Mathcal,
   Mathfrak,
   MFrac,
   MFunDef,
+  MLog,
   MSet,
   NoWrap,
   Np,
+  Orange,
+  Pink,
+  Quotes,
   Rank,
   TreeChild,
   TreeChildren,
@@ -354,7 +360,7 @@ const exp = (
       <PreviewScope>
         <P>
           Several attempts have been made to find randomized data structures that perform well in an external memory model.
-          Golovin<Bib item="golovin2009b" /> has proposed <Def n="b_treap" r="B-treap" rs="B-treaps">bushy treaps</Def>(<Def n="b_treap" fake>B-treaps</Def>) to approximate the behavior of B-trees via treaps.
+          Golovin<Bib item="golovin2009b" /> has proposed <Def n="b_treap" r="B-treap" rs="B-treaps">bushy treaps</Def> (<Def n="b_treap" fake>B-treaps</Def>) to approximate the behavior of B-trees via treaps.
           Unfortunately, <Rs n="b_treap" /> are complicated enough that even their author recommends using more simple alternatives such as the <Def n="b_skip_list" r="B-skip-list" rs="B-skip-lists">B-skip-list</Def><Bib item="golovin2010b" />.
           The <R n="b_skip_list" /> still involves a tuning parameter beyond the probability distribution for assigning node levels, a nontrivial invariant, and virtual memory management via hash tables rather than simple usage of pointers.
           In short, the conceptual complexity goes far beyond that of binary <Rs n="skip_list" /> or <Rs n="treap" />.
@@ -402,7 +408,7 @@ const exp = (
 
           <P>
             We write <TreeItems><R n="tree_t" /></TreeItems> for the <Rs n="item" /> of <NoWrap><R n="tree_t" />,</NoWrap> and <TreeItem tree={<R n="tree_t" />}><M>i</M></TreeItem> for the <M>i</M>-th <R n="item" /> of <NoWrap><R n="tree_t" />.</NoWrap>
-            We write <TreeChildren><R n="tree_t" /></TreeChildren> for the <Rs n="child" /> of <NoWrap><R n="tree_t" />,</NoWrap> and <TreeChild tree={<R n="tree_t" />}><M>i</M></TreeChild> for the <M>i</M>-th <R n="child" /> of <NoWrap><R n="tree_t" />.</NoWrap>
+            {" "}We write <TreeChildren><R n="tree_t" /></TreeChildren> for the <Rs n="child" /> of <NoWrap><R n="tree_t" />,</NoWrap> and <TreeChild tree={<R n="tree_t" />}><M>i</M></TreeChild> for the <M>i</M>-th <R n="child" /> of <NoWrap><R n="tree_t" />.</NoWrap>
             Indexing always starts at zero.
           </P>
         </PreviewScope>
@@ -484,8 +490,33 @@ const exp = (
               r="geometric distribution"
               rs="geometric distributions"
               math="\mathcal{G}"
-            /> <GeoDistribution><R n="geo_p" /></GeoDistribution> is a discrete probability distribution where the random variable <M><Def n="rand_x" r="X" /></M> takes on value <M><Def n="rand_k" r="k" /> \in <Np /></M> with probability <M>P(<R n="rand_x" /> = <R n="rand_k" />) = p \cdot (1 -<R n="geo_p" />)^{`{`}<R n="rand_k" /> - 1{`}`}</M>.
-            We can interpret <R n="rand_k" /> as the outcome of a series of Bernoulli trials with success probability <R n="geo_p" />, where the rank <R n="rand_k" /> represents the total number of trials until (and including) a first success.
+            /> <GeoDistribution><R n="geo_p" /></GeoDistribution> is a discrete probability distribution where the random variable <M><Def n="geo_x" r="X" /></M> takes on value <M><Def n="geo_k" r="k" /> \in <Np /></M> with probability <M>P(<R n="geo_x" /> = <R n="geo_k" />) = <R n="geo_p" /> \cdot (1 - <R n="geo_p" />)^{`{`}<R n="geo_k" /> - 1{`}`}</M>.
+            We can interpret <R n="geo_k" /> as the outcome of a series of Bernoulli trials with success probability <R n="geo_p" />, where the rank <R n="geo_k" /> represents the total number of trials until (and including) a first success.
+            As is customary, we often write <M><Def n="geo_q" r="q"/> := 1 - <R n="geo_p" /></M> for the failure probability of the Bernoulli trial.
+          </P>
+        </PreviewScope>
+
+        <PreviewScope>
+          <P>
+            The expected value of <R n="geo_x"/> is <M><Def n="geo_expected" r="E"/>[<R n="geo_x"/>] = <MFrac num="1" de={<R n="geo_p" />}/> = <MFrac num="1" de={<>1 - <R n="geo_q"/></>}></MFrac></M><Sidenote note={<>Most people would actually look this up <A href="https://en.wikipedia.org/wiki/Geometric_distribution#Moments_and_cumulants">on Wikipedia</A> rather than in a textbook.</>}><Bib item="forbes2011statistical"/></Sidenote>.
+          </P>
+        </PreviewScope>
+
+        <PreviewScope>
+          <P>
+            The random variable <R n="geo_x"/> can take on arbitrary large numbers, but we often need to represent <R n="geo_x" /> in a computer.
+            To this end, we work with <Def n="truncated"/> <Rs n="geometric_distribution" />, which clamp <R n="geo_x" /> between <M>1</M> and some maximum value <M><Def n="geo_beta" r="\beta"/></M>.
+            Typically, <R n="geo_beta" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_beta" /></MLog></M> bits.
+          </P>
+        </PreviewScope>
+
+        <PreviewScope>
+          <P>
+            <Alj>I'm not entirely happy with this paragraph. Could you give a more clear explanation, and/or could we simply cite this from somewhere?</Alj>
+            To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that the probability for not getting a success within the first <R n="geo_k"/> trials is <M post="."><R n="geo_q"/>^<Curly><R n="geo_k"/> - 1</Curly></M>
+            {" "}Since we stop the trials after <R n="geo_beta"/> failures, we reduce the expected number of trials by <M><MFrac num="1" de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_beta"/> - 1</Curly></M>
+            {" "}This leads to the truncated expected value <M post="."><Def n="geo_expected_truncated" r="E"/>[<R n="geo_x"/>] = (1 - <R n="geo_q"/>^<Curly><R n="geo_beta"/> - 1</Curly>) / (1 - <R n="geo_q"/>) = (1 - <R n="geo_q"/>^<Curly><R n="geo_beta"/> - 1</Curly>) / <R n="geo_p"/></M>
+            {" "}For large <R n="geo_beta"/>, we can hence simply ignore the effect of <R n="truncated">trunctation</R>.
           </P>
         </PreviewScope>
 
@@ -505,6 +536,7 @@ const exp = (
         <P>
           In practice, <Rank p={<>\frac<Curly>1</Curly><Curly>2</Curly></>}><R n="geo_arg_u" /></Rank> can be implemented by hashing <R n="geo_arg_u" /> with a secure hash function and counting the number of trailing zeros in the binary representation of the digest.
           This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh and Teitelbaum<Bib item="pugh1989incremental" />.
+          For digests of length <M>l</M>, this <R n="truncated">truncates</R> the distribution to <M post="."><R n="geo_beta" /> = 2^l</M>{" "}
           Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers.
         </P>
       </Hsection>
@@ -564,7 +596,7 @@ const exp = (
           title="Colliding Sequences"
           caption={
             <P>
-              The same <R n="zip_tree"/> as in <Rc n="fig_ziptree_basic"/>, highlighting linked lists of <R n="colliding"/> <Rs n="item"/> of <Rs n="rank"/> <Span style="color: #ff8000">three</Span>, <Span style="color: #fb3199">two</Span>, <Span style="color: #00b9f2;">two</Span>, and <Span style="color: #ffbfbf;">one</Span>.
+              The same <R n="zip_tree"/> as in <Rc n="fig_ziptree_basic"/>, highlighting linked lists of <R n="colliding"/> <Rs n="item"/> of <Rs n="rank"/> <Orange>three</Orange>, <Magenta>two</Magenta>, <Cyan>two</Cyan>, and <Pink>one</Pink>.
               All other <Rs n="vertex"/> form <R n="colliding"/> sequences of length one.
             </P>
           }
@@ -694,6 +726,19 @@ const exp = (
         Hence, they miss the useful instantiations that we discuss next.
       </P>
 
+      <Hsection title="Analysis" n="analysis">
+      <P>
+        We now give a formal analysis of the performance-related properties of <Rs n="gtree"/>. Roughly speaking, we show that <Rs n="gtree"/> with a <R n="geometric_distribution"/> of some probability <M><MFrac num="1" de="k"/></M> are sufficiently similar to perfectly balanced <M>(k + 1)</M>-ary trees with high probability: the height (in terms of <Rs n="gnode"/>) stays within a constant factor of <M><MLog>k</MLog></M>, and the maximal number of <Rs n="item"/> per <R n="gnode"/> stays within a constant factor of <M>k</M>.
+      </P>
+
+      <PreviewScope>
+        <P>
+          Throughout our analyses, we let <M><Def n="ana_k" r="k"/></M> be a natural number greater than or equal to two.
+          We then consider <Rs n="gtree"/> for the <Rs n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M> with <M><Def n="ana_p" r="p"/> := <MFrac num="1" de={<R n="ana_k"/>}/></M>, and we write <M post="."><Def n="ana_q" r="q"/> := 1 - <R n="ana_p"/></M>
+        </P>
+      </PreviewScope>
+    </Hsection>
+
       <Hsection title="Well-Known G-Trees" n="old_gtrees">
         <P>
           We now discuss how several well-known probabilistic data structures can be expressed as <Rs n="gtree"/>.
@@ -750,6 +795,10 @@ const exp = (
         </P>
 
         <P>
+          <Alj inline>TODO add some experimental evidence that backs the intuition here.</Alj>
+        </P>
+
+        <P>
           The second key insight toward an efficient <M>k</M>-ary data structure is, paradoxically, that there is no need to be clever about it.
           Sorted linked lists are naïve, inefficient data structures, yet <Rs n="zip_tree"/> are efficient. We can be similarly naïve for our <M>k</M>-ary construction.
         </P>
@@ -786,35 +835,68 @@ const exp = (
           </PreviewScope>
 
           <Fig
-            n="fig_2ziptree"
-            title="2-Zip-Tree"
-            wrapperTagProps={{clazz: "wide"}}
-            caption={
-              <P>
-                A <R n="kzip_tree"><M>2</M>-zip-tree</R>.
-                Linked list pointers are <Span style="color: #808080;">dashed</Span>, child pointers are solid.
-                The three layers of the layout correspond to the three different <Rs n="rank"/>.
-                Observe how contracting the multi-vertex linked lists effectively yields <Rc n="fig_gnodes"/>.
-              </P>
-            }
-          >
-          <Img
-            src={<ResolveAsset asset={["graphics", "kziptree.svg"]} />}
-            alt="A rendering of a 2-zip-tree."
-          />
-        </Fig>
+              n="fig_2ziptree"
+              title="2-Zip-Tree"
+              wrapperTagProps={{clazz: "wide"}}
+              caption={
+                <P>
+                  A <R n="kzip_tree"><M>2</M>-zip-tree</R>.
+                  Linked list pointers are <Span style="color: #808080;">dashed</Span>, child pointers are solid.
+                  The three layers of the layout correspond to the three different <Rs n="rank"/>.
+                  Observe how contracting the linked lists effectively yields <Rc n="fig_gnodes"/>.
+                </P>
+              }
+            >
+            <Img
+              src={<ResolveAsset asset={["graphics", "kziptree.svg"]} />}
+              alt="A rendering of a 2-zip-tree."
+            />
+          </Fig>
 
           <P>
             The <Rs n="k_list"/> are inefficient data structures — inserting or deleting the first item requires <BigO>n</BigO> time in a <R n="k_list"/> of <M>n</M> items.
             The <Rs n="kzip_tree"/> are nevertheless efficient, because the expected size of the <Rs n="gnode"/>, and hence, the expected length of the <Rs n="k_list"/>, is constant for any <R n="geo_p"/>.
           </P>
       </Hsection>
-
     </Hsection>
 
-    <Hsection title="Analysis" n="analysis"></Hsection>
+    <Hsection title="Algorithms" n="implementation">
+      <P>
+        Designing algorithms for mutating <R n="history_independent"/> data structures differs from designing them for other data structures in that there is total clarity on what the algorithm must achieve: there is an intended change to the set that the data structure represents, and from that follows the single correct data structure that must be the result of the operation.
+        {" "}<Rcb n="fig_zip_insert_and_delete"/> shows an example of two <Rs n="zip_tree"/>, which differ by a single item.
+        The algorithms for insertion and deletion must convert between precisely these two trees, there is no wiggle room for any design decisions.
+      </P>
 
-    <Hsection title="Algorithms" n="implementation"></Hsection>
+      <Fig
+          n="fig_zip_insert_and_delete"
+          title="Zip Trees — Insertion and Deletion"
+          caption={
+            <P>
+              Bla.
+            </P>
+          }
+        >
+        <Img
+          src={<ResolveAsset asset={["graphics", "zipInsertDelete.svg"]} />}
+          alt="A zip-tree, before and after inserting an item."
+        />
+      </Fig>
+
+      <P>
+        <Alj>This should be in the related work section, not here.</Alj>
+        Still, there can be several agorithms that produce the same results but differ in computational or conceptual complexity. For <Rs n="zip_tree"/> and <Rs n="treap"/>, there are algorithms based on <Bib item="seidel1996randomized">tree rotations</Bib>, and algorithms based on <Bib item="tarjan2021zip">joining (<Quotes>zipping</Quotes>) and splitting (<Quotes>unzipping</Quotes>) subtrees</Bib>. 
+      </P>
+
+      <P>
+        Both approaches have the same asymptotic complexity, but tree rotations are arguably less elegant: half the work of each rotation is undoing the damage to the tree invariants that the previous rotation introduced.
+        In a paper that <Em>almost</Em> anticipated treaps, Stephenson<Bib item="stephenson1980method"/> cautioned against tree rotations in this context several years before treaps even existed.
+        The <R n="zip_informal"/> insertion algorithm is essentially Stephenson’s algorithm, and the <R n="zip_informal"/> deletion algorithm its inverse.
+      </P>
+
+      <P>
+        The <R n="zip_tree"/> algorithms for insertion and deletion generalize neatly to <Rs n="gtree"/>, however. We hence begin our algorithm descriptions with a recapitulation of <R n="zip_tree"/> algorithms.
+      </P>
+    </Hsection>
   </ArticleTemplate>
 );
 
