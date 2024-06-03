@@ -746,4 +746,53 @@ export const bib: BibItemDeclaration[] = [
 `,
     href: "https://link.springer.com/book/10.1007/1-84628-168-7",
   },
+  {
+    item: `@inproceedings{blelloch2016just,
+      title={Just join for parallel ordered sets},
+      author={Blelloch, Guy E and Ferizovic, Daniel and Sun, Yihan},
+      booktitle={Proceedings of the 28th ACM Symposium on Parallelism in Algorithms and Architectures},
+      pages={253--264},
+      year={2016}
+    }
+    
+`,
+    asset: ["references", "blelloch2016just.pdf"],
+    blurb: (
+      <>
+        <P>
+          Ordered sets (and maps when data is associated with each key)
+          are one of the most important and useful data types. The set-set
+          functions union, intersection and difference are particularly useful
+          in certain applications. Brown and Tarjan first described an algorithm
+          for these functions, based on 2-3 trees, that meet the optimal <BigTheta>m \log(<MFrac num="n" de="m"/> + 1)</BigTheta>
+          time bounds in the comparison model (<M>n</M> and
+          <M>m ≤ n</M> are the input sizes). Later Adams showed very elegant
+          algorithms for the functions, and others, based on weight-balanced
+          trees. They only require a single function that is specific to the
+          balancing scheme—a function that joins two balanced trees—and
+          hence can be applied to other balancing schemes. Furthermore the
+          algorithms are naturally parallel. However, in the twenty-four years
+          since, no one has shown that the algorithms, sequential or parallel
+          are asymptotically work optimal.
+        </P>
+        <P>
+          In this paper we show that Adams’ algorithms are both work
+          efficient and highly parallel (polylog span) across four different
+          balancing schemes—AVL trees, red-black trees, weight balanced
+          trees and treaps. To do this we use careful, but simple, algorithms
+          for JOIN that maintain certain invariants, and our proof is (mostly)
+          generic across the schemes.
+        </P>
+        <P>
+          To understand how the algorithms perform in practice we have
+          also implemented them (all code except JOIN is generic across the
+          balancing schemes). Interestingly the implementations on all four
+          balancing schemes and three set functions perform similarly in time
+          and speedup (more than 45x on 64 cores). We also compare the
+          performance of our implementation to other existing libraries and
+          algorithms.
+        </P>
+      </>
+    ),
+  },
 ];

@@ -136,6 +136,10 @@ code.pseudocode {
     [data-hl][data-preview-anchor] {
         padding: 0;
     }
+
+    dfn {
+        font-style: normal;
+    }
 }
 
 code.pseudocode:is(.dedent1, .dedent2)>.locContent {
