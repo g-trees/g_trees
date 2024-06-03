@@ -130,11 +130,14 @@ pseudoBlocks.forEach((pseudoBlock) => {
       const unfoldButton = document.createElement("div");
       unfoldButton.innerHTML = "⋯";
       unfoldButton.classList.add("unfoldButton");
-      line.appendChild(unfoldButton);
 
       const fold = () => {
         folded = true;
         gutter.children[1].innerHTML = "▶";
+        line.appendChild(unfoldButton);
+        if (line.children.length === 2) {
+          line.style.display = "inline-block";
+        }
 
         gutter.classList.toggle("isFolded", folded);
         gutter.classList.toggle("isUnfolded", !folded);
@@ -151,6 +154,11 @@ pseudoBlocks.forEach((pseudoBlock) => {
       const unfold = () => {
         gutter.children[1].innerHTML = "▼";
         folded = false;
+        try {
+          line.removeChild(unfoldButton);
+        } catch (_err) {
+          // ignore
+        }
 
         gutter.classList.toggle("isFolded", folded);
         gutter.classList.toggle("isUnfolded", !folded);

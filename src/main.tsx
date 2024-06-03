@@ -1,6 +1,7 @@
 import { expressions } from "macromaniajsx/jsx-runtime";
 import {
 Access,
+  AccessStruct,
   AccessTuple,
   Application,
   ApplicationRaw,
@@ -20,6 +21,7 @@ Access,
   If,
   Img,
   Interface,
+  Let,
   LetRaw,
   Loc,
   Match,
@@ -210,6 +212,7 @@ const exp = (
     ]}
   >
     <Hsection n="introduction" title="Introduction">
+      <Alj>TODO: Lead with performance comparison plot zip-tree (i.e., 1-zip-tree) vs 16-zip-tree (or whichever performs best).</Alj>
       <P>
         Randomized set data structures eschew self-balancing logic for more simple, probabilistic item organization.
         When deriving the necessary randomness via pseudorandom functions of the stored items themselves, the resulting graphs depend on the stored set only, but not the order of insertions and deletions.
@@ -1165,9 +1168,9 @@ const exp = (
         We build our insertion and deletion algorithms from algorithms for unzipping and zipping <Rs n="gtree"/>. Unzipping takes a key and splits a <R n="gtree"/> into the tree of all <Rs n="item"/> less than the key, and the tree of all <Rs n="item"/> greater than the key. The algorithm calls the similar <R n="c_neset_split"/> on the inner <R n="c_gtree_node_set"/> of the root <R n="c_gtree_node"/>, and then performs a small case distinction to determine whether it is necessary to recurse:
       </P>
 
-      <Pseudocode n="code_unzip">
+      <Pseudocode n="code_unzip" lineNumbering>
         <FunctionItem
-          comment={<>Split <R n="c_unzip_t"/> into two trees of <Rs n="item"/> less and greater respectively than <R n="c_unzip_key"/></>}
+          comment={<>Split <R n="c_unzip_t"/> into two trees of <Rs n="item"/> less and greater than <R n="c_unzip_key"/> respectively.</>}
           id={["unzip", "c_unzip"]}
           generics={[
             {
@@ -1181,7 +1184,88 @@ const exp = (
             ["t", "c_unzip_t", <TypeApplication constr="c_gtree" args={[<R n="c_unzip_s"/>]} />],
             ["key", "c_unzip_key", <R n="c_unzip_i"/>],
           ]}
-          body={[<Return>4</Return>]}
+          multilineArgs
+          ret={<TupleType types={[
+            <TypeApplication constr="c_gtree" args={[<R n="c_unzip_s"/>]} />,
+            <TypeApplication constr="c_gtree" args={[<R n="c_unzip_s"/>]} />,
+          ]}/>}
+          body={[<Match
+            exp={<R n="c_unzip_t"/>}
+            cases={[
+              {
+                commented: {
+                  comment: "Unzipping the empty tree is trivial.",
+                  dedicatedLine: true,
+                  segment: [
+                    <R n="c_gtree_empty"/>,
+                    <>
+                      <Return>
+                        <Tuple fields={[
+                          <R n="c_gtree_empty"/>,
+                          <R n="c_gtree_empty"/>,
+                        ]}/>
+                      </Return>
+                      <SpliceLoc/>
+                    </>,
+                  ],
+                },
+              },
+              {
+                commented: {
+                  comment: <>
+                    For non-empty trees split the inner set.
+                  </>,
+                  dedicatedLine: true,
+                  segment: [
+                    <TupleStruct name="c_gtree_nonempty" fields={[<DefValue n="c_unzip_set" r="s" />]} />,
+                    <Match
+                      exp={<Application fun="c_neset_split" multilineArgs args={[
+                        <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct>,
+                        <R n="c_unzip_key"/>
+                      ]} />}
+                      cases={[
+                        {
+                          commented: {
+                            comment: <>If <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct> contains the split point (<R n="c_unzip_key"/>), then everything up until the split point becomes the left return value, with the <R n="gtree_left_subtree"/> of the split point becoming the <R n="gtree_right_subtree"/> of the left return. Everything after the split point becomes the right return, with the <R n="gtree_right_subtree"/> of the current node becoming the <R n="gtree_right_subtree"/> of the right return.</>,
+                            dedicatedLine: true,
+                            segment: [
+                              <Tuple multiline fields={[
+                                <DefValue n="c_left_set_0" r="left_set"/>,
+                                <TupleStruct name="OptionSome" fields={[<DefValue n="c_left_subtree_of_key" r="left_subtree_of_key" />]} />,
+                                <DefValue n="c_right_set_0" r="right_set"/>,
+                              ]} />,
+                              [
+                                <Let id={["left_return", "left_return_0"]}><Match
+                                  exp={<R n="c_left_set_0"/>}
+                                  cases={[
+                                    [
+                                      <R n="c_set_nonempty"/>,
+                                      <R n="c_left_subtree_of_key"/>,
+                                    ],
+                                    [
+                                      <TupleStruct name="c_set_nonempty" fields={[<DefValue n="c_unzip_ls_0" r="ls" />]} />,
+                                      // <Struct name="c_gtree_node" multiline fields={[
+                                      //   ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
+                                      // ]} />,
+                                      <Tuple name={<R n="c_gtree_nonempty"/>} fields={[
+                                        <Struct name="c_gtree_node" multiline fields={[
+                                          ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
+                                        ]} />,
+                                      ]} />
+                                    ],
+                                  ]}
+                                /></Let>
+                              ],
+                            ],
+                          },
+                        },
+                      ]}
+                    />
+                  ],
+                },
+              },
+            ]}
+          />]}
         />
       </Pseudocode>
 

@@ -62,10 +62,15 @@ code.pseudocode {
 
         >div:first-child {
             >.indent {
-                width: 4ch;
+                width: 2ch;
                 border-left: solid 1px var(--pseudo-fg-muted);
                 height: 100%;
             }
+        }
+
+        >div:only-child {
+            grid-column-start: 1;
+            grid-column-end: 3;
         }
 
         >div.comment,
