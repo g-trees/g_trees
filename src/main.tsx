@@ -1167,6 +1167,7 @@ const exp = (
       </P>
 
       <P>
+        <Alj>TODO: High-level explanation of how to do insert and delete via unzip and zip here?</Alj>
         We build our insertion and deletion algorithms from algorithms for unzipping and zipping <Rs n="gtree"/>. Unzipping takes a key and splits a <R n="gtree"/> into the tree of all <Rs n="item"/> less than the key, and the tree of all <Rs n="item"/> greater than the key. The algorithm calls the similar <R n="c_neset_split"/> on the inner <R n="c_gtree_node_set"/> of the root <R n="c_gtree_node"/>, and then performs a case distinction to determine whether it is necessary to recurse:
       </P>
 
@@ -1228,7 +1229,7 @@ const exp = (
                       cases={[
                         {
                           commented: {
-                            comment: <>If <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct> contains the split point (<R n="c_unzip_key"/>), then everything up until the split point becomes the left return value, with the <R n="gtree_left_subtree"/> of the split point becoming the <R n="gtree_right_subtree"/> of the left return. Everything after the split point becomes the right return, with the <R n="gtree_right_subtree"/> of the current node becoming the <R n="gtree_right_subtree"/> of the right return.</>,
+                            comment: <>If <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct> contains the split point (<R n="c_unzip_key"/>), then everything up until the split point becomes the left return value, with the <R n="gtree_left_subtree"/> of the split point becoming the <R n="gtree_right_subtree"/> of the left return. Everything after the split point becomes the right return, with the <R n="gtree_right_subtree"/> of the current node becoming the <R n="gtree_right_subtree"/> of the right return. No further recursion.</>,
                             dedicatedLine: true,
                             segment: [
                               <Tuple multiline fields={[
@@ -1310,7 +1311,7 @@ const exp = (
                                     <R n="c_unzip_key"/>,
                                   ]} />
                                 </LetRaw>,
-                                <Return><Tuple fields={[
+                                <Return><Tuple multiline fields={[
                                   <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
                                     <Struct name="c_gtree_node" multiline fields={[
                                       ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
@@ -1320,6 +1321,80 @@ const exp = (
                                   ]} />,
                                   <R n="c_right_0"/>,
                                 ]}/></Return>,
+                              ],
+                            ],
+                          },                          
+                        },
+
+                        {
+                          commented: {
+                            comment: <>If <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct> does not contain the split point, but it does contain <Rs n="item"/> greater than the split point, then recursively split the <R n="gtree_left_subtree">leftmost subtree</R> of those greater <Rs n="item"/>.</>,
+                            dedicatedLine: true,
+                            segment: [
+                              <Tuple fields={[
+                                <DefValue n="c_left_set_1" r="left_set"/>,
+                                <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
+                                <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_r_0" r="r"/>]}/>,
+                              ]}/>,
+                              [
+                                <LetRaw lhs={<Tuple multiline fields={[
+                                  <Tuple fields={[<DefValue n="r_leftmost_item"/>, <DefValue n="r_leftmost_subtree"/>]}/>,
+                                  <DefValue n="r_others"/>,
+                                ]}/>}>
+                                  <Application fun="c_neset_remove_min" args={[<R n="c_r_0"/>]} />
+                                </LetRaw>,
+                                <>
+                                  <LetRaw lhs={<Tuple multiline fields={[
+                                    <DefValue n="c_left_1" r="left"/>,
+                                    <DefValue n="c_right_1" r="right"/>,
+                                  ]}/>}>
+                                    <Application fun="c_unzip" args={[
+                                      <R n="r_leftmost_subtree"/>,
+                                      <R n="c_unzip_key"/>,
+                                    ]} />
+                                  </LetRaw>
+                                  <SpliceLoc/>
+                                </>,
+
+                                <>
+                                  <Let id={["left_return", "left_return_1"]}><Match
+                                    exp={<R n="c_left_set_1"/>}
+                                    cases={[
+                                      [
+                                        <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
+                                        <R n="c_left_1"/>,
+                                      ],
+                                      [
+                                        <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_unzip_ls_1" r="ls" />]} />,
+                                        <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                          <Struct name="c_gtree_node" multiline fields={[
+                                            ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
+                                            ["c_gtree_node_set", <R n="c_unzip_ls_1"/>],
+                                            ["c_gtree_node_right", <R n="c_left_1"/>],
+                                          ]} />,
+                                        ]} />
+                                      ],
+                                    ]}
+                                  /></Let>
+                                  <SpliceLoc/>
+
+                                  <Return><Tuple multiline fields={[
+                                    <R n="left_return_1"/>,
+                                    <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                      <Struct name="c_gtree_node" multiline fields={[
+                                        ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
+                                        ["c_gtree_node_set", <Application fun="c_set_insert_min" multilineArgs args={[
+                                          <R n="r_others"/>,
+                                          <Tuple fields={[
+                                            <R n="r_leftmost_item"/>,
+                                            <R n="c_right_1"/>,
+                                          ]} />
+                                        ]}/>],
+                                        ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="c_unzip_set"/></AccessStruct>],
+                                      ]} />,
+                                    ]} />,
+                                  ]} /></Return>
+                                </>,
                               ],
                             ],
                           },                          
@@ -1334,114 +1409,6 @@ const exp = (
         />
       </Pseudocode>
 
-      {/* <Fig
-          n="fig_gtree"
-        >
-        <Pseudocode n="code_gtree" lineNumbering>
-          <StructDef
-            id={["GTreeNode", "c_gtree_node"]}
-            generics={[
-              {
-                commented: {
-                  segment: {
-                    id: ["Item", "c_gtree_item"],
-                  },
-                  comment: <>The type of <Rs n="item"/> in the <R n="gtree"/>.</>,
-                  dedicatedLine: true,
-                }
-              },
-              {
-                commented: {
-                  segment: {
-                    id: ["S", "c_gtree_s"],
-                    bounds: [<TypeApplication constr="c_set" args={[<TupleType types={[<R n="c_gtree_item"/>, <R n="c_gtree"/>]} />]}/>],
-                  },
-                  comment: <>The set data structure <R n="gtree_g"/> of the <R n="gtree"/>.</>,
-                  dedicatedLine: true,
-                }
-              }
-            ]}
-            multilineGenerics
-            fields={[{
-              commented: {
-                segment: [["set", "c_gtree_set"], <R n="c_gtree_s"/>],
-                comment: <>A non-empty set, containing <Rs n="item"/> of type <R n="c_gtree_item"/> together with their <Rs n="gtree_left_subtree"/>.</>,
-                dedicatedLine: true,
-              },
-            }, {
-              commented: {
-                segment: [["right", "c_gtree_right"], <R n="c_gtree"/>],
-                comment: <>The <R n="gtree_right_subtree"/> of the <R n="gtree"/>.</>,
-                dedicatedLine: true,
-              },
-            }]}
-          />
-          <Loc></Loc>
-          <Type
-            id={["GTree", "c_gtree"]}
-            comment={<>A <R n="gtree"/> is either the <R n="tree_empty"/>, or a <R n="c_gtree_node"/>.</>}
-            generics={[
-              {
-                id: ["Item", "c_gtree_item2"],
-              },
-              {
-                id: ["S", "c_gtree_s2"],
-                bounds: [<TypeApplication constr="c_set" args={[<TupleType types={[<R n="c_gtree_item"/>, <R n="c_gtree"/>]} />]}/>],
-              },
-            ]}
-            multiline
-          >
-            <ChoiceType
-              types={[<DefVariant n="EmptyTree"/>, <R n="c_gtree_s2"/>]}
-            />
-          </Type>
-        </Pseudocode>
-      </Fig> */}
-
-      {/* <Fig
-          n="fig_unzip"
-        >
-        <Pseudocode n="code_unzip" lineNumbering>
-          <FunctionItem
-            comment={<><P>Split a <R n="c_gtree"/> <R n="c_unzip_t"/> into the <R n="c_gtree"/> of all <Rs n="item"/> strictly less than <R n="c_unzip_key"/> and the <R n="c_gtree"/> of all <Rs n="item"/> strictly greater than <R n="c_unzip_key"/>. Also report whether <R n="c_unzip_t"/> contains <R n="c_unzip_key"/>.</P></>}
-            id={["unzip", "c_unzip"]}
-            generics={[
-              {
-                id: ["Item", "c_unzip_item"],
-              },
-              {
-                id: ["S", "c_unzip_s"],
-                bounds: [<TypeApplication constr="c_set" args={[<TupleType types={[<R n="c_gtree_item"/>, <R n="c_gtree"/>]} />]}/>],
-              },
-            ]}
-            multilineGenerics
-            args={[
-              ["t", "c_unzip_t", <TypeApplication constr="c_gtree" args={[<R n="c_unzip_item"/>, <R n="c_unzip_s"/>]}/>],
-              ["key", "c_unzip_key", <R n="c_unzip_item"/>],
-            ]}
-            ret={<TupleType types={[
-              <TypeApplication constr="c_gtree" args={[<R n="c_unzip_item"/>, <R n="c_unzip_s"/>]}/>,
-              "Bool",
-              <TypeApplication constr="c_gtree" args={[<R n="c_unzip_item"/>, <R n="c_unzip_s"/>]}/>,
-            ]}/>}
-            body={[
-              <If
-                cond={<><R n="c_unzip_t"/> = <R n="EmptyTree"/></>}
-                body={[<Return><Tuple fields={[<R n="EmptyTree"/>, "false", <R n="EmptyTree"/>]}/></Return>]}
-              />,
-              <LetRaw
-                lhs={<Tuple fields={[<DefValue n="c_unzip_l" r="l"/>, <DefValue n="c_unzip_has" r="has"/>, <DefValue n="c_unzip_r" r="r"/>]}/>}
-              >
-                <ApplicationRaw fun="split" args={[<Access at={<R n="c_gtree_set"/>}><R n="c_unzip_t"/></Access>, <R n="c_unzip_key"/>]}/>
-              </LetRaw>,
-              <If
-              cond={<><R n="c_unzip_has"/></>}
-              body={[<Return><Tuple fields={[<R n="EmptyTree"/>, "false", <R n="EmptyTree"/>]}/></Return>]}
-            />,
-            ]}
-          />
-        </Pseudocode>
-      </Fig> */}
     </Hsection>
   </ArticleTemplate>
 );
