@@ -8,6 +8,7 @@ Access,
   Bib,
   Bibliography,
   BibScope,
+  BlankPattern,
   ChoiceType,
   Cite,
   CommentLine,
@@ -25,6 +26,7 @@ Access,
   LetRaw,
   Loc,
   Match,
+  QualifiedMember,
   RefLoc,
   Self,
   SpliceLoc,
@@ -1062,7 +1064,7 @@ const exp = (
                     <Return><Application fun="c_neset_singleton" args={[
                       <AccessTuple at={0}><R n="c_set_insert_min_new"/></AccessTuple>,
                       <AccessTuple at={1}><R n="c_set_insert_min_new"/></AccessTuple>,
-                    ]} multilineArgs/></Return>,
+                    ]}/></Return>,
                   ],
                   [
                     <TupleStruct name="c_set_nonempty" fields={[<DefValue n="c_set_insert_min_set_s" r="s" />]} />,
@@ -1165,12 +1167,12 @@ const exp = (
       </P>
 
       <P>
-        We build our insertion and deletion algorithms from algorithms for unzipping and zipping <Rs n="gtree"/>. Unzipping takes a key and splits a <R n="gtree"/> into the tree of all <Rs n="item"/> less than the key, and the tree of all <Rs n="item"/> greater than the key. The algorithm calls the similar <R n="c_neset_split"/> on the inner <R n="c_gtree_node_set"/> of the root <R n="c_gtree_node"/>, and then performs a small case distinction to determine whether it is necessary to recurse:
+        We build our insertion and deletion algorithms from algorithms for unzipping and zipping <Rs n="gtree"/>. Unzipping takes a key and splits a <R n="gtree"/> into the tree of all <Rs n="item"/> less than the key, and the tree of all <Rs n="item"/> greater than the key. The algorithm calls the similar <R n="c_neset_split"/> on the inner <R n="c_gtree_node_set"/> of the root <R n="c_gtree_node"/>, and then performs a case distinction to determine whether it is necessary to recurse:
       </P>
 
       <Pseudocode n="code_unzip" lineNumbering>
         <FunctionItem
-          comment={<>Split <R n="c_unzip_t"/> into two trees of <Rs n="item"/> less and greater than <R n="c_unzip_key"/> respectively.</>}
+          comment={<>Split <R n="c_unzip_t"/> into two trees of <Rs n="item"/> strictly less and greater than <R n="c_unzip_key"/> respectively.</>}
           id={["unzip", "c_unzip"]}
           generics={[
             {
@@ -1197,7 +1199,7 @@ const exp = (
                   comment: "Unzipping the empty tree is trivial.",
                   dedicatedLine: true,
                   segment: [
-                    <R n="c_gtree_empty"/>,
+                    <QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_empty" />,
                     <>
                       <Return>
                         <Tuple fields={[
@@ -1213,13 +1215,13 @@ const exp = (
               {
                 commented: {
                   comment: <>
-                    For non-empty trees split the inner set.
+                    For non-empty trees, split the inner set.
                   </>,
                   dedicatedLine: true,
                   segment: [
-                    <TupleStruct name="c_gtree_nonempty" fields={[<DefValue n="c_unzip_set" r="s" />]} />,
+                    <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} fields={[<DefValue n="c_unzip_set" r="s" />]} />,
                     <Match
-                      exp={<Application fun="c_neset_split" multilineArgs args={[
+                      exp={<Application fun="c_neset_split" args={[
                         <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct>,
                         <R n="c_unzip_key"/>
                       ]} />}
@@ -1231,33 +1233,96 @@ const exp = (
                             segment: [
                               <Tuple multiline fields={[
                                 <DefValue n="c_left_set_0" r="left_set"/>,
-                                <TupleStruct name="OptionSome" fields={[<DefValue n="c_left_subtree_of_key" r="left_subtree_of_key" />]} />,
+                                <Tuple name={<QualifiedMember type={<R n="Option"/>} member="OptionSome" />} fields={[<DefValue n="c_left_subtree_of_key" r="left_subtree_of_key" />]} />,
                                 <DefValue n="c_right_set_0" r="right_set"/>,
                               ]} />,
                               [
-                                <Let id={["left_return", "left_return_0"]}><Match
-                                  exp={<R n="c_left_set_0"/>}
-                                  cases={[
-                                    [
-                                      <R n="c_set_nonempty"/>,
-                                      <R n="c_left_subtree_of_key"/>,
-                                    ],
-                                    [
-                                      <TupleStruct name="c_set_nonempty" fields={[<DefValue n="c_unzip_ls_0" r="ls" />]} />,
-                                      // <Struct name="c_gtree_node" multiline fields={[
-                                      //   ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
-                                      // ]} />,
-                                      <Tuple name={<R n="c_gtree_nonempty"/>} fields={[
-                                        <Struct name="c_gtree_node" multiline fields={[
-                                          ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
-                                        ]} />,
-                                      ]} />
-                                    ],
-                                  ]}
-                                /></Let>
+                                <>
+                                  <Let id={["left_return", "left_return_0"]}><Match
+                                    exp={<R n="c_left_set_0"/>}
+                                    cases={[
+                                      [
+                                        <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
+                                        <R n="c_left_subtree_of_key"/>,
+                                      ],
+                                      [
+                                        <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_unzip_ls_0" r="ls" />]} />,
+                                        <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                          <Struct name="c_gtree_node" multiline fields={[
+                                            ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
+                                            ["c_gtree_node_set", <R n="c_unzip_ls_0"/>],
+                                            ["c_gtree_node_right", <R n="c_left_subtree_of_key"/>],
+                                          ]} />,
+                                        ]} />
+                                      ],
+                                    ]}
+                                  /></Let>
+                                  <SpliceLoc/>
+                                </>,
+                                <>
+                                  <Let id={["right_return", "right_return_0"]}><Match
+                                    exp={<R n="c_right_set_0"/>}
+                                    cases={[
+                                      [
+                                        <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
+                                        <AccessStruct field="c_gtree_node_right"><R n="c_unzip_set"/></AccessStruct>,
+                                      ],
+                                      [
+                                        <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_unzip_rs_0" r="rs" />]} />,
+                                        <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                          <Struct name="c_gtree_node" multiline fields={[
+                                            ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
+                                            ["c_gtree_node_set", <R n="c_unzip_rs_0"/>],
+                                            ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="c_unzip_set"/></AccessStruct>],
+                                          ]} />,
+                                        ]} />
+                                      ],
+                                    ]}
+                                  /></Let>
+                                  <SpliceLoc />
+                                </>,
+                                <Return><Tuple fields={[
+                                  <R n="left_return_0"/>,
+                                  <R n="right_return_0"/>,
+                                ]}/></Return>
                               ],
                             ],
-                          },
+                          },                          
+                        },
+
+                        {
+                          commented: {
+                            comment: <>If <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct> does not contain the split point, and all its <Rs n="item"/> are less than the split point, then recursively split the <R n="gtree_right_subtree"/> of <R n="c_unzip_set"/>.</>,
+                            dedicatedLine: true,
+                            segment: [
+                              <Tuple fields={[
+                                <BlankPattern/>,
+                                <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
+                                <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
+                              ]}/>,
+                              [
+                                <LetRaw lhs={<Tuple fields={[
+                                  <DefValue n="c_left_0" r="left"/>,
+                                  <DefValue n="c_right_0" r="right"/>,
+                                ]}/>}>
+                                  <Application fun="c_unzip" args={[
+                                    <AccessStruct field="c_gtree_node_right"><R n="c_unzip_set"/></AccessStruct>,
+                                    <R n="c_unzip_key"/>,
+                                  ]} />
+                                </LetRaw>,
+                                <Return><Tuple fields={[
+                                  <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                    <Struct name="c_gtree_node" multiline fields={[
+                                      ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
+                                      ["c_gtree_node_set", <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct>],
+                                      ["c_gtree_node_right", <R n="c_left_0"/>],
+                                    ]} />,
+                                  ]} />,
+                                  <R n="c_right_0"/>,
+                                ]}/></Return>,
+                              ],
+                            ],
+                          },                          
                         },
                       ]}
                     />
