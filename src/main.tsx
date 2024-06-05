@@ -888,6 +888,10 @@ const exp = (
             The <Rs n="k_list"/> are inefficient data structures — inserting or deleting the first item requires <BigO>n</BigO> time in a <R n="k_list"/> of <M>n</M> items.
             The <Rs n="kzip_tree"/> are nevertheless efficient, because the expected size of the <Rs n="gnode"/>, and hence, the expected length of the <Rs n="k_list"/>, is constant for any <R n="geo_p"/>.
           </P>
+
+          <P>
+            <Alj>k-zip-zip and k-zip^l trees here?</Alj>
+          </P>
       </Hsection>
     </Hsection>
 
@@ -933,11 +937,7 @@ const exp = (
       </P>
 
       <P>
-        We now present efficient algorithms to mutate <Rs n="gtree"/>. To optimize for clarity of presentation, we describe purely functional algorithms: all functions return new values rather than mutating their inputs.
-      </P>
-
-      <P>
-        Our algorithms neatly generalize the original <R n="zip_tree"/> algorithms, but we opt for a fully self-contained presentation. Zipping and unzipping are similar to the join and split functions of <Bib item="blelloch2016just">join-based tree algorithms</Bib>. We consistently use zip and unzip terminology when operating on <Rs n="gtree"/>, and join and split terminology when operating on the underlying set datastructure <R n="gtree_g"/>.
+        We now present asymptotically efficient algorithms to mutate <Rs n="gtree"/>. To optimize for clarity of presentation, we describe purely functional algorithms: all functions return new values rather than mutating their inputs.
       </P>
 
       <P>
@@ -1167,8 +1167,31 @@ const exp = (
       </P>
 
       <P>
-        <Alj>TODO: High-level explanation of how to do insert and delete via unzip and zip here?</Alj>
-        We build our insertion and deletion algorithms from algorithms for unzipping and zipping <Rs n="gtree"/>. Unzipping takes a key and splits a <R n="gtree"/> into the tree of all <Rs n="item"/> less than the key, and the tree of all <Rs n="item"/> greater than the key. The algorithm calls the similar <R n="c_neset_split"/> on the inner <R n="c_gtree_node_set"/> of the root <R n="c_gtree_node"/>, and then performs a case distinction to determine whether it is necessary to recurse:
+        While it is possible to derive insertion and deletion algorithms by generalizing the original <R n="zip_tree"/> algorithms, we opt for a fully self-contained presentation. Zipping and unzipping are similar to the join and split functions of <Bib item="blelloch2016just">join-based tree algorithms</Bib>. We consistently use zip and unzip terminology when operating on <Rs n="gtree"/>, and join and split terminology when operating on the underlying set datastructure <R n="gtree_g"/>.
+      </P>
+
+      <P>
+        We build our insertion and deletion algorithms from algorithms for unzipping and zipping <Rs n="gtree"/>. Unzipping takes a key and splits a <R n="gtree"/> into the tree of all <Rs n="item"/> less than the key, and the tree of all <Rs n="item"/> greater than the key. Zipping takes two trees, the first containing only <Rs n="item"/> strictly lesser than any <R n="item"/> of the second, and joins them together into a single tree. We call this version of zipping <Code>zip2</Code>, because it takes <Em>two</Em> arguments. We also use a <Code>zip3</Code> function, which additionally incorporates a single <R n="item"/> into the tree that is strictly greater than all <Rs n="item"/> of the first tree, and strictly less than all <Rs n="item"/> of the second tree. Insertion and deletion can then be implemented as composition of unzipping and zipping (<Code>zip3</Code> and <Code>zip2</Code>, respectively) — see <Rc n="fig_insert_and_delete"/>.
+      </P>
+
+      <Fig
+          n="fig_insert_and_delete"
+          title="Insertion and Deletion"
+          caption={
+            <P>
+              Example of inserting or deleting <R n="item"/> <M>18</M> of <R n="rank"/> <M>3</M> via unzipping followed by zipping.
+            </P>
+          }
+        >
+        <Img
+          src={<ResolveAsset asset={["graphics", "gtreeInsertDelete.svg"]} />}
+          alt="A G-tree, before and after inserting an item, with the unzipped tree as an intermediate step."
+          style="max-width: 450px; margin: 0 auto;"
+        />
+      </Fig>
+
+      <P>
+        To unzip a <R n="gtree"/>, <R n="c_neset_split"/> the inner <R n="c_gtree_node_set"/> of the root <R n="c_gtree_node"/>, and then performs a case distinction to determine whether it is necessary to recurse:
       </P>
 
       <Pseudocode n="code_unzip" lineNumbering>
@@ -1408,6 +1431,10 @@ const exp = (
           />]}
         />
       </Pseudocode>
+
+      <P>
+        Since the expected size of <Rs n="gnode"/> is constant with high probability, we can treat all functions of the <R n="c_neset"/> interface as running in constant time. Each recursive call of the <R n="c_unzip"/> function is to a <R n="c_gtree_node"/> of strictly decreasing <R n="c_gtree_node_rank"/>, so the recursion depth is bounded by the height of the <R n="gtree"/>, which is logarithmic with high probability. Hence, the overall running time is in <BigO>\log(n)</BigO> with high probability.
+      </P>
 
     </Hsection>
   </ArticleTemplate>
