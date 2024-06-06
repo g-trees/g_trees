@@ -18,6 +18,7 @@ Access,
   DefVariant,
   Dfn,
   Else,
+  ElseIf,
   Enum,
   Gt,
   If,
@@ -26,6 +27,7 @@ Access,
   Let,
   LetRaw,
   Loc,
+  Lt,
   Match,
   QualifiedMember,
   RefLoc,
@@ -194,8 +196,8 @@ const exp = (
     abstract={
       <>
         <P>
-          We describe the G-trees, a general family of randomized search tree data structures that encompasses several previously unconnected data structures such as zip-trees, skip-trees, and merkle-search-trees.
-          In particular, the family contains trees of arity greater than two.
+          We describe the G-trees, a general family of randomized, history-independent search tree data structures that encompasses several previously unconnected data structures such as zip-trees, skip-trees, and merkle-search-trees.
+          The family further contains novel trees of arity greater than two.
           Traditionally, such randomized trees have been significantly more complex than their binary counterparts, whereas our <M>k</M>-ary G-trees have no additional conceptual overhead at all.
           We generalize the zip and unzip operations of zip-trees to provide a uniform, simple, and efficient implementation technique for all members of our family of data structures.
         </P>
@@ -934,6 +936,15 @@ const exp = (
                 multiline: true,
               },
               {
+                comment: <>Join two sets <R n="c_neset_join_left"/> and <R n="c_neset_join_right"/> into a single set, assuming that all <Rs n="item"/> in <R n="c_neset_join_left"/> are less than any <R n="item"/> in <R n="c_neset_join_right"/>.</>,
+                id: ["join", "c_neset_join"],
+                args: [
+                  ["left", "c_neset_join_left", <Self/>],
+                  ["right", "c_neset_join_right", <Self/>],
+                ],
+                ret: <Self/>,
+              },
+              {
                 comment: <>Split <R n="c_neset_remove_min_self"/> into the least <R n="item"/> and its <R n="gtree_left_subtree"/>, and the remaining set.</>,
                 id: ["remove_min", "c_neset_remove_min"],
                 args: [
@@ -1096,14 +1107,14 @@ const exp = (
               exp={<R n="c_set_insert_min_set"/>}
               cases={[
                 [
-                  <R n="c_set_empty"/>,
-                  <Return><Application fun="c_neset_singleton" args={[
+                  <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
+                  <Return><Application multilineArgs fun="c_neset_singleton" args={[
                     <AccessTuple at={0}><R n="c_set_insert_min_new"/></AccessTuple>,
                     <AccessTuple at={1}><R n="c_set_insert_min_new"/></AccessTuple>,
                   ]}/></Return>,
                 ],
                 [
-                  <TupleStruct name="c_set_nonempty" fields={[<DefValue n="c_set_insert_min_set_s" r="s" />]} />,
+                  <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_set_insert_min_set_s" r="s" />]} />,
                   [<Return><Application
                     fun="c_neset_insert_min"
                     args={[
@@ -1221,7 +1232,7 @@ const exp = (
                         ["c_gtree_node_right", <R n="c_norm_right"/>],
                       ]} />,
                     ]} />
-                  </Return>
+                  </Return>,
                 ],
               ]}
             />
@@ -1254,7 +1265,7 @@ const exp = (
       </Fig>
 
       <P>
-        To unzip a <R n="gtree"/>, <R n="c_neset_split"/> the inner <R n="c_gtree_node_set"/> of the root <R n="c_gtree_node"/>, and then performs a case distinction to determine whether it is necessary to recurse:
+        To unzip a <R n="gtree"/>, <R n="c_neset_split"/> the inner <R n="c_gtree_node_set"/> of the root <R n="c_gtree_node"/>, and then performs a case distinction<Marginale>We give a more thorough description in the form of code comments.</Marginale> to determine whether it is necessary to recurse:
       </P>
 
       <Pseudocode n="code_unzip" lineNumbering>
@@ -1436,37 +1447,243 @@ const exp = (
         Since the expected size of <Rs n="gnode"/> is constant with high probability, we can treat all functions of the <R n="c_neset"/> interface as running in constant time. Each recursive call of the <R n="c_unzip"/> function is to a <R n="c_gtree_node"/> of strictly decreasing <R n="c_gtree_node_rank"/>, so the recursion depth is bounded by the height of the <R n="gtree"/>, which is logarithmic with high probability. Hence, the overall running time is in <BigO>\log(n)</BigO> with high probability.
       </P>
 
-      <P><Alj inline>Remarks on efficiency (only zip/unzip what actually needs work), iterative and mutable, search.</Alj></P>
+      <P>
+        We can similarly give a recursive algorithm<Marginale>Again, the main description takes the form of code comments.</Marginale> for zipping together two <Rs n="gtree"/> with the same complexity properties:
+      </P>
 
+      <Pseudocode n="code_zip2" lineNumbering>
+        <FunctionItem
+          comment={<>Join two trees <R n="c_zip2_left"/> and <R n="c_zip2_right"/> into a single tree, assuming that all <Rs n="item"/> in <R n="c_zip2_left"/> are less than any <R n="item"/> in <R n="c_zip2_right"/>.</>}
+          id={["zip2", "c_zip2"]}
+          generics={[
+            {
+              id: ["I", "c_zip2_i"], 
+            }, {
+              id: [<><Mathfrak>S</Mathfrak></>, "c_zip2_s"],
+              bounds: [<TypeApplication constr="c_neset" args={[<R n="c_zip2_i"/>]}/>],
+            },
+          ]}
+          args={[
+            ["left", "c_zip2_left", <TypeApplication constr="c_gtree" args={[<R n="c_zip2_s"/>]} />],
+            ["right", "c_zip2_right", <TypeApplication constr="c_gtree" args={[<R n="c_zip2_s"/>]} />],
+          ]}
+          multilineArgs
+          ret={<TypeApplication constr="c_gtree" args={[<R n="c_zip2_s"/>]} />}
+          body={[
+            <Match
+              exp={<Tuple fields={[
+                <R n="c_zip2_left"/>,
+                <R n="c_zip2_right"/>,
+              ]}/>}
+              cases={[
+                {commented: {
+                  comment: <>If <R n="c_zip2_left"/> is empty, then the join is the other tree.</>,
+                  dedicatedLine: true,
+                  segment: [
+                    <Tuple fields={[
+                      <QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_empty" />,
+                      <BlankPattern/>,
+                    ]}/>,
+                    <Return><R n="c_zip2_right"/></Return>,
+                  ],
+                }},
+                {commented: {
+                  comment: <>If <R n="c_zip2_right"/> is empty, then the join is the other tree.</>,
+                  dedicatedLine: true,
+                  segment: [
+                    <Tuple fields={[
+                      <BlankPattern/>,
+                      <QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_empty" />,
+                    ]}/>,
+                    <Return><R n="c_zip2_left"/></Return>,
+                  ],
+                }},
+                {commented: {
+                  comment: <>Neither tree is empty, so there is real work to do. What that entails depends on how the ranks of the root nodes of the two trees compare.</>,
+                  dedicatedLine: true,
+                  segment: [
+                    <Tuple fields={[
+                      <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} fields={[<DefValue n="c_zip2_l" r="l" />]} />,
+                      <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} fields={[<DefValue n="c_zip2_r" r="r" />]} />
+                    ]}/>,
+                    [
+                      <If
+                        cond={
+                          <><AccessStruct field="c_gtree_node_rank"><R n="c_zip2_l"/></AccessStruct> <Lt/> <AccessStruct field="c_gtree_node_rank"><R n="c_zip2_l"/></AccessStruct></>
+                        }
+                        body={[
+                          {commented: {
+                            comment: <>Zip <R n="c_zip2_l"/> into the leftmost <R n="gtree_left_subtree"/> of <R n="c_zip2_r"/>.</>,
+                            dedicatedLine: true,
+                            segment: <LetRaw lhs={<Tuple multiline fields={[
+                              <Tuple fields={[<BlankPattern/>, <DefValue n="c_zip2_r_leftmost_subtree" r="r_leftmost_subtree"/>]}/>,
+                              <BlankPattern/>,
+                            ]}/>}>
+                              <Application fun="c_neset_remove_min" args={[<R n="c_zip2_r"/>]} />
+                            </LetRaw>
+                          }},
+                          <Let id={["zipped", "c_zip2_zipped_0"]}>
+                            <Application fun="c_zip2" args={[
+                              <R n="c_zip2_left"/>,
+                              <R n="c_zip2_r_leftmost_subtree"/>
+                            ]}/>
+                          </Let>,
+                          <Return>
+                            <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                              <Application fun="c_update_leftmost" args={[
+                                <R n="c_zip2_r"/>,
+                                <R n="c_zip2_zipped_0"/>
+                              ]}/>,
+                            ]} />
+                          </Return>,
+                        ]}
+                      />,
+                      <ElseIf
+                        cond={
+                          <><AccessStruct field="c_gtree_node_rank"><R n="c_zip2_l"/></AccessStruct> <Gt/> <AccessStruct field="c_gtree_node_rank"><R n="c_zip2_l"/></AccessStruct></>
+                        }
+                        body={[
+                          {commented: {
+                            comment: <>Zip <R n="c_zip2_r"/> into the <R n="gtree_right_subtree"/> of <R n="c_zip2_l"/>.</>,
+                            dedicatedLine: true,
+                            segment: <Let id={["zipped", "c_zip2_zipped_1"]}>
+                              <Application fun="c_zip2" args={[
+                                <AccessStruct field="c_gtree_node_right"><R n="c_zip2_l"/></AccessStruct>,
+                                <R n="c_zip2_right"/>,
+                              ]}/>
+                            </Let>,
+                          }},
+                          <Return>
+                            <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                              <Application fun="c_update_right" args={[
+                                <R n="c_zip2_l"/>,
+                                <R n="c_zip2_zipped_1"/>
+                              ]}/>,
+                            ]} />
+                          </Return>,
+                        ]}
+                      />,
+                      <Else body={[
+                        {commented: {
+                          comment: <>Equal ranks. Join the two inner sets, with the <R n="gtree_right_subtree"/> of the left node being zipped into the leftmost <R n="gtree_left_subtree"/> of the right node.</>,
+                          dedicatedLine: true,
+                          segment: <LetRaw lhs={<Tuple multiline fields={[
+                            <Tuple fields={[<DefValue n="c_zip2_r_leftmost_item2" r="r_leftmost_item"/>, <DefValue n="c_zip2_r_leftmost_subtree2" r="r_leftmost_subtree"/>]}/>,
+                            <DefValue n="c_zip2_r_others" r="r_others"/>,
+                          ]}/>}>
+                              <Application fun="c_neset_remove_min" args={[<R n="c_zip2_r"/>]} />
+                            </LetRaw>,
+                          }},
+                          <Let id={["zipped", "c_zip2_zipped_2"]}>
+                              <Application fun="c_zip2" args={[
+                                <AccessStruct field="c_gtree_node_right"><R n="c_zip2_l"/></AccessStruct>,
+                                <R n="c_zip2_r_leftmost_subtree2"/>,
+                              ]}/>
+                          </Let>,
+                          <>
+                            <Let id={["r_set", "c_zip2_r_set"]}>
+                              <Application fun="c_neset_insert_min" multilineArgs args={[
+                                <R n="c_zip2_r_others"/>,
+                                <Tuple fields={[
+                                  <R n="c_zip2_r_leftmost_item2"/>,
+                                  <R n="c_zip2_zipped_2"/>,
+                                ]}/>,
+                              ]}/>
+                            </Let>
+                            <SpliceLoc/>
+                          </>,
+                          <Return>
+                            <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                              <Struct name="c_gtree_node" multiline fields={[
+                                ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_zip2_l"/></AccessStruct>],
+                                ["c_gtree_node_set", <Application fun="c_neset_join" args={[
+                                  <AccessStruct field="c_gtree_node_set"><R n="c_zip2_l"/></AccessStruct>,
+                                  <R n="c_zip2_r_set"/>,
+                                ]}/>],
+                                ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="c_zip2_r"/></AccessStruct>],
+                              ]} />,
+                            ]} />
+                          </Return>,
+                      ]}/>
+                    ],
+                  ],
+                }},
+              ]}
+            />
+          ]}
+        />
+      </Pseudocode>
+
+      <P>
+        To implement zipping of two <Rs n="gtree"/> with an additional <R n="item"/> in between them, we can simply convert that <R n="item"/> into a singleton <R n="gtree"/>, and then call <R n="c_zip2"/> twice:
+      </P>
+
+      <Pseudocode n="code_zip3" lineNumbering>
+        <FunctionItem
+          comment={<>Join two trees <R n="c_zip3_left"/> and <R n="c_zip3_right"/> and the item <R n="c_zip3_item"/> into a single tree, assuming that all <Rs n="item"/> in <R n="c_zip3_left"/> are less than <R n="c_zip3_item"/>, and all <Rs n="item"/> in <R n="c_zip3_right"/> are greater than <R n="c_zip3_item"/>.</>}
+          id={["zip3", "c_zip3"]}
+          generics={[
+            {
+              id: ["I", "c_zip3_i"], 
+            }, {
+              id: [<><Mathfrak>S</Mathfrak></>, "c_zip3_s"],
+              bounds: [<TypeApplication constr="c_neset" args={[<R n="c_zip3_i"/>]}/>],
+            },
+          ]}
+          args={[
+            ["left", "c_zip3_left", <TypeApplication constr="c_gtree" args={[<R n="c_zip3_s"/>]} />],
+            ["item", "c_zip3_item", <R n="c_zip3_i"/>],
+            ["rank", "c_zip3_rank", <M>\N</M>],
+            ["right", "c_zip3_right", <TypeApplication constr="c_gtree" args={[<R n="c_zip3_s"/>]} />],
+          ]}
+          multilineArgs
+          ret={<TypeApplication constr="c_gtree" args={[<R n="c_zip3_s"/>]} />}
+          body={[
+            <>
+              <Let id={["mid", "c_zip3_mid"]}>
+                <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                  <Struct name="c_gtree_node" multiline fields={[
+                    ["c_gtree_node_rank", <R n="c_zip3_rank"/>],
+                    ["c_gtree_node_set", <Application fun="c_neset_singleton" args={[
+                      <R n="c_zip3_item"/>,
+                      <QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_empty" />,
+                    ]}/>],
+                    ["c_gtree_node_right", <QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_empty" />],
+                  ]} />,
+                ]} />
+              </Let>
+              <SpliceLoc/>
+            </>,
+            <Return>
+              <Application fun="c_zip2" args={[
+                <Application fun="c_zip2" args={[
+                  <R n="c_zip3_left"/>,
+                  <R n="c_zip3_mid"/>,
+                ]}/>,
+                <R n="c_zip3_right"/>
+              ]}/>
+            </Return>
+          ]}
+          // return zip2(&zip2(&left, &mid), &right);
+        />
+      </Pseudocode>
+
+      <P>
+        With <R n="c_unzip"/>, <R n="c_zip2"/>, and <R n="c_zip3"/> in place, insertion and deletion in expected logarithmic time become trivial:
+      </P>
+
+      <P>
+        We want to emphasize that our choice of algorithms optimizes for elegance, not for (non-asymptotic) efficiency. Implementations based on in-place mutations will outperform our immutable algorithms. A direct implementation of <R n="c_zip3"/> will outperform the reduction to two applications of <R n="c_zip2"/>. Iterative implementations might outperform recursive implementations. And finally, direct implementations of insertion and deletion should outperform those based off unzipping and zipping the full trees. The <Bib item="tarjan2021zip">original zip-tree paper</Bib> contains examples of direct algorithms that zip and unzip only parts of a tree, our algorithms can be adapted to work analogously.
+      </P>
+    </Hsection>
+
+    <Hsection n="conclusion" title="Conclusion">
+      <P>
+        Bla
+      </P>
     </Hsection>
   </ArticleTemplate>
 );
-
-/*
-// Split a GTree t into the GTree of all items strictly less than key and the GTree
-// of all items strictly greater than key. Also report whether t contains key.
-fn unzip<
-  Item,
-  S: Set<(Item, GTree)>,
->(t: GTree<Item, S>, key: Item) -> (GTree<Item, S>, Bool, GTree<Item, S>) {
-  if t = EmptyTree {
-    return (EmptyTree, false, EmptyTree)
-  }
-  
-  let (l, mid, r) := split(t.set, key)
-  if mid != nil {
-    let left = GTree {
-      set: l,
-      right: mid.1
-    }
-    return (left, true, r == )
-  } else if r == nil {
-    const (rec_l) 
-  }
-}
-
-
-*/
 
 // Evaluate the expression. This has exciting side-effects,
 // like creating a directory that contains a website!

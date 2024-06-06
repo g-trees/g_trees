@@ -181,7 +181,7 @@ export const bib: BibItemDeclaration[] = [
             Stephenson
           </A>,{" "}
           <A href="https://dl.acm.org/doi/abs/10.1145/274787.274812">
-            Mart´ınez and Roura
+            Martínez and Roura
           </A>, and{" "}
           <A href="https://link.springer.com/article/10.1007/BF02576649">
             Sprugnoli
