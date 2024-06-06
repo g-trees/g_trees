@@ -209,33 +209,6 @@ export const bib: BibItemDeclaration[] = [
     ),
   },
   {
-    item: `@article{stephenson1980method,
-      title={A method for constructing binary search trees by making insertions at the root},
-      author={Stephenson, Christopher J},
-      journal={International Journal of Computer \& Information Sciences},
-      volume={9},
-      pages={15--29},
-      year={1980},
-      publisher={Springer}
-    }      
-`,
-    href: "https://link.springer.com/article/10.1007/BF00995807",
-    blurb: (
-      <P>
-        It is possible to construct a binary search tree by inserting items at
-        the root instead of adding them as leaves. When used for sorting, the
-        method has several desirable properties, including (a) fewer comparisons
-        in the best case, (b) fewer comparisons in the worst case, (c) a reduced
-        variance, and (d) good performance when the items are already nearly
-        sorted or nearly reverse sorted. For applications in which the tree is
-        searched for existing items as well as having new items added to it
-        (e.g., in the construction of a symbol table), the tree can be made to
-        exhibit stacklike behavior, so that the fewest comparisons are required
-        to locate the most recently used items.
-      </P>
-    ),
-  },
-  {
     item: `@inproceedings{gila2023zip,
       title={Zip-Zip Trees: Making Zip Trees More Balanced, Biased, Compact, or Persistent},
       author={Gila, Ofek and Goodrich, Michael T and Tarjan, Robert E},

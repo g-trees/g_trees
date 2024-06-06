@@ -9,6 +9,7 @@ Access,
   Bibliography,
   BibScope,
   BlankPattern,
+  Br,
   ChoiceType,
   Cite,
   CommentLine,
@@ -214,8 +215,8 @@ const exp = (
     ]}
   >
     <Hsection n="introduction" title="Introduction">
-      <Alj>TODO: Lead with performance comparison plot zip-tree (i.e., 1-zip-tree) vs 16-zip-tree (or whichever performs best).</Alj>
       <P>
+        <Alj>TODO: Lead with performance comparison plot zip-tree (i.e., 1-zip-tree) vs 16-zip-tree (or whichever performs best).</Alj>
         Randomized set data structures eschew self-balancing logic for more simple, probabilistic item organization.
         When deriving the necessary randomness via pseudorandom functions of the stored items themselves, the resulting graphs depend on the stored set only, but not the order of insertions and deletions.
         This <Def n="history_independent"
@@ -493,14 +494,6 @@ const exp = (
             </Ul>
           </P>
         </PreviewScope>
-
-        <P>
-          <Alj inline>
-            You put balancing (deterministic and probabilistic) into your preliminaries.
-            Should we also put them into the final paper?
-            I think we don't necessarily need them, since the definitions are not formal anyways.
-          </Alj>
-        </P>
       </Hsection>
 
       <Hsection
@@ -897,60 +890,12 @@ const exp = (
 
     <Hsection title="Algorithms" n="implementation">
       <P>
-        Designing algorithms for mutating <R n="history_independent"/> data structures differs from designing them for other data structures in that there is total clarity on what the algorithm must achieve: there is an intended change to the set that the data structure represents, and from that follows the single correct data structure that must be the result of the operation.
-        {" "}<Rcb n="fig_zip_insert_and_delete"/> shows an example of two <Rs n="zip_tree"/>, which differ by a single item.
-        The algorithms for insertion and deletion must convert between precisely these two trees, there is no wiggle room for any design decisions.
-      </P>
-
-      <Fig
-          n="fig_zip_insert_and_delete"
-          title="Zip Trees — Insertion and Deletion"
-          caption={
-            <P>
-              Bla.
-            </P>
-          }
-        >
-        <Img
-          src={<ResolveAsset asset={["graphics", "zipInsertDelete.svg"]} />}
-          alt="A zip-tree, before and after inserting an item."
-        />
-      </Fig>
-
-      <P>
-        <Alj>This should be in the related work section, not here.</Alj>
-        Still, there can be several agorithms that produce the same results but differ in computational or conceptual complexity. For <Rs n="zip_tree"/> and <Rs n="treap"/>, there are algorithms based on <Bib item="seidel1996randomized">tree rotations</Bib>, and algorithms based on <Bib item="tarjan2021zip">joining (<Quotes>zipping</Quotes>) and splitting (<Quotes>unzipping</Quotes>) subtrees</Bib>. 
-      </P>
-
-      <P>
-        Both approaches have the same asymptotic complexity, but tree rotations are arguably less elegant: half the work of each rotation is undoing the damage to the tree invariants that the previous rotation introduced.
-        In a paper that <Em>almost</Em> anticipated treaps, Stephenson<Bib item="stephenson1980method"/> cautioned against tree rotations in this context several years before treaps even existed.
-        The <R n="zip_informal"/> insertion algorithm is essentially Stephenson’s algorithm, and the <R n="zip_informal"/> deletion algorithm its inverse.
-      </P>
-
-      <P>
-        The <R n="zip_tree"/> algorithms for insertion and deletion generalize neatly to <Rs n="gtree"/>, however. We hence begin our algorithm descriptions with a recapitulation of <R n="zip_tree"/> algorithms.
-      </P>
-
-      <P>
-        <Alj inline>Drafting some pseudocode outside the main document flow now.</Alj>
-      </P>
-
-      <P>
         We now present asymptotically efficient algorithms to mutate <Rs n="gtree"/>. To optimize for clarity of presentation, we describe purely functional algorithms: all functions return new values rather than mutating their inputs.
       </P>
 
       <P>
-        We explicitly distinguish between non-empty and possibly-empty <Rs n="gtree"/> and internal set data structures. To reinforce those distinctions, our pseudocode comes with pseudotypes. The typing also aids in keeping straight the multiple levels of parametric polymorphism (<Quotes>generics</Quotes>). Finally, pseudotypes allow us to explicitly define the functions that must be available on <R n="gtree_g"/> for our algorithms to work. {/*<Rcb n="fig_set_interface"/> provides all type-level definitions we need.*/}
+        We explicitly distinguish between non-empty and possibly-empty <Rs n="gtree"/> and internal set data structures, to clarify which cases can arise in our algorithms. To reinforce those distinctions, our pseudocode comes with pseudotypes. The typing also aids in keeping straight the multiple levels of parametric polymorphism (<Quotes>generics</Quotes>). Finally, pseudotypes allow us to explicitly define the functions that must be available on <R n="gtree_g"/> for our algorithms to work. {/*<Rcb n="fig_set_interface"/> provides all type-level definitions we need.*/}
       </P>
-
-      {/* <P>
-        We try to optimize our presentation of <Rs n="gtree"/> algorithms for clarity rather than non-asymptotic efficiency. In particular, we give purely functional versions of the algorithms, we use a pseudo-type system, and we explicitly distinguish between empty and non-empty collections. Making <R n="gtree_s"/> a type of <Em>non-</Em>empty sets not only captures more accurately the behavior of <Rs n="gtree"/>, but has an important practical benefit as well<Alj>Bah, not happy with this explanation =(</Alj>: many set data structures are nullable pointers to some tree vertex, with the null pointer representing the empty collection. Requiring a non-empty collection allows the <Rs n="gnode"/> to forego a level of indirection. A concrete example: the type of linked lists is that of nullable pointers to a list vertex, whereas the type of non-empty linked lists is that of list vertices.
-      </P>
-
-      <P>
-        We give the interface for <R n="gtree_s"/> in <Rc n="fig_set_interface"/>. Note that we require explicit functions for adding a minimal or maximal <Rs n="item"/> to the data structure, rather than a generic insertion function. The latter would work just as well, but obscures that the insertions and deletions performed by our algorithms adhere to a strict pattern. Furthermore, the specialized functions can admit more efficient implementations.
-      </P> */}
 
       {/* <Fig
           n="fig_set_interface"
@@ -1004,7 +949,7 @@ const exp = (
                 multiline: true,
               },
               {
-                comment: <>Insert an <R n="item"/> and its <R n="gtree_left_subtree"/> into <R n="c_neset_remove_min_self"/>. The new <R n="item"/> is guaranteed to be strictly less than any <R n="item"/> in <R n="c_neset_remove_min_self"/>.</>,
+                comment: <>Insert an <R n="item"/> and its <R n="gtree_left_subtree"/> into <R n="c_neset_remove_min_self"/>. The new <R n="item"/> is must strictly less than any <R n="item"/> in <R n="c_neset_remove_min_self"/>.</>,
                 id: ["insert_min", "c_neset_insert_min"],
                 args: [
                   ["self", "c_neset_insert_min_self", <Self/>],
@@ -1038,49 +983,6 @@ const exp = (
             ]}
           />
           <Loc />
-          <FunctionItem
-            comment={<>Insert an <R n="item"/> and its <R n="gtree_left_subtree"/> into a possibly empty set. The new <R n="item"/> is guaranteed to be strictly less than any <R n="item"/> in <R n="c_set_insert_min_set"/>.</>}
-            id={["set_insert_min", "c_set_insert_min"]}
-            generics={[{
-              id: ["I", "c_set_insert_min_item"], 
-            }, {
-              id: [<><Mathfrak>S</Mathfrak></>, "c_set_insert_min_s"],
-              bounds: [<TypeApplication constr="c_neset" args={[<R n="c_set_insert_min_item"/>]}/>],
-            }]}
-            args={[
-              ["set", "c_set_insert_min_set", <TypeApplication constr="c_set" args={[<R n="c_set_insert_min_s"/>]} />],
-              ["new_min", "c_set_insert_min_new", <TupleType types={[
-                <R n="c_set_insert_min_item"/>,
-                <TypeApplication constr="c_gtree" args={[<R n="c_set_insert_min_s"/>]} />
-              ]}/>],
-            ]}
-            multilineArgs
-            body={[
-              <Match
-                exp={<R n="c_set_insert_min_set"/>}
-                cases={[
-                  [
-                    <R n="c_set_empty"/>,
-                    <Return><Application fun="c_neset_singleton" args={[
-                      <AccessTuple at={0}><R n="c_set_insert_min_new"/></AccessTuple>,
-                      <AccessTuple at={1}><R n="c_set_insert_min_new"/></AccessTuple>,
-                    ]}/></Return>,
-                  ],
-                  [
-                    <TupleStruct name="c_set_nonempty" fields={[<DefValue n="c_set_insert_min_set_s" r="s" />]} />,
-                    [<Return><Application
-                      fun="c_neset_insert_min"
-                      args={[
-                        <R n="c_set_insert_min_set_s"/>,
-                        <R n="c_set_insert_min_new"/>,
-                      ]}
-                    /></Return>],
-                  ],
-                ]}
-              />
-            ]}
-          />
-          <Loc/>
           <StructDef
             comment={<>A <R n="gnode"/>.</>}
             id={["GTreeNode", "c_gtree_node"]} 
@@ -1161,17 +1063,178 @@ const exp = (
           <>
             Not that we needed an efficient implementation: since <Rs n="gnode"/> have constant expected size, even <BigO>n</BigO> implementations do not hurt the asymptotic efficiency of our algorithms.
           </>
-        }>structures</Sidenote>. The only choice worth commenting on is that of requiring specialized <R n="c_neset_insert_min"/> and <R n="c_neset_insert_max"/> functions instead of a generic <DefFunction n="insert" preview={
-          <P>A less efficient and explicit alternative to specialized <R n="c_neset_insert_min"/> and <R n="c_neset_insert_max"/> functions is a single <DefFunction n="insert" fake/> function.</P>
+        }>structures</Sidenote>. The only choice worth commenting on is that of using a specialized <R n="c_neset_insert_min"/> function instead of a generic <DefFunction n="insert" preview={
+          <P>A less efficient and explicit alternative to a specialized <R n="c_neset_insert_min"/> function is a generic <DefFunction n="insert" fake/> function.</P>
         }/> function. This choice is to allow for more efficient, specialized implementations, as well as to highlight that our algorithms interact with the internal set data structures in a surprisingly constrained manner.
       </P>
+
+      <P>
+        Before giving our main algorithms, we define some helper functions:
+      </P>
+
+      <Pseudocode n="code_helpers" lineNumbering>
+        <FunctionItem
+          comment={<>Insert an <R n="item"/> and its <R n="gtree_left_subtree"/> into a possibly empty set. The new <R n="item"/> is must be strictly less than any <R n="item"/> in <R n="c_set_insert_min_set"/>.</>}
+          id={["set_insert_min", "c_set_insert_min"]}
+          generics={[{
+            id: ["I", "c_set_insert_min_item"], 
+          }, {
+            id: [<><Mathfrak>S</Mathfrak></>, "c_set_insert_min_s"],
+            bounds: [<TypeApplication constr="c_neset" args={[<R n="c_set_insert_min_item"/>]}/>],
+          }]}
+          args={[
+            ["set", "c_set_insert_min_set", <TypeApplication constr="c_set" args={[<R n="c_set_insert_min_s"/>]} />],
+            ["new_min", "c_set_insert_min_new", <TupleType types={[
+              <R n="c_set_insert_min_item"/>,
+              <TypeApplication constr="c_gtree" args={[<R n="c_set_insert_min_s"/>]} />
+            ]}/>],
+          ]}
+          multilineArgs
+          ret={<R n="c_set_insert_min_s"/>}
+          body={[
+            <Match
+              exp={<R n="c_set_insert_min_set"/>}
+              cases={[
+                [
+                  <R n="c_set_empty"/>,
+                  <Return><Application fun="c_neset_singleton" args={[
+                    <AccessTuple at={0}><R n="c_set_insert_min_new"/></AccessTuple>,
+                    <AccessTuple at={1}><R n="c_set_insert_min_new"/></AccessTuple>,
+                  ]}/></Return>,
+                ],
+                [
+                  <TupleStruct name="c_set_nonempty" fields={[<DefValue n="c_set_insert_min_set_s" r="s" />]} />,
+                  [<Return><Application
+                    fun="c_neset_insert_min"
+                    args={[
+                      <R n="c_set_insert_min_set_s"/>,
+                      <R n="c_set_insert_min_new"/>,
+                    ]}
+                  /></Return>],
+                ],
+              ]}
+            />
+          ]}
+        />
+        <Loc/>
+        <FunctionItem
+          comment={<>Replace the leftmost <R n="gtree_left_subtree"/> of a <R n="c_gtree_node"/>.</>}
+          id={["update_leftmost", "c_update_leftmost"]}
+          generics={[{
+            id: ["I", "c_update_leftmost_i"], 
+          }, {
+            id: [<><Mathfrak>S</Mathfrak></>, "c_update_leftmost_s"],
+            bounds: [<TypeApplication constr="c_neset" args={[<R n="c_update_leftmost_i"/>]}/>],
+          }]}
+          args={[
+            ["node", "c_update_leftmost_node", <TypeApplication constr="c_gtree_node" args={[<R n="c_update_leftmost_i"/>, <R n="c_update_leftmost_s"/>]} />],
+            ["new_left", "c_update_leftmost_new", <TypeApplication constr="c_gtree" args={[<R n="c_update_leftmost_i"/>, <R n="c_update_leftmost_s"/>]} />],
+          ]}
+          multilineArgs
+          ret={<TypeApplication constr="c_gtree_node" args={[<R n="c_update_leftmost_i"/>, <R n="c_update_leftmost_s"/>]}/>}
+          body={[
+            <LetRaw lhs={<Tuple multiline fields={[
+              <Tuple fields={[
+                <DefValue n="c_update_leftmost_leftmost_item" r="leftmost_item"/>,
+                <BlankPattern/>,
+              ]} />,
+              <DefValue n="c_update_leftmost_others" r="other_pairs"/>,
+            ]}/>}>
+              <Application fun="c_neset_remove_min" args={[<AccessStruct field="c_gtree_node_set"><R n="c_update_leftmost_node"/></AccessStruct>]}/>
+            </LetRaw>,
+            <Return>
+              <Struct name="c_gtree_node" multiline fields={[
+                ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_update_leftmost_node"/></AccessStruct>],
+                ["c_gtree_node_set", <Application fun="c_set_insert_min" multilineArgs args={[
+                  <R n="c_update_leftmost_others"/>,
+                  <Tuple fields={[
+                    <R n="c_update_leftmost_leftmost_item"/>,
+                    <R n="c_update_leftmost_new"/>,
+                  ]}/>
+                ]}/>],
+                ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="c_update_leftmost_node"/></AccessStruct>],
+              ]} />
+            </Return>
+          ]}
+        />
+        <Loc/>
+        <FunctionItem
+          comment={<>Replace the <R n="gtree_right_subtree"/> of a <R n="c_gtree_node"/>.</>}
+          id={["update_rightmost", "c_update_rightmost"]}
+          generics={[{
+            id: ["I", "c_update_rightmost_i"], 
+          }, {
+            id: [<><Mathfrak>S</Mathfrak></>, "c_update_rightmost_s"],
+            bounds: [<TypeApplication constr="c_neset" args={[<R n="c_update_rightmost_i"/>]}/>],
+          }]}
+          args={[
+            ["node", "c_update_rightmost_node", <TypeApplication constr="c_gtree_node" args={[<R n="c_update_rightmost_i"/>, <R n="c_update_rightmost_s"/>]} />],
+            ["new_right", "c_update_rightmost_new", <TypeApplication constr="c_gtree" args={[<R n="c_update_rightmost_i"/>, <R n="c_update_rightmost_s"/>]} />],
+          ]}
+          multilineArgs
+          ret={<TypeApplication constr="c_gtree_node" args={[<R n="c_update_rightmost_i"/>, <R n="c_update_rightmost_s"/>]}/>}
+          body={[
+            <Return>
+              <Struct name="c_gtree_node" multiline fields={[
+                ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_update_rightmost_node"/></AccessStruct>],
+                ["c_gtree_node_set", <AccessStruct field="c_gtree_node_set"><R n="c_update_rightmost_node"/></AccessStruct>],
+                ["c_gtree_node_right", <R n="c_update_rightmost_new"/>],
+              ]} />
+            </Return>
+          ]}
+        />
+        <Loc/>
+        <FunctionItem
+          comment={<>
+            A (non-empty) <R n="c_gtree"/> has a root <R n="c_gtree_node"/> that consists of a <R n="rank"/>, a <R n="gtree_right_subtree"/>, and a non-empty set of pairs of <Rs n="item"/> and their <Rs n="gtree_left_subtree"/>.<Br/>
+            Occasionally, we need to construct a non-empty <R n="c_gtree"/> from a <R n="rank"/>, a <R n="gtree_right_subtree"/>, and a <Em>possibly empty</Em> set of pairs of <Rs n="item"/> and their <Rs n="gtree_left_subtree"/>. If the set is empty, the lifted <R n="c_gtree"/> is simply the supplied <R n="gtree_right_subtree"/>.
+          </>}
+          id={["lift", "c_norm"]}
+          generics={[{
+            id: ["I", "c_norm_i"], 
+          }, {
+            id: [<><Mathfrak>S</Mathfrak></>, "c_norm_s"],
+            bounds: [<TypeApplication constr="c_neset" args={[<R n="c_norm_i"/>]}/>],
+          }]}
+          args={[
+            ["s", "c_norm_arg", <TypeApplication constr="c_set" args={[<R n="c_norm_s"/>]} />],
+            ["right", "c_norm_right", <TypeApplication constr="c_gtree" args={[<R n="c_norm_i"/>, <R n="c_norm_s"/>]} />],
+            ["rank", "c_norm_rank", <M>\N</M>],
+          ]}
+          multilineArgs
+          ret={<TypeApplication constr="c_gtree" args={[<R n="c_norm_i"/>, <R n="c_norm_s"/>]}/>}
+          body={[
+            <Match
+              exp={<R n="c_norm_arg"/>}
+              cases={[
+                [
+                  <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
+                  <Return><R n="c_norm_right"/></Return>,
+                ],
+                [
+                  <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_norm_bla" r="set" />]} />,
+                  <Return>
+                    <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                      <Struct name="c_gtree_node" multiline fields={[
+                        ["c_gtree_node_rank", <R n="c_norm_rank"/>],
+                        ["c_gtree_node_set", <R n="c_norm_bla"/>],
+                        ["c_gtree_node_right", <R n="c_norm_right"/>],
+                      ]} />,
+                    ]} />
+                  </Return>
+                ],
+              ]}
+            />
+          ]}
+        />
+      </Pseudocode>
 
       <P>
         While it is possible to derive insertion and deletion algorithms by generalizing the original <R n="zip_tree"/> algorithms, we opt for a fully self-contained presentation. Zipping and unzipping are similar to the join and split functions of <Bib item="blelloch2016just">join-based tree algorithms</Bib>. We consistently use zip and unzip terminology when operating on <Rs n="gtree"/>, and join and split terminology when operating on the underlying set datastructure <R n="gtree_g"/>.
       </P>
 
       <P>
-        We build our insertion and deletion algorithms from algorithms for unzipping and zipping <Rs n="gtree"/>. Unzipping takes a key and splits a <R n="gtree"/> into the tree of all <Rs n="item"/> less than the key, and the tree of all <Rs n="item"/> greater than the key. Zipping takes two trees, the first containing only <Rs n="item"/> strictly lesser than any <R n="item"/> of the second, and joins them together into a single tree. We call this version of zipping <Code>zip2</Code>, because it takes <Em>two</Em> arguments. We also use a <Code>zip3</Code> function, which additionally incorporates a single <R n="item"/> into the tree that is strictly greater than all <Rs n="item"/> of the first tree, and strictly less than all <Rs n="item"/> of the second tree. Insertion and deletion can then be implemented as composition of unzipping and zipping (<Code>zip3</Code> and <Code>zip2</Code>, respectively) — see <Rc n="fig_insert_and_delete"/>.
+        We build our insertion and deletion algorithms from algorithms for unzipping and zipping <Rs n="gtree"/>. Unzipping takes a key, and splits a <R n="gtree"/> into the tree of all <Rs n="item"/> less than the key and the tree of all <Rs n="item"/> greater than the key. Zipping takes two trees, the first containing only <Rs n="item"/> strictly lesser than any <R n="item"/> of the second, and joins them together into a single tree. We call this version of zipping <Code>zip2</Code>, because it takes <Em>two</Em> arguments. We also use a <Code>zip3</Code> function, which additionally incorporates a single <R n="item"/> into the tree that is strictly greater than all <Rs n="item"/> of the first tree, and strictly less than all <Rs n="item"/> of the second tree. Insertion and deletion can then be implemented as composition of unzipping and zipping (<Code>zip3</Code> and <Code>zip2</Code>, respectively) — see <Rc n="fig_insert_and_delete"/>.
       </P>
 
       <Fig
@@ -1435,6 +1498,8 @@ const exp = (
       <P>
         Since the expected size of <Rs n="gnode"/> is constant with high probability, we can treat all functions of the <R n="c_neset"/> interface as running in constant time. Each recursive call of the <R n="c_unzip"/> function is to a <R n="c_gtree_node"/> of strictly decreasing <R n="c_gtree_node_rank"/>, so the recursion depth is bounded by the height of the <R n="gtree"/>, which is logarithmic with high probability. Hence, the overall running time is in <BigO>\log(n)</BigO> with high probability.
       </P>
+
+      <P><Alj inline>Remarks on efficiency (only zip/unzip what actually needs work), iterative and mutable, search.</Alj></P>
 
     </Hsection>
   </ArticleTemplate>
