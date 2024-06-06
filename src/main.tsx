@@ -1664,7 +1664,6 @@ const exp = (
               ]}/>
             </Return>
           ]}
-          // return zip2(&zip2(&left, &mid), &right);
         />
       </Pseudocode>
 
@@ -1672,7 +1671,85 @@ const exp = (
         With <R n="c_unzip"/>, <R n="c_zip2"/>, and <R n="c_zip3"/> in place, insertion and deletion in expected logarithmic time become trivial:
       </P>
 
+      <Pseudocode n="code_insert_delete" lineNumbering>
+        <FunctionItem
+          comment={<>Insert an <R n="item"/> at a given <R n="rank"/> into a <R n="gtree"/>.</>}
+          id={["insert", "c_insert"]}
+          generics={[
+            {
+              id: ["I", "c_insert_i"], 
+            }, {
+              id: [<><Mathfrak>S</Mathfrak></>, "c_insert_s"],
+              bounds: [<TypeApplication constr="c_neset" args={[<R n="c_insert_i"/>]}/>],
+            },
+          ]}
+          args={[
+            ["t", "c_insert_t", <TypeApplication constr="c_gtree" args={[<R n="c_insert_s"/>]} />],
+            ["item", "c_insert_item", <R n="c_insert_i"/>],
+            ["rank", "c_insert_rank", <M>\N</M>],
+          ]}
+          multilineArgs
+          ret={<TypeApplication constr="c_gtree" args={[<R n="c_insert_s"/>]} />}
+          body={[
+            <LetRaw lhs={<Tuple fields={[
+              <DefValue n="c_insert_left" r="left"/>,
+              <DefValue n="c_insert_right" r="right"/>,
+            ]}/>}>
+              <Application fun="c_unzip" args={[
+                <R n="c_insert_t"/>,
+                <R n="c_insert_item"/>,
+              ]}/>
+            </LetRaw>,
+            <Return>
+              <Application fun="c_zip3" args={[
+                <R n="c_insert_left"/>,
+                <R n="c_insert_item"/>,
+                <R n="c_insert_rank"/>,
+                <R n="c_insert_right"/>,
+              ]}/>
+            </Return>,
+          ]}
+        />
+        <Loc/>
+        <FunctionItem
+          comment={<>Delete an <R n="item"/>from a <R n="gtree"/>.</>}
+          id={["delete", "c_delete"]}
+          generics={[
+            {
+              id: ["I", "c_delete_i"], 
+            }, {
+              id: [<><Mathfrak>S</Mathfrak></>, "c_delete_s"],
+              bounds: [<TypeApplication constr="c_neset" args={[<R n="c_delete_i"/>]}/>],
+            },
+          ]}
+          args={[
+            ["t", "c_delete_t", <TypeApplication constr="c_gtree" args={[<R n="c_delete_s"/>]} />],
+            ["item", "c_delete_item", <R n="c_delete_i"/>],
+          ]}
+          multilineArgs
+          ret={<TypeApplication constr="c_gtree" args={[<R n="c_delete_s"/>]} />}
+          body={[
+            <LetRaw lhs={<Tuple fields={[
+              <DefValue n="c_delete_left" r="left"/>,
+              <DefValue n="c_delete_right" r="right"/>,
+            ]}/>}>
+              <Application fun="c_unzip" args={[
+                <R n="c_delete_t"/>,
+                <R n="c_delete_item"/>,
+              ]}/>
+            </LetRaw>,
+            <Return>
+              <Application fun="c_zip2" args={[
+                <R n="c_delete_left"/>,
+                <R n="c_delete_right"/>,
+              ]}/>
+            </Return>,
+          ]}
+        />
+      </Pseudocode>
+
       <P>
+        <Alj>Update this paragraph if we add efficient pseudocode and/or a link to a real, efficient implementation.</Alj>
         We want to emphasize that our choice of algorithms optimizes for elegance, not for (non-asymptotic) efficiency. Implementations based on in-place mutations will outperform our immutable algorithms. A direct implementation of <R n="c_zip3"/> will outperform the reduction to two applications of <R n="c_zip2"/>. Iterative implementations might outperform recursive implementations. And finally, direct implementations of insertion and deletion should outperform those based off unzipping and zipping the full trees. The <Bib item="tarjan2021zip">original zip-tree paper</Bib> contains examples of direct algorithms that zip and unzip only parts of a tree, our algorithms can be adapted to work analogously.
       </P>
     </Hsection>
