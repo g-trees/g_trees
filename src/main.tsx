@@ -1792,8 +1792,95 @@ const exp = (
 
     <Hsection n="conclusion" title="Conclusion">
       <P>
-      <Wip inline>TODO</Wip>
+        <Wip inline>TODO</Wip>
       </P>
+    </Hsection>
+
+    <Hsection n="variants" title="Appendix A: Variants">
+      <P>
+        <Alj>TODO: Teach Macromania about appendices...</Alj>
+      </P>
+
+      <Fig
+        n="fig_leafy_gtree"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafGtree.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_leafy_1zip"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafGtreeOfLists.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_leafy_2zip"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafGtree2Lists.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_leafy_bot_gtree"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafBotGtree.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_leafy_bot_1zip"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafBot1zip.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_leafy_bot_2zip"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafBot2zip.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_linked_leafy_bot_gtree"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "linkedLeafBotGtree.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_linked_leafy_bot_1zip"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "linkedLeafBot1zip.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_linked_leafy_bot_2zip"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "linkedLeafBot2zip.svg"]} />}
+        />
+      </Fig>
     </Hsection>
   </ArticleTemplate>
 );
