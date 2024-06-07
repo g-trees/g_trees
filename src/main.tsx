@@ -31,6 +31,7 @@ Access,
   Match,
   QualifiedMember,
   RefLoc,
+  S,
   Self,
   SpliceLoc,
   Struct,
@@ -362,6 +363,9 @@ const exp = (
 
     <Hsection title="Related Work" n="related-work">
       <P>
+        <Marginale>
+          The practically-minded reader can safely skip ahead to <Rc n="preliminaries"/>. Academic tradition requires us to <S>talk down all prior research</S> demonstrate knowledge of the current state of the art and contextualize our contributions.
+        </Marginale>
         Data structures whose exact shape is determined solely by their contents and not by the order of insertion and deletion operations have been studied for decades.
         This property has been given several names, such as <Bib item="snyder1977uniquely">unique representation</Bib>, <Bib item="auvolat2019merkle">structural unicity</Bib>, <Bib item="driscoll1994fully">confluent persistence</Bib>, and <Bib item="naor2001anti">anti-persistence or history-independence</Bib>.
         Deterministically self-balancing <R n="history_independent" /> set data structures necessarily take super-logarithmic time to update under arbitrary insertions and deletions<Bib item="snyder1977uniquely" />.
@@ -694,7 +698,7 @@ const exp = (
             The <Def n="gtree" r="G-tree" rs="G-trees">geometric search tree</Def> (<Def n="gtree" fake>G-tree</Def>) of <R n="gtree_s"/> using <R n="gtree_g"/> is a pair of<Ul>
               <Li>
                 <Marginale>
-                  To emphasize: <R n="gtree_g"/> does not store <Rs n="item"/> only, but a list of <R n="item"/>-<R n="gtree_left_subtree">subtree</R>-pairs.
+                  To emphasize: <R n="gtree_g"/> does not store <Rs n="item"/> only, but <R n="item"/>-<R n="gtree_left_subtree">subtree</R>-pairs.
                 </Marginale>
                 an instance of <R n="gtree_g"/> storing the <Rs n="item"/> in <R n="gtree_m"/> in ascending order, paired with their <Rs n="gtree_left_subtree"/>, where the <Def n="gtree_left_subtree" r="left subtree" rs="left subtrees"/> of <R n="item"/> <M>m_i</M> is the <R n="gtree"/> of <M><MSet>s \in <R n="gtree_s"/> : m_<Curly>i - 1</Curly> \succ s \succ m_i</MSet></M>, and
               </Li>
@@ -751,13 +755,16 @@ const exp = (
         <Rsb n="gtree"/>, when interpreted as trees of <Rs n="gnode"/>, are highly similar to Auvolat & Taïani’s <Rs n="mst">merkle-search-trees</Rs> — <Rc n="fig_gnodes"/> could directly serve as a depiction of an <R n="mst"/>.
         Structurally, the only difference is that <Rs n="mst"/> insert empty nodes uphold the invariant that the difference in <R n="rank"/> bewteen a parent and a child node is at most one.
         {" "}<Rsb n="gtree"/>, in contrast, collapse missing <Rs n="rank"/>.
-        More importantly, however, Auvolat and Taïani treat <Rs n="gnode"/> as atomic, never considering how they might be represented on a machine, and how that representation might affect asymptotic performance.
+        More importantly, however, Auvolat and Taïani treat <Rs n="gnode"/> as atomic, never considering how they might be represented in memory.
         Whereas we determine the common interface of all possible realizations of <Rs n="gnode"/> to be that of set datastructures and then explore the impact of various reifications, they disregard the issue and their reference implementation simply uses the dynamic array type of their programming language.
         Hence, they miss the useful instantiations that we uncover in <Rc n="new_gtrees"/>.
       </P>
 
       <Hsection title="Analysis" n="analysis">
       <P>
+        <Marginale>
+          The math-averse reader can safely skip ahead to <Rc n="old_gtrees"/>, as long as they believe when we say that <Rs n="gnode"/> form trees of logarithmic height with high probability, and that each <R n="gnode"/> contains <BigO>1</BigO> <Rs n="item"/> with high probability.
+        </Marginale>
         <Alj>TODO (not anchored here, just taking notes): explicitly mention that it would make more sense to do width first, height second. (keep in head that we are using heights to define width)</Alj>
         <Alj>TODO (not anchored here, just taking notes): explicitly compare our bounds to the (tighter) zip-paper bounds.</Alj>
         We now give a formal analysis of the performance-related properties of <Rs n="gtree"/>. Roughly speaking, we show that <Rs n="gtree"/> with a <R n="geometric_distribution"/> of some probability <M>1 - <MFrac num="1" de="k"/></M> are sufficiently similar to perfectly balanced <M post="-ary">(k + 1)</M> trees with high probability: the height (in terms of <Rs n="gnode"/>) stays within a constant factor of <M><MLog base="k">n</MLog></M>, and the maximal number of <Rs n="item"/> per <R n="gnode"/> stays within a constant factor of <M>k</M>.
@@ -915,7 +922,7 @@ const exp = (
           </P>
 
           <P>
-            The space amplification of <Rs n="k_list"/> might seem concerning at first glance: in the worst case, every <R n="item"/> would be in its own <R n="k_list"/>, resulting in an amplification factor of <M>k</M>. Intuitively, this occurs only rarely, however: the expected size of each <R n="gnode"/> is <M>k</M>, and the probability for a node to have size <M>s \lt k</M> decreases exponentially in <M>k - s</M>. Any overfull node consists of one or more full linked-list vertex, plus exactly one underfull linked-list vertex. Hence, the overfull nodes contribute an amplification factor of at most two. <Rcb n="fig_space_amplification"/> backs up this intuition with experimental data.<Alj>TODO: @Carson, can you create that figure?</Alj> 
+            The space amplification of <Rs n="k_list"/> might seem concerning at first glance: in the worst case, every <R n="item"/> would be in its own <R n="k_list"/>, resulting in an amplification factor of <M>k</M>. Intuitively, this occurs only rarely, however: the expected size of each <R n="gnode"/> is <M>k</M>, and the probability for a node to have size <M>s \lt k</M> decreases exponentially in <M>k - s</M>. Any overfull node consists of one or more full linked-list vertex, plus exactly one underfull linked-list vertex. Hence, the overfull nodes contribute an amplification factor of at most two. <Rcb n="fig_space_amplification"/> backs up this intuition with experimental data.<Alj>TODO: @Carson, can you create that figure? Later: actually, as part of writing the pseudocode, I have accidentally implemented G-trees in rust. So I can generate the data myself as well.</Alj> 
           </P>
 
           <PreviewScope>
