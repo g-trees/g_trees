@@ -1881,6 +1881,33 @@ const exp = (
           src={<ResolveAsset asset={["graphics", "linkedLeafBot2zip.svg"]} />}
         />
       </Fig>
+
+      <Fig
+        n="fig_gplus_gtree"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "gPlusGtree.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_gplus_1zip"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "gPlus1zip.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_gplus_2zip"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "gPlus2zip.svg"]} />}
+        />
+      </Fig>
     </Hsection>
   </ArticleTemplate>
 );
