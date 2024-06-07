@@ -94,6 +94,7 @@ import {
   Magenta,
   Mathcal,
   Mathfrak,
+  MCeil,
   MFrac,
   MFunDef,
   MLog,
@@ -218,7 +219,7 @@ const exp = (
   >
     <Hsection n="introduction" title="Introduction">
       <P>
-        <Alj>TODO: Lead with performance comparison plot zip-tree (i.e., 1-zip-tree) vs 16-zip-tree (or whichever performs best).</Alj>
+        <Alj>TODO: Lead with performance comparison plot zip-tree (i.e., 1-zip-tree) vs 16-zip-tree (or whichever performs best). @Carson</Alj>
         Randomized set data structures eschew self-balancing logic for more simple, probabilistic item organization.
         When deriving the necessary randomness via pseudorandom functions of the stored items themselves, the resulting graphs depend on the stored set only, but not the order of insertions and deletions.
         This <Def n="history_independent"
@@ -529,18 +530,18 @@ const exp = (
         <PreviewScope>
           <P>
             The random variable <R n="geo_x"/> can take on arbitrary large numbers, but we often need to represent <R n="geo_x" /> in a computer.
-            To this end, we work with <Def n="truncated"/> <Rs n="geometric_distribution" />, which clamp <R n="geo_x" /> between <M>1</M> and some maximum value <M><Def n="geo_beta" r="\beta"/></M>.
-            Typically, <R n="geo_beta" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_beta" /></MLog></M> bits.
+            To this end, we work with <Def n="truncated"/> <Rs n="geometric_distribution" />, which clamp <R n="geo_x" /> between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
+            Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
           </P>
         </PreviewScope>
 
         <PreviewScope>
           <P>
-            <Alj>I'm not entirely happy with this paragraph. Could you give a more clear explanation, and/or could we simply cite this from somewhere?</Alj>
+            <Alj>I'm not entirely happy with this paragraph. Could you give a more clear explanation? @Carson</Alj>
             To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that the probability for not getting a success within the first <R n="geo_k"/> trials is <M post="."><R n="geo_q"/>^<Curly><R n="geo_k"/> - 1</Curly></M>
-            {" "}Since we stop the trials after <R n="geo_beta"/> failures, we reduce the expected number of trials by <M><MFrac num="1" de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_beta"/> - 1</Curly></M>
-            {" "}This leads to the truncated expected value <M post="."><Def n="geo_expected_truncated" r="E"/>[<R n="geo_x"/>] = (1 - <R n="geo_q"/>^<Curly><R n="geo_beta"/> - 1</Curly>) / (1 - <R n="geo_q"/>) = (1 - <R n="geo_q"/>^<Curly><R n="geo_beta"/> - 1</Curly>) / <R n="geo_p"/></M>
-            {" "}For large <R n="geo_beta"/>, we can hence simply ignore the effect of <R n="truncated">trunctation</R>.
+            {" "}Since we stop the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num="1" de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
+            {" "}This leads to the truncated expected value <M post="."><Def n="geo_expected_truncated" r="E"/>[<R n="geo_x"/>] = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / (1 - <R n="geo_q"/>) = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / <R n="geo_p"/></M>
+            {" "}For large <R n="geo_N"/>, we can hence simply ignore the effect of <R n="truncated">trunctation</R>.
           </P>
         </PreviewScope>
 
@@ -560,7 +561,7 @@ const exp = (
         <P>
           In practice, <Rank p={<>\frac<Curly>1</Curly><Curly>2</Curly></>}><R n="geo_arg_u" /></Rank> can be implemented by hashing <R n="geo_arg_u" /> with a secure hash function and counting the number of trailing zeros in the binary representation of the digest.
           This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh and Teitelbaum<Bib item="pugh1989incremental" />.
-          For digests of length <M>l</M>, this <R n="truncated">truncates</R> the distribution to <M post="."><R n="geo_beta" /> = 2^l</M>{" "}
+          For digests of length <M>l</M>, this <R n="truncated">truncates</R> the distribution to <M post="."><R n="geo_N" /> = 2^l</M>{" "}
           Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers.
         </P>
       </Hsection>
@@ -580,10 +581,15 @@ const exp = (
           n="fig_ziptree_basic"
           title="A Zip-Tree"
           caption={
-            <P>
-              <Rsb n="item"/> are the numbers in the vertices, <Rs n="rank"/> are the gray numbers above the vertices. 
-              {" "}<Rsb n="item"/> are increasing from left to right (the tree is a <R n="search_tree"/> with respect to <Rs n="item"/>), <Rs n="rank"/> are decreasing from top to bottom (the tree is a <R n="heap"/> with respect to <Rs n="rank"/> ), and no <R n="vertex"/> has a <R n="left"/> <R n="child"/> of equal <R n="rank"/> (yielding a unique tree shape).
-            </P>
+            <>
+              <P>
+                <Rsb n="item"/> are the numbers in the vertices, <Rs n="rank"/> are the gray numbers above the vertices. 
+                {" "}<Rsb n="item"/> are increasing from left to right (the tree is a <R n="search_tree"/> with respect to <Rs n="item"/>), <Rs n="rank"/> are decreasing from top to bottom (the tree is a <R n="heap"/> with respect to <Rs n="rank"/> ), and no <R n="vertex"/> has a <R n="left"/> <R n="child"/> of equal <R n="rank"/> (yielding a unique tree shape).
+              </P>
+              <P>
+                The exampe tree is taken from a <A href="https://stackoverflow.com/questions/61944198/what-is-a-zip-tree-and-how-does-it-work">stackoverflow answer</A>, the interested reader can find there a detailed description of the isomorphism to <Rs n="skip_list"/> for that same example tree.
+              </P>
+            </>
           }
         >
           <Img
@@ -747,22 +753,50 @@ const exp = (
         {" "}<Rsb n="gtree"/>, in contrast, collapse missing <Rs n="rank"/>.
         More importantly, however, Auvolat and Taïani treat <Rs n="gnode"/> as atomic, never considering how they might be represented on a machine, and how that representation might affect asymptotic performance.
         Whereas we determine the common interface of all possible realizations of <Rs n="gnode"/> to be that of set datastructures and then explore the impact of various reifications, they disregard the issue and their reference implementation simply uses the dynamic array type of their programming language.
-        Hence, they miss the useful instantiations that we discuss next.
+        Hence, they miss the useful instantiations that we uncover in <Rc n="new_gtrees"/>.
       </P>
 
       <Hsection title="Analysis" n="analysis">
       <P>
         <Alj>TODO (not anchored here, just taking notes): explicitly mention that it would make more sense to do width first, height second. (keep in head that we are using heights to define width)</Alj>
         <Alj>TODO (not anchored here, just taking notes): explicitly compare our bounds to the (tighter) zip-paper bounds.</Alj>
-        We now give a formal analysis of the performance-related properties of <Rs n="gtree"/>. Roughly speaking, we show that <Rs n="gtree"/> with a <R n="geometric_distribution"/> of some probability <M><MFrac num="1" de="k"/></M> are sufficiently similar to perfectly balanced <M>(k + 1)</M>-ary trees with high probability: the height (in terms of <Rs n="gnode"/>) stays within a constant factor of <M><MLog>k</MLog></M>, and the maximal number of <Rs n="item"/> per <R n="gnode"/> stays within a constant factor of <M>k</M>.
+        We now give a formal analysis of the performance-related properties of <Rs n="gtree"/>. Roughly speaking, we show that <Rs n="gtree"/> with a <R n="geometric_distribution"/> of some probability <M>1 - <MFrac num="1" de="k"/></M> are sufficiently similar to perfectly balanced <M post="-ary">(k + 1)</M> trees with high probability: the height (in terms of <Rs n="gnode"/>) stays within a constant factor of <M><MLog base="k">n</MLog></M>, and the maximal number of <Rs n="item"/> per <R n="gnode"/> stays within a constant factor of <M>k</M>.
       </P>
 
       <PreviewScope>
         <P>
-          Throughout our analyses, we let <M><Def n="ana_k" r="k"/></M> be a natural number greater than or equal to two.
-          We then consider <Rs n="gtree"/> for the <Rs n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M> with <M><Def n="ana_p" r="p"/> := <MFrac num="1" de={<R n="ana_k"/>}/></M>, and we write <M post="."><Def n="ana_q" r="q"/> := 1 - <R n="ana_p"/></M>
+          Throughout our analyses, we let <M><Def n="ana_k" r="k"/></M> be a natural number greater than or equal to two; <R n="ana_k"/> is the intended average number of <Rs n="item"/> per <R n="gnode"/>.
+          We let <M><Def n="ana_T" r="T"/></M> be a <R n="gtree"/> of <M><Def n="ana_n" r="n"/></M> <Rs n="gnode"/>.
+          We further fix a target capacity <Def n="ana_max" r="N"/>, some anticipated maximum number of <Rs n="item"/> in the <Rs n="gtree"/>.
+          We then consider <Rs n="gtree"/> for the <Rs n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M> with <M post=","><Def n="ana_p" r="p"/> := 1 - <MFrac num="1" de={<R n="ana_k"/>}/></M> <R n="truncated"/> at <R n="ana_max"/>; we write <M post=","><Def n="ana_q" r="q"/> := 1 - <R n="ana_p"/> = <MFrac num="1" de={<R n="ana_k"/>}/></M> and <M post="."><Def n="ana_beta" r="\beta"/> := <MCeil><MLog base={<R n="ana_k"/>}><R n="ana_max"/></MLog></MCeil> + 2</M><Alj>Why + 2?</Alj>
         </P>
       </PreviewScope>
+
+      <Hsection n="gtree_height" title="G-Tree Height">
+        <PreviewScope>
+          <P>
+            Given these parameters, the <R n="rank"/> of any <R n="gnode"/> is a geometric random variable with parameter <R n="ana_p"/>, truncated at <R n="ana_max"/>. The height of <R n="ana_T"/> is upper-bounded by the <R n="rank"/> <M><Def n="ana_R" r="R"/></M> of its root node, since each child has strictly lesser <R n="rank"/> than its parent.
+          </P>
+        </PreviewScope>
+
+        <PreviewScope>
+          <P>
+            <R n="ana_R"/> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="truncated"/> <R n="geometric_distribution"/>. By construction, this is at most <R n="ana_beta"/>. <Wip inline>TODO</Wip>
+          </P>
+        </PreviewScope>
+      </Hsection>
+
+      <Hsection n="gtree_node_size" title="G-Node Size">
+        <P>
+          <Wip inline>TODO</Wip> <Alj inline>@Carson: We definitely need an analysis of the expected node size, but do we even need an analysis of the expect <Em>number</Em> of nodes? That number is trivially upper-bounded by <M>n</M>, so the total space consumption of the tree will always be in <BigO>n</BigO> anyways.</Alj>
+        </P>
+      </Hsection>
+
+      <Hsection n="gtree_simulation" title="Simulation">
+        <P>
+          <Wip inline>TODO</Wip> <Alj inline>Figures for height and node size distributions. @Carson your domain probably.</Alj>
+        </P>
+      </Hsection>
     </Hsection>
 
       <Hsection title="Well-Known G-Trees" n="old_gtrees">
@@ -817,11 +851,7 @@ const exp = (
 
         <P>
           A key intuition behind classic <Rs n="zip_tree"/> is that of choosing <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M><R n="geo_p"/> = <MFrac num="1" de="2"/></M> because this is the distribution of the height of a randomly chosen vertex in a perfectly balanced binary <R n="tree"/>.
-          For <M>k</M>-ary trees, the same intuition instructs us to draw <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M post=","><R n="geo_p"/> = <MFrac num="1" de="k - 1"/></M> as this is the distribution of heights in a perfectly balanced <M>k</M>-ary <R n="tree"/>. We give a proper analysis to justify this choice in <Rc n="analysis"/>, for now we shall simply trust our intuition that — with high probability — the resulting trees are of logarithmic height and their <Rs n="gnode"/> store <BigO>k</BigO> <Rs n="item"/>.
-        </P>
-
-        <P>
-          <Alj inline>TODO add some experimental evidence that backs the intuition here.</Alj>
+          For <M>k</M>-ary trees, the same intuition instructs us to draw <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M post=","><R n="geo_p"/> = 1 - <MFrac num="1" de="k"/></M> as this is the distribution of heights in a perfectly balanced <M>k</M>-ary <R n="tree"/>. Our <R n="analysis">analysis</R> confirmes that — with high probability — the resulting trees are of logarithmic height and their <Rs n="gnode"/> store <BigO>k</BigO> <Rs n="item"/>.
         </P>
 
         <P>
@@ -855,7 +885,7 @@ const exp = (
 
           <PreviewScope>
             <P>
-              Instantiating <Rs n="gtree"/> with the <Rs n="k_list"/> and a <R n="geometric_distribution"/> of <M><R n="geo_p"/> = <MFrac num="1" de="k"/></M> yields a family of data structures we call the <Def n="kzip_tree" r={<><M>k</M>-zip-tree</>} rs={<><M>k</M>-zip-trees</>}><M>k</M>-zip-trees</Def>.
+              Instantiating <Rs n="gtree"/> with the <Rs n="k_list"/> and a <R n="geometric_distribution"/> of <M><R n="geo_p"/> = 1 - <MFrac num="1" de="1 + k"/></M> yields a family of data structures we call the <Def n="kzip_tree" r={<><M>k</M>-zip-tree</>} rs={<><M>k</M>-zip-trees</>}><M>k</M>-zip-trees</Def>.
               {" "}<Rcb n="fig_2ziptree"/> depicts the <R n="kzip_tree"><M>2</M>-zip-tree</R> for our running example set.
             </P>
           </PreviewScope>
@@ -885,8 +915,14 @@ const exp = (
           </P>
 
           <P>
-            <Alj>k-zip-zip and k-zip^l trees here?</Alj>
+            The space amplification of <Rs n="k_list"/> might seem concerning at first glance: in the worst case, every <R n="item"/> would be in its own <R n="k_list"/>, resulting in an amplification factor of <M>k</M>. Intuitively, this occurs only rarely, however: the expected size of each <R n="gnode"/> is <M>k</M>, and the probability for a node to have size <M>s \lt k</M> decreases exponentially in <M>k - s</M>. Any overfull node consists of one or more full linked-list vertex, plus exactly one underfull linked-list vertex. Hence, the overfull nodes contribute an amplification factor of at most two. <Rcb n="fig_space_amplification"/> backs up this intuition with experimental data.<Alj>TODO: @Carson, can you create that figure?</Alj> 
           </P>
+
+          <PreviewScope>
+            <P>
+              Recursive instantiation of <Rs n="gtree"/> with other <Rs n="gtree"/> leads to the family of <Rs n="zipk_tree"/> when using linked lists (i.e., <R n="k_list"><M>1</M>-lists</R>) as the recursion anchor. We can similarly use arbitrary <Rs n="k_list"/> as the recursion anchor to obtain the <Rs n="kzip_tree"/>, the <Def n="kzipzip_tree" r={<><M>k</M>-zip-zip-tree</>} rs={<><M>k</M>-zip-zip-trees</>}><M>k</M>-zip-zip-trees</Def>, and so on.
+            </P>
+          </PreviewScope>
       </Hsection>
     </Hsection>
 
@@ -1712,7 +1748,7 @@ const exp = (
         />
         <Loc/>
         <FunctionItem
-          comment={<>Delete an <R n="item"/>from a <R n="gtree"/>.</>}
+          comment={<>Delete an <R n="item"/> from a <R n="gtree"/>.</>}
           id={["delete", "c_delete"]}
           generics={[
             {
@@ -1749,14 +1785,14 @@ const exp = (
       </Pseudocode>
 
       <P>
-        <Alj>Update this paragraph if we add efficient pseudocode and/or a link to a real, efficient implementation.</Alj>
+        <Alj>TODO: Update this paragraph if we add efficient pseudocode and/or a link to a real, efficient implementation.</Alj>
         We want to emphasize that our choice of algorithms optimizes for elegance, not for (non-asymptotic) efficiency. Implementations based on in-place mutations will outperform our immutable algorithms. A direct implementation of <R n="c_zip3"/> will outperform the reduction to two applications of <R n="c_zip2"/>. Iterative implementations might outperform recursive implementations. And finally, direct implementations of insertion and deletion should outperform those based off unzipping and zipping the full trees. The <Bib item="tarjan2021zip">original zip-tree paper</Bib> contains examples of direct algorithms that zip and unzip only parts of a tree, our algorithms can be adapted to work analogously.
       </P>
     </Hsection>
 
     <Hsection n="conclusion" title="Conclusion">
       <P>
-        Bla
+      <Wip inline>TODO</Wip>
       </P>
     </Hsection>
   </ArticleTemplate>

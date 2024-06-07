@@ -6,6 +6,18 @@ import { Expression, Expressions, M } from "../deps.ts";
 // General-purpose //
 /////////////////////
 
+export function MCeil({ children }: { base?: Expressions, children?: Expressions }): Expression {
+  return (
+    <M>\lceil<exps x={children}/>\rceil</M>
+  );
+}
+
+export function MFloor({ children }: { base?: Expressions, children?: Expressions }): Expression {
+  return (
+    <M>\lfloor<exps x={children}/>\rfloor</M>
+  );
+}
+
 export function MLog({ children, base }: { base?: Expressions, children?: Expressions }): Expression {
   return (
     <M>\log{base ? <>_<Curly><exps x={base}/></Curly></> : ""}(<exps x={children}/>)</M>
