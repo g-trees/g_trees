@@ -110,6 +110,7 @@ dfn>a[data-preview-anchor] {
 }
 
 .marginale {
+  user-select: none;
   font-size: 0.85em;
   line-height: 1.2;
   margin-bottom: var(--default-spacing);
@@ -119,9 +120,14 @@ dfn>a[data-preview-anchor] {
   }
 }
 
+.marginale:hover {
+  user-select: auto;
+}
+
 .sidenoteCounter {
   vertical-align: super;
   font-size: 0.7em;
+  user-select: none;
 }
 
 .clearRight {
