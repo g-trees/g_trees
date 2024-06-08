@@ -768,7 +768,7 @@ const exp = (
       <Hsection title="Analysis" n="analysis">
       <P>
         <Marginale>
-          The math-averse reader can safely skip ahead to <Rc n="old_gtrees"/>, as long as they believe when we say that <Rs n="gnode"/> form trees of logarithmic height with high probability, and that each <R n="gnode"/> contains <BigO>1</BigO> <Rs n="item"/> with high probability.
+          The math-averse reader can safely skip ahead to <Rc n="old_gtrees"/>, as long as they believe us when we say that <Rs n="gnode"/> form trees of logarithmic height with high probability, and that each <R n="gnode"/> contains <BigO>1</BigO> <Rs n="item"/> with high probability.
         </Marginale>
         <Alj>TODO (not anchored here, just taking notes): explicitly mention that it would make more sense to do width first, height second. (keep in head that we are using heights to define width)</Alj>
         <Alj>TODO (not anchored here, just taking notes): explicitly compare our bounds to the (tighter) zip-paper bounds.</Alj>
@@ -943,6 +943,10 @@ const exp = (
               Recursive instantiation of <Rs n="gtree"/> with other <Rs n="gtree"/> leads to the family of <Rs n="zipk_tree"/> when using linked lists (i.e., <R n="k_list"><M>1</M>-lists</R>) as the recursion anchor. We can similarly use arbitrary <Rs n="k_list"/> as the recursion anchor to obtain the <Rs n="kzip_tree"/>, the <Def n="kzipzip_tree" r={<><M>k</M>-zip-zip-tree</>} rs={<><M>k</M>-zip-zip-trees</>}><M>k</M>-zip-zip-trees</Def>, and so on.
             </P>
           </PreviewScope>
+
+          <P>
+            Through some small adjustments, the definition of <Rs n="gtree"/> can be adapted to yield generalizations of <Rs n="skip_list"/> and <R n="history_independent"/> analogons of <Bib item="comer1979ubiquitous">B<Sup>+</Sup>-trees</Bib>. We sketch these extensions in <R n="variants">Appendix B</R>.
+          </P>
       </Hsection>
     </Hsection>
 
@@ -1841,7 +1845,6 @@ const exp = (
       </Hsection>
       <Hsection n="variants" title="G-Tree Variants">
         <P>
-          <Alj>TODO: refer to this from the main body.</Alj>
           We now sketch several variants of <Rs n="gtree"/> that might be useful in practice. Highlights include a <R n="gtree"/>-analogon of the <Bib item="comer1979ubiquitous">B<Sup>+</Sup>-tree</Bib>, and a cache-efficient generalization of the <R n="skip_list"/>. 
         </P>
 
