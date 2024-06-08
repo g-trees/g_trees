@@ -132,6 +132,20 @@ function Alj(
   );
 }
 
+function Cjqf(
+  { children, inline }: { children?: Expressions; inline?: boolean },
+): Expression {
+  return (
+    <Wip
+      fg="#67595E" // Coffee pot
+      bg="#EED6D3" // Dusty rose
+      wrap={(_ctx, inner) => <>cjqf: {inner}</>} // Carson John Quentry Farmer :)
+      children={children}
+      inline={inline}
+    />
+  );
+}
+
 /*
 Create macros for figures (which includes theorem-like blocks).
 */
@@ -208,8 +222,8 @@ const exp = (
     authors={[
       {
         name: "Carson Farmer",
-        affiliation: <Wip inline>TODO</Wip>,
-        email: <Wip inline>TODO</Wip>,
+        affiliation: "Textile, Inc",
+        email: "carson@textile.io",
       },
       {
         name: "Aljoscha Meyer",
@@ -364,7 +378,7 @@ const exp = (
     <Hsection title="Related Work" n="related-work">
       <P>
         <Marginale>
-          The practically-minded reader can safely skip ahead to <Rc n="preliminaries"/>. Academic tradition requires us to <S>talk down all prior research</S> demonstrate knowledge of the current state of the art and contextualize our contributions.
+          The practically-minded reader can safely skip ahead to <Rc n="preliminaries"/>, whereas the more academically inclined may wish to stick around for <Rc n="related-work"/>, where we outline the current state of the art and contextualize our contributions.
         </Marginale>
         Data structures whose exact shape is determined solely by their contents and not by the order of insertion and deletion operations have been studied for decades.
         This property has been given several names, such as <Bib item="snyder1977uniquely">unique representation</Bib>, <Bib item="auvolat2019merkle">structural unicity</Bib>, <Bib item="driscoll1994fully">confluent persistence</Bib>, and <Bib item="naor2001anti">anti-persistence or history-independence</Bib>.
@@ -446,7 +460,7 @@ const exp = (
           <P>
             We write <TreeItems><R n="tree_t" /></TreeItems> for the <Rs n="item" /> of <NoWrap><R n="tree_t" />,</NoWrap> and <TreeItem tree={<R n="tree_t" />}><M>i</M></TreeItem> for the <M>i</M>-th <R n="item" /> of <NoWrap><R n="tree_t" />.</NoWrap>
             {" "}We write <TreeChildren><R n="tree_t" /></TreeChildren> for the <Rs n="child" /> of <NoWrap><R n="tree_t" />,</NoWrap> and <TreeChild tree={<R n="tree_t" />}><M>i</M></TreeChild> for the <M>i</M>-th <R n="child" /> of <NoWrap><R n="tree_t" />.</NoWrap>
-            Indexing always starts at zero.
+            {" "}Indexing always starts at zero.
           </P>
         </PreviewScope>
 
@@ -478,7 +492,7 @@ const exp = (
                 all <Rs n="item" /> in <TreeChild tree={<R n="tree_t" />}><M>0</M></TreeChild> are less than <TreeItem tree={<R n="tree_t" />}><M>0</M></TreeItem>,
               </Li>
               <Li>
-                for all <M post=",">0 \lt <Def n="searchtree_i" r="i" /> \lt <R n="tree_d" /> - 1</M> all <Rs n="item" /> in <TreeChild tree={<R n="tree_t" />}><M><R n="searchtree_i" /></M></TreeChild> are less than <TreeItem tree={<R n="tree_t" />}><M><R n="searchtree_i" /> - 1</M></TreeItem> and greater than <NoWrap><TreeItem tree={<R n="tree_t" />}><M><R n="searchtree_i" /> - 1</M></TreeItem>,</NoWrap> and
+                for all <M post=",">0 \lt <Def n="searchtree_i" r="i" /> \lt <R n="tree_d" /> - 1</M> all <Rs n="item" /> in <TreeChild tree={<R n="tree_t" />}><M><R n="searchtree_i" /></M></TreeChild> are less than <TreeItem tree={<R n="tree_t" />}><M><R n="searchtree_i" /> + 1</M></TreeItem> and greater than <NoWrap><TreeItem tree={<R n="tree_t" />}><M><R n="searchtree_i" /> - 1</M></TreeItem>,</NoWrap> and
               </Li>
               <Li>
                 all <Rs n="item" /> in <TreeChild tree={<R n="tree_t" />}><M><R n="tree_d" /> - 1</M></TreeChild> are greater than <TreeItem tree={<R n="tree_t" />}><M><R n="tree_d" /> - 2</M></TreeItem>.
@@ -520,7 +534,7 @@ const exp = (
               rs="geometric distributions"
               math="\mathcal{G}"
             /> <GeoDistribution><R n="geo_p" /></GeoDistribution> is a discrete probability distribution where the random variable <M><Def n="geo_x" r="X" /></M> takes on value <M><Def n="geo_k" r="k" /> \in <Np /></M> with probability <M>P(<R n="geo_x" /> = <R n="geo_k" />) = <R n="geo_p" /> \cdot (1 - <R n="geo_p" />)^{`{`}<R n="geo_k" /> - 1{`}`}</M>.
-            We can interpret <R n="geo_k" /> as the outcome of a series of Bernoulli trials with success probability <R n="geo_p" />, where the rank <R n="geo_k" /> represents the total number of trials until (and including) a first success.
+            We can interpret <R n="geo_k" /> as the outcome of a series of Bernoulli trials with success probability <NoWrap><R n="geo_p" />,</NoWrap> where the rank <R n="geo_k" /> represents the total number of trials until (and including) a first success.
             As is customary, we often write <M><Def n="geo_q" r="q"/> := 1 - <R n="geo_p" /></M> for the failure probability of the Bernoulli trial.
           </P>
         </PreviewScope>
@@ -533,40 +547,25 @@ const exp = (
 
         <PreviewScope>
           <P>
-            The random variable <R n="geo_x"/> can take on arbitrary large numbers, but we often need to represent <R n="geo_x" /> in a computer.
-            To this end, we work with <Def n="truncated"/> <Rs n="geometric_distribution" />, which clamp <R n="geo_x" /> between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
-            Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
-          </P>
-        </PreviewScope>
-
-        <PreviewScope>
-          <P>
-            <Alj>I'm not entirely happy with this paragraph. Could you give a more clear explanation? @Carson</Alj>
-            To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that the probability for not getting a success within the first <R n="geo_k"/> trials is <M post="."><R n="geo_q"/>^<Curly><R n="geo_k"/> - 1</Curly></M>
-            {" "}Since we stop the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num="1" de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
-            {" "}This leads to the truncated expected value <M post="."><Def n="geo_expected_truncated" r="E"/>[<R n="geo_x"/>] = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / (1 - <R n="geo_q"/>) = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / <R n="geo_p"/></M>
-            {" "}For large <R n="geo_N"/>, we can hence simply ignore the effect of <R n="truncated">trunctation</R>.
-          </P>
-        </PreviewScope>
-
-        <PreviewScope>
-          <P>
             We often wish to pseudorandomly map items from some universe <M><Def n="geo_u" r="U" /></M> to geometrically distributed <Def n="rank" rs="ranks">ranks</Def>.
             To this end, we require a rank function <MFunDef
               n="fn_rank"
               dom={<R n="geo_u" />}
               co="\N"
               sub={<R n="geo_p" />}
-            >rank</MFunDef>, such that <Rank p={<R n="geo_p" />}><R n="geo_arg_u" /></Rank> for any <M><Def n="geo_arg_u" r="u" /> \in <R n="geo_u" /></M> is drawn independently from a geometric distribution <GeoDistribution><R n="geo_p" /></GeoDistribution>.
+            >rank</MFunDef>, such that <Rank p={<R n="geo_p" />}><R n="geo_arg_u" /></Rank> for any <M><Def n="geo_arg_u" r="u" /> \in <R n="geo_u" /></M> is drawn independently from a random geometric distribution <GeoDistribution><R n="geo_p" /></GeoDistribution>.
             We simply write <Rank><R n="geo_arg_u" /></Rank> when <R n="geo_p" /> is unimportant or clear from context.
           </P>
         </PreviewScope>
 
         <P>
+          <Cjqf>I've tried it both ways with the rank function subscript: (<M>\frac<Curly>1</Curly><Curly>2</Curly></M>) and (<M>1/2</M>), not sure which looks nicer?</Cjqf>
           In practice, <Rank p={<>\frac<Curly>1</Curly><Curly>2</Curly></>}><R n="geo_arg_u" /></Rank> can be implemented by hashing <R n="geo_arg_u" /> with a secure hash function and counting the number of trailing zeros in the binary representation of the digest.
           This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh and Teitelbaum<Bib item="pugh1989incremental" />.
           For digests of length <M>l</M>, this <R n="truncated">truncates</R> the distribution to <M post="."><R n="geo_N" /> = 2^l</M>{" "}
           Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers.
+          
+          <Cjqf><A href="https://textile.notion.site/Flipping-bits-and-coins-with-hashes-205770b56418498fba4fef8cb037412d">This blog post on bit manipulation</A> might make another useful contribution to the "practicalities" section?</Cjqf>
         </P>
       </Hsection>
 
@@ -587,15 +586,14 @@ const exp = (
           caption={
             <>
               <P>
+                <Marginale>The exampe tree is taken from a <A href="https://stackoverflow.com/questions/61944198/what-is-a-zip-tree-and-how-does-it-work">stackoverflow answer</A>, the interested reader can find there a detailed description of the isomorphism to <Rs n="skip_list"/> for that same example tree.</Marginale>
                 <Rsb n="item"/> are the numbers in the vertices, <Rs n="rank"/> are the gray numbers above the vertices. 
-                {" "}<Rsb n="item"/> are increasing from left to right (the tree is a <R n="search_tree"/> with respect to <Rs n="item"/>), <Rs n="rank"/> are decreasing from top to bottom (the tree is a <R n="heap"/> with respect to <Rs n="rank"/> ), and no <R n="vertex"/> has a <R n="left"/> <R n="child"/> of equal <R n="rank"/> (yielding a unique tree shape).
-              </P>
-              <P>
-                The exampe tree is taken from a <A href="https://stackoverflow.com/questions/61944198/what-is-a-zip-tree-and-how-does-it-work">stackoverflow answer</A>, the interested reader can find there a detailed description of the isomorphism to <Rs n="skip_list"/> for that same example tree.
+                {" "}<Rsb n="item"/> are increasing from left to right (the tree is a <R n="search_tree"/> with respect to <Rs n="item"/>), <Rs n="rank"/> are decreasing from top to bottom (the tree is a <R n="heap"/> with respect to <Rs n="rank"/>), and no <R n="vertex"/> has a <R n="left"/> <R n="child"/> of equal <R n="rank"/> (yielding a unique tree shape).
               </P>
             </>
           }
         >
+          <Cjqf>Note that I had to set <Code>relativity: 0</Code> to get this to render properly while "watch"ing the file.</Cjqf>
           <Img
             src={<ResolveAsset asset={["graphics", "ziptreeBasic.svg"]} />}
             alt="A rendering of a zip tree."
@@ -611,16 +609,19 @@ const exp = (
 
       <Definition n="zip_tree_recursive" title="Zip-Tree, Recursively">
           <P>
-            Define the <Def n="pivot" r="pivot item" rs="pivot items"/> of a set <M><Def n="pivot_s" r="S"/>\subseteq <R n="tree_u"/></M> as the least element of <R n="pivot_s"/> among those of maximal <R n="rank"/>.
-            The <Def n="zip_tree_rec" r="zip-tree" rs="zip-trees"/> of any set <R n="pivot_s"/> with <R n="pivot"/> <M><Def n="pivot_p" r="p"/></M> is the binary <R n="tree"/> whose <R n="item"/> is <R n="pivot_p"/>, whose <R n="left"/> <R n="child"/> is the <R n="zip_tree_rec"/> of <M><MSet>s \in <R n="pivot_s"/> : s \prec <R n="pivot_p"/></MSet></M>, and whose <R n="right"/> <R n="child"/> is the <R n="zip_tree_rec"/> of <M><MSet>s \in <R n="pivot_s"/> : s \succ <R n="pivot_p"/></MSet></M>.
+            <Cjqf>Note that I've changed the name from pivot to partition, as I think this is more accurate. Even if partition isn't right, pivot certainlny isn't...</Cjqf>
+            Define the <Def n="partition" r="partition item" rs="partition items"/> of a set <M><Def n="partition_s" r="S"/>\subseteq <R n="tree_u"/></M> as the least element of <R n="partition_s"/> among those of maximal <R n="rank"/>.
+            <Cjqf>I'm not sure "p" is a good choice here? "i" might work? Or just use something totally different like ρ or π?</Cjqf>
+            {" "}The <Def n="zip_tree_rec" r="zip-tree" rs="zip-trees"/> of any set <R n="partition_s"/> with <R n="partition"/> <M><Def n="partition_p" r="p"/></M> is the binary <R n="tree"/> whose <R n="item"/> is <R n="partition_p"/>, whose <R n="left"/> <R n="child"/> is the <R n="zip_tree_rec"/> of <M><MSet>s \in <R n="partition_s"/> : s \prec <R n="partition_p"/></MSet></M>, and whose <R n="right"/> <R n="child"/> is the <R n="zip_tree_rec"/> of <M><MSet>s \in <R n="partition_s"/> : s \succ <R n="partition_p"/></MSet></M>.
+            <Cjqf>Last one here: I like these more math-formal definitions, but given we used less formal language earlier (for each item in... all items less than...), should we use prose here instead?</Cjqf>
           </P>
       </Definition>
 
       <PreviewScope>
         <P>
-          From this definition, it is easy to see that the <Rs n="item"/> of maximal <R n="rank"/> form a linked list of <R n="right"/> <Rs n="child"/> at the root of the <R n="zip_tree_rec"/>.
+          This recursive definition reveals an interesting property of zip trees: <Def n="colliding"/> ranks. From this definition, it is easy to see that the <Rs n="item"/> of maximal <R n="rank"/> form a linked list of <R n="right"/> <Rs n="child"/> at the root of the <R n="zip_tree_rec"/>.
           The same holds recursively in all <Rs n="subtree"/> as well.
-          We can characterize these linked lists of <Rs n="item"/> of equal <R n="rank"/>: a sequence <M><Def n="colliding_q" r="Q"/> = <Def n="colliding_q0" r="q_0"/> \prec <Def n="colliding_q1" r="q_1"/> \prec \ldots <Def n="colliding_qk" r="q_k"/></M> of <Rs n="item"/> is <Def n="colliding"/> in a superset <M><Def n="colliding_s" r="S"/> \supseteq <R n="colliding_q"/></M> if all <R n="item"/> in <R n="colliding_q"/> have equal <R n="rank"/>, and there is no <M><Def n="colliding_nope" r="s"/> \in <R n="colliding_s"/></M> of greater <R n="rank"/> such that <M post="."><R n="colliding_q0"/> \prec <R n="colliding_nope"/> \prec <R n="colliding_qk"/></M>
+          We can characterize these linked lists of <Rs n="item"/> of equal <R n="rank"/> as a sequence <M><Def n="colliding_q" r="Q"/> = <Def n="colliding_q0" r="q_0"/> \prec <Def n="colliding_q1" r="q_1"/> \prec \ldots <Def n="colliding_qk" r="q_k"/></M> of <Rs n="item"/> <R n="colliding"/> in a superset <M><Def n="colliding_s" r="S"/> \supseteq <R n="colliding_q"/></M> if all <R n="item"/> in <R n="colliding_q"/> have equal <R n="rank"/>, and there is no <M><Def n="colliding_nope" r="s"/> \in <R n="colliding_s"/></M> of greater <R n="rank"/> such that <M post="."><R n="colliding_q0"/> \prec <R n="colliding_nope"/> \prec <R n="colliding_qk"/></M>
           {" "}<Rcb n="fig_ziptree_colliding"/> visualizes the linked lists formed by maximal sets of <R n="colliding"/> <Rs n="item"/> in a <R n="zip_tree"/>.
         </P>
       </PreviewScope>
@@ -642,13 +643,13 @@ const exp = (
       </Fig>
 
       <P>
-        We can even <Em>define</Em> <Rs n="zip_tree"/> in terms of maximal <R n="colliding"/> <R n="item"/> sequences, by using all <Rs n="item"/> of maximal <R n="rank"/> as <Rs n="pivot"/> in a single construction step:
+        We can even <Em>define</Em> <Rs n="zip_tree"/> in terms of maximal <R n="colliding"/> <R n="item"/> sequences, by using all <Rs n="item"/> of maximal <R n="rank"/> as <Rs n="partition"/> in a single construction step:
       </P>
 
       <Definition n="zip_tree_colliding" title="Zip-Tree, Via Colliding Sequences">
           <P>
             Let <M><Def n="zip_colliding_s" r="S"/> \subseteq <R n="tree_u"/></M> be a set, and let <M><Def n="zip_colliding_m" r="M"/> = (m_0, m_1, \ldots, m_<Curly>|<R n="zip_colliding_m"/>| - 1</Curly>)</M> be the <Rs n="item"/> of maximal <R n="rank"/> in <R n="zip_colliding_s"/>.
-            The <Def n="zip_tree_col" r="zip-tree" rs="zip-trees"/> of <R n="zip_colliding_s"/> is a pair of<Ul>
+            The <Def n="zip_tree_col" r="zip-tree" rs="zip-trees"/> of <R n="zip_colliding_s"/> is a pair, containing:<Ul>
               <Li>
                 <Marginale>
                   To emphasize: the linked list is not a list of <Rs n="item"/> only, but a list of <R n="item"/>-<R n="zip_colliding_left_subtree">subtree</R>-pairs.
@@ -663,7 +664,7 @@ const exp = (
       </Definition>
 
       <P>
-        <Rcb n="fig_ziptree_lists"/> viualizes this perspective on <Rs n="zip_tree"/>.
+        <Rcb n="fig_ziptree_lists"/> vizualizes this perspective on <Rs n="zip_tree"/>.
         Note how the linked-list pointers are exactly the pointers between <Rs n="item"/> of equal <R n="rank"/>, whereas both <R n="zip_colliding_left_subtree">left</R> and <R n="zip_colliding_right_subtree">right child</R> pointers always involve a strict decrease in <R n="rank"/>.
         In that sense, the <R n="zip_tree_col">list-based definition</R> fixes an asymmetry of the <R n="zip_tree">original definition</R>, which only requires strictly decreasing <Rs n="rank"/> for <R n="left"/> <Rs n="child"/>.
       </P>
@@ -695,7 +696,7 @@ const exp = (
       <Definition n="def_gtree" title="Geometric Search Tree">
           <P>
             Let <M><Def n="gtree_s" r="S"/> \subseteq <R n="tree_u"/></M> be a set, and let <M><Def n="gtree_m" r="M"/> = (m_0, m_1, \ldots, m_<Curly>|<R n="gtree_m"/>| - 1</Curly>)</M> be the <Rs n="item"/> of maximal <R n="rank"/> in <R n="gtree_s"/>, and let <M><Def n="gtree_g" r={<Mathfrak>S</Mathfrak>}/></M> be a data structure for representing sets.
-            The <Def n="gtree" r="G-tree" rs="G-trees">geometric search tree</Def> (<Def n="gtree" fake>G-tree</Def>) of <R n="gtree_s"/> using <R n="gtree_g"/> is a pair of<Ul>
+            The <Def n="gtree" r="G-tree" rs="G-trees">geometric search tree</Def> (<Def n="gtree" fake>G-tree</Def>) of <R n="gtree_s"/> using <R n="gtree_g"/> is a pair, containing:<Ul>
               <Li>
                 <Marginale>
                   To emphasize: <R n="gtree_g"/> does not store <Rs n="item"/> only, but <R n="item"/>-<R n="gtree_left_subtree">subtree</R>-pairs.
@@ -734,6 +735,7 @@ const exp = (
           title="High-Level View — G-Nodes"
           caption={
             <P>
+              <Cjqf>Let's make this bigger, to match the sizes of the previous zip trees.</Cjqf>
               A <R n="gtree"/> from a high-level view: we disregard the internal structure of its <Rs n="gnode"/>, rendering them as single vertices. 
               We neither know nor care about the choice of <R n="gtree_g"/>.
               The set of <Rs n="item"/> is identical to that of <Rc n="fig_ziptree_lists"/>.
@@ -747,16 +749,17 @@ const exp = (
       </Fig>
 
       <P>
-        When we select the <R n="rank"/> of each item <R n="item"/> as a pseudorandom function of the <R n="item"/>, a tree of <Rs n="gnode"/> is uniquely determined by the set of its <Rs n="item"/>.
+        When we select the <R n="rank"/> of each <R n="item"/> as a pseudorandom function of the <R n="item"/> itself, a tree of <Rs n="gnode"/> is uniquely determined by the set of its <Rs n="item"/>.
         Hence, if <R n="gtree_g"/> is <R n="history_independent"/>, so is the <R n="gtree"/>.
       </P>
 
       <P>
-        <Rsb n="gtree"/>, when interpreted as trees of <Rs n="gnode"/>, are highly similar to Auvolat & Taïani’s <Rs n="mst">merkle-search-trees</Rs> — <Rc n="fig_gnodes"/> could directly serve as a depiction of an <R n="mst"/>.
-        Structurally, the only difference is that <Rs n="mst"/> insert empty nodes uphold the invariant that the difference in <R n="rank"/> bewteen a parent and a child node is at most one.
+        When interpreted as trees of <Rs n="gnode"/>, <Rsb n="gtree"/> are very similar to the <Rs n="mst">merkle-search-trees</Rs> of Auvolat & Taïani; indeed, <Rc n="fig_gnodes"/> could directly serve as a depiction of a <R n="mst"/>.
+        Structurally, the only difference is that <Rs n="mst"/> insert empty nodes to uphold the B-tree invariant that the difference in <R n="rank"/> bewteen a parent and a child node is at most one.
         {" "}<Rsb n="gtree"/>, in contrast, collapse missing <Rs n="rank"/>.
+        <Cjqf>I think we can find better ways to highlight the benefits of G-trees over MSTs. This section isn't quite hitting it for me... yet. It also doesn't "flow" into the analysis section, which it totally could, because they don't offer _any_ analysis in the MST paper.</Cjqf>
         More importantly, however, Auvolat and Taïani treat <Rs n="gnode"/> as atomic, never considering how they might be represented in memory.
-        Whereas we determine the common interface of all possible realizations of <Rs n="gnode"/> to be that of set datastructures and then explore the impact of various reifications, they disregard the issue and their reference implementation simply uses the dynamic array type of their programming language.
+        Whereas we determine the common interface of all possible realizations of <Rs n="gnode"/> to be that of set data structures, and then explore the impact of various reifications, they disregard the issue and their reference implementation simply uses the dynamic array type of their programming language.
         Hence, they miss the useful instantiations that we uncover in <Rc n="new_gtrees"/>.
       </P>
 
@@ -767,28 +770,35 @@ const exp = (
         </Marginale>
         <Alj>TODO (not anchored here, just taking notes): explicitly mention that it would make more sense to do width first, height second. (keep in head that we are using heights to define width)</Alj>
         <Alj>TODO (not anchored here, just taking notes): explicitly compare our bounds to the (tighter) zip-paper bounds.</Alj>
-        We now give a formal analysis of the performance-related properties of <Rs n="gtree"/>. Roughly speaking, we show that <Rs n="gtree"/> with a <R n="geometric_distribution"/> of some probability <M>1 - <MFrac num="1" de="k"/></M> are sufficiently similar to perfectly balanced <M post="-ary">(k + 1)</M> trees with high probability: the height (in terms of <Rs n="gnode"/>) stays within a constant factor of <M><MLog base="k">n</MLog></M>, and the maximal number of <Rs n="item"/> per <R n="gnode"/> stays within a constant factor of <M>k</M>.
+        We now give a formal analysis of the performance-related properties of <Rs n="gtree"/>. Roughly speaking, we show that <Rs n="gtree"/> with a <R n="geometric_distribution"/> of some probability <M>1 - <MFrac num="1" de="k"/></M> are similar to perfectly balanced <M post="-ary">(k + 1)</M> trees with high probability: the height (in terms of <Rs n="gnode"/>) stays within a constant factor of <M><MLog base="k">n</MLog></M>, and the maximal number of <Rs n="item"/> per <R n="gnode"/> stays within a constant factor of <M>k</M>.
       </P>
 
       <PreviewScope>
         <P>
           Throughout our analyses, we let <M><Def n="ana_k" r="k"/></M> be a natural number greater than or equal to two; <R n="ana_k"/> is the intended average number of <Rs n="item"/> per <R n="gnode"/>.
-          We let <M><Def n="ana_T" r="T"/></M> be a <R n="gtree"/> of <M><Def n="ana_n" r="n"/></M> <Rs n="gnode"/>.
-          We further fix a target capacity <Def n="ana_max" r="N"/>, some anticipated maximum number of <Rs n="item"/> in the <Rs n="gtree"/>.
-          We then consider <Rs n="gtree"/> for the <Rs n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M> with <M post=","><Def n="ana_p" r="p"/> := 1 - <MFrac num="1" de={<R n="ana_k"/>}/></M> <R n="truncated"/> at <R n="ana_max"/>; we write <M post=","><Def n="ana_q" r="q"/> := 1 - <R n="ana_p"/> = <MFrac num="1" de={<R n="ana_k"/>}/></M> and <M post="."><Def n="ana_beta" r="\beta"/> := <MCeil><MLog base={<R n="ana_k"/>}><R n="ana_max"/></MLog></MCeil> + 2</M><Alj>Why + 2?</Alj>
+          We let <M><Def n="ana_T" r="T"/></M> be a <R n="gtree"/> of <M><Def n="ana_n" r="n"/></M> <Rs n="gnode"/>. We then consider <Rs n="gtree"/> for the <R n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M> with <M><Def n="ana_p" r="p"/> := 1 - <MFrac num="1" de={<R n="ana_k"/>}/></M>, and set <M><Def n="ana_q" r="q"/> := 1 - <R n="ana_p"/> = <MFrac num="1" de={<R n="ana_k"/>}/></M>.
         </P>
       </PreviewScope>
+
+      <P>
+        Our goal is to maintain <Rs n="gnode"/> with a constant <R n="ana_k"/> number of <Rs n="item"/> on average. In order to achieve this, we require rank collisions to occur with a probability of ... Rank collisions are a direct consequence of ... I'm strugging to write here, but the idea is to try to address your comment and outline why we present things in the order we do.
+      </P>
 
       <Hsection n="gtree_height" title="G-Tree Height">
         <PreviewScope>
           <P>
-            Given these parameters, the <R n="rank"/> of any <R n="gnode"/> is a geometric random variable with parameter <R n="ana_p"/>, truncated at <R n="ana_max"/>. The height of <R n="ana_T"/> is upper-bounded by the <R n="rank"/> <M><Def n="ana_R" r="R"/></M> of its root node, since each child has strictly lesser <R n="rank"/> than its parent.
+            Given these parameters, the <R n="rank"/> of any <R n="gnode"/> is a geometric random variable with parameter <R n="ana_p"/>. The height of <R n="ana_T"/> is upper-bounded by the <R n="rank"/> <M><Def n="ana_Mn" r="M_n"/></M> of its root node, since each child has strictly lesser <R n="rank"/> than its parent.
           </P>
         </PreviewScope>
 
         <PreviewScope>
           <P>
-            <R n="ana_R"/> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="truncated"/> <R n="geometric_distribution"/>. By construction, this is at most <R n="ana_beta"/>. <Wip inline>TODO</Wip>
+            <R n="ana_Mn"/> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="geometric_distribution"/>. For simplicity, we can bound <R n="ana_Mn"/> as the maximum rank of any <R n="gnode"/> in <R n="ana_T"/> via the union bound: note that for given <M><R n="ana_k"/> much less than ∞</M> the probability that the <R n="rank"/> of a <R n="gnode"/> is at least <R n="ana_k"/> is at most qk−1 (i.e., Pr[g.rank ≥ k] ≤ qk−1). This implies that the probability that there exists some <R n="gnode"/> such that its <R n="rank"/> ≥ <R n="ana_k"/> is Pr[∃g,g.rank ≥ k] ≤ nqk−1, and so for some positive constant c, Pr[Mn ≥ (c + 1) logγ n] ≤ n−c <Bib item="golovin2010b" />.
+          </P>
+          <P>
+          Even for k → ∞, the tail probability contribution is relatively small, and can be estimated via the simplification of the geometric series for values of k {'>'} ⌈logγ n⌉:
+
+          Lost stream, will pick up tomorrow!
           </P>
         </PreviewScope>
       </Hsection>
@@ -1803,120 +1813,140 @@ const exp = (
       </P>
     </Hsection>
 
-    <Hsection n="variants" title="Appendix A: Variants">
+    <Hsection n="appendix" title="Appendix">
       <P>
         <Alj>TODO: Teach Macromania about appendices...</Alj>
       </P>
+      <Hsection n="practicalities" title="Practicalities">
+      <PreviewScope>
+          <P>
+            The random variable <R n="geo_x"/> can take on arbitrary large numbers, but we often need to represent <R n="geo_x" /> in a computer.
+            To this end, we work with <Def n="truncated"/> <Rs n="geometric_distribution" />, which clamp <R n="geo_x" /> between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
+            Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
+          </P>
+        </PreviewScope>
 
-      <Fig
-        n="fig_leafy_gtree"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "leafGtree.svg"]} />}
-        />
-      </Fig>
+        <PreviewScope>
+          <P>
+            <Alj>I'm not entirely happy with this paragraph. Could you give a more clear explanation? @Carson</Alj>
+            To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that the probability for not getting a success within the first <R n="geo_k"/> trials is <M post="."><R n="geo_q"/>^<Curly><R n="geo_k"/> - 1</Curly></M>
+            {" "}Since we stop the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num="1" de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
+            {" "}This leads to the truncated expected value <M post="."><Def n="geo_expected_truncated" r="E"/>[<R n="geo_x"/>] = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / (1 - <R n="geo_q"/>) = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / <R n="geo_p"/></M>
+            {" "}For large <R n="geo_N"/>, we can hence simply ignore the effect of <R n="truncated">trunctation</R>.
+          </P>
+        </PreviewScope>
+      </Hsection>
+      <Hsection n="variants" title="Variants">
+        <Fig
+          n="fig_leafy_gtree"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "leafGtree.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_leafy_1zip"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "leafGtreeOfLists.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_leafy_1zip"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "leafGtreeOfLists.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_leafy_2zip"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "leafGtree2Lists.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_leafy_2zip"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "leafGtree2Lists.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_leafy_bot_gtree"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "leafBotGtree.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_leafy_bot_gtree"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "leafBotGtree.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_leafy_bot_1zip"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "leafBot1zip.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_leafy_bot_1zip"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "leafBot1zip.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_leafy_bot_2zip"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "leafBot2zip.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_leafy_bot_2zip"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "leafBot2zip.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_linked_leafy_bot_gtree"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "linkedLeafBotGtree.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_linked_leafy_bot_gtree"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "linkedLeafBotGtree.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_linked_leafy_bot_1zip"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "linkedLeafBot1zip.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_linked_leafy_bot_1zip"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "linkedLeafBot1zip.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_linked_leafy_bot_2zip"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "linkedLeafBot2zip.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_linked_leafy_bot_2zip"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "linkedLeafBot2zip.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_gplus_gtree"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "gPlusGtree.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_gplus_gtree"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "gPlusGtree.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_gplus_1zip"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "gPlus1zip.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_gplus_1zip"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "gPlus1zip.svg"]} />}
+          />
+        </Fig>
 
-      <Fig
-        n="fig_gplus_2zip"
-        wrapperTagProps={{clazz: "wide"}}
-      >
-        <Img
-          src={<ResolveAsset asset={["graphics", "gPlus2zip.svg"]} />}
-        />
-      </Fig>
+        <Fig
+          n="fig_gplus_2zip"
+          wrapperTagProps={{clazz: "wide"}}
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "gPlus2zip.svg"]} />}
+          />
+        </Fig>
+      </Hsection>
     </Hsection>
-  </ArticleTemplate>
+    </ArticleTemplate>
 );
 
 // Evaluate the expression. This has exciting side-effects,
