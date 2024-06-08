@@ -755,7 +755,7 @@ const exp = (
       </P>
 
       <P>
-        When interpreted as trees of <Rs n="gnode"/>, <Rsb n="gtree"/> are very similar to the <Rs n="mst">merkle-search-trees</Rs> of Auvolat & Taïani; indeed, <Rc n="fig_gnodes"/> could directly serve as a depiction of a<Alj>I tough you go by the phonetic "Em-As-Tee" for determining "a" vs "an".</Alj> <R n="mst"/>.
+        When interpreted as trees of <Rs n="gnode"/>, <Rsb n="gtree"/> are very similar to the <Rs n="mst">merkle-search-trees</Rs> of Auvolat & Taïani; indeed, <Rc n="fig_gnodes"/> could directly serve as a depiction of a<Alj>I thought you go by the phonetic "Em-As-Tee" for determining "a" vs "an".</Alj> <R n="mst"/>.
         Structurally, the only difference is that <Rs n="mst"/> insert empty nodes to uphold the B-tree invariant that the difference in <R n="rank"/> bewteen a parent and a child node is at most one.
         {" "}<Rsb n="gtree"/>, in contrast, collapse missing <Rs n="rank"/>.
         <Cjqf>I think we can find better ways to highlight the benefits of G-trees over MSTs. This section isn't quite hitting it for me... yet. It also doesn't "flow" into the analysis section, which it totally could, because they don't offer _any_ analysis in the MST paper.</Cjqf>
