@@ -170,9 +170,6 @@ export function ArticleTemplate(
                         <RenderAbstract children={abstract} />
                       </Div>
                       <exps x={children} />
-                      <Hsection title="References" n="bibliography" noNumbering>
-                        <Bibliography />
-                      </Hsection>
                     </Hsection>
                   </Div>
                 </Html5>

@@ -236,7 +236,6 @@ const exp = (
     <Hsection n="introduction" title="Introduction">
       <P>
         <Alj>TODO: Lead with performance comparison plot zip-tree (i.e., 1-zip-tree) vs 16-zip-tree (or whichever performs best). @Carson</Alj>
-        <Alj>TODO: make toc scrollable on small screens</Alj>
         Randomized set data structures eschew self-balancing logic for more simple, probabilistic item organization.
         When deriving the necessary randomness via pseudorandom functions of the stored items themselves, the resulting graphs depend on the stored set only, but not the order of insertions and deletions.
         This <Def n="history_independent"
@@ -1825,211 +1824,211 @@ const exp = (
       </P>
     </Hsection>
 
-    <Hsection n="appendix" title="Appendix">
-      <P>
-        <Alj>TODO: Teach Macromania about appendices...</Alj>
-      </P>
-      <Hsection n="practicalities" title="Practicalities">
-      <PreviewScope>
-          <P>
-            The random variable <R n="geo_x"/> can take on arbitrary large numbers, but we often need to represent <R n="geo_x" /> in a computer.
-            To this end, we work with <Def n="truncated"/> <Rs n="geometric_distribution" />, which clamp <R n="geo_x" /> between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
-            Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
-          </P>
-        </PreviewScope>
-
-        <PreviewScope>
-          <P>
-            <Alj>I'm not entirely happy with this paragraph. Could you give a more clear explanation? @Carson</Alj>
-            To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that the probability for not getting a success within the first <R n="geo_k"/> trials is <M post="."><R n="geo_q"/>^<Curly><R n="geo_k"/> - 1</Curly></M>
-            {" "}Since we stop the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num="1" de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
-            {" "}This leads to the truncated expected value <M post="."><Def n="geo_expected_truncated" r="E"/>[<R n="geo_x"/>] = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / (1 - <R n="geo_q"/>) = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / <R n="geo_p"/></M>
-            {" "}For large <R n="geo_N"/>, we can hence simply ignore the effect of <R n="truncated">trunctation</R>.
-          </P>
-        </PreviewScope>
-      </Hsection>
-      <Hsection n="variants" title="G-Tree Variants">
-        <P>
-          We now sketch several variants of <Rs n="gtree"/> that might be useful in practice. Highlights include a <R n="gtree"/>-analogon of the <Bib item="comer1979ubiquitous">B<Sup>+</Sup>-tree</Bib>, and a cache-efficient generalization of the <R n="skip_list"/>. 
-        </P>
-
-        <PreviewScope>
-          <P>
-            When search trees store not only keys but key-value pairs, some usecases benefit from storing all key-value pairs in leaves of the tree. To support efficient lookup of the leaves, the inner vertices of the tree store duplicates of certain keys. We easily can adapt <Rs n="gtree"/> to this behavior by placing <R n="item"/> not only in the tree layer corresponding to their <R n="rank"/> but also on all lower layers. <Rcb n="fig_leafy_gtree"/> depicts such a <Def n="naive_leafy_gtree" r="naïve leafy G-tree"/>, and <Rc n="fig_leafy_1zip"/> and <Rc n="fig_leafy_2zip"/> show concrete instantiations with a <R n="k_list">1-list</R> (a <Def n="naive_leafy_zip_tree" r="naïve leafy zip-tree"/>) and a <R n="k_list">2-list</R> (a <Def n="naive_leafy_2zip_tree" r="naïve leafy 2-zip-tree"/>) respectively. We <Sidenote note={<>Spoiler: the ordering is arbitrary <Em>in principle</Em>, but our choice will surface a deep connection to <Rs n="skip_list"/> in a few paragraphs.</>}>arbitrarily</Sidenote> choose to sort <Rs n="item"/> of lower <R n="rank"/> to the right of their copies of higher <R n="rank"/>.
-          </P>
-        </PreviewScope>
-
-        <Fig
-          n="fig_leafy_gtree"
-          wrapperTagProps={{clazz: "wide"}}
-          title="Naïve Leafy G-Tree"
-          caption={<>
-            <P>
-              An example <R n="naive_leafy_gtree"/> that stores the same <Rs n="item"/> as the <R n="gtree"/> in <Rc n="fig_gnodes"/>.
-            </P>
-          </>}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "leafGtree.svg"]} />}
-          />
-        </Fig>
-
-        <Fig
-          n="fig_leafy_1zip"
-          wrapperTagProps={{clazz: "wide"}}
-          title="Naïve Leafy Zip-Tree"
-          caption={<>
-            <P>
-              An example <R n="naive_leafy_zip_tree"/>, a concrete instantiation of the <R n="naive_leafy_gtree"/> in <Rc n="fig_leafy_gtree"/>. Compare also with <Rc n="fig_ziptree_lists"/>, which depicts the <R n="zip_tree"/> for the same <Rs n="item"/>.
-            </P>
-          </>}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "leafGtreeOfLists.svg"]} />}
-          />
-        </Fig>
-
-        <Fig
-          n="fig_leafy_2zip"
-          wrapperTagProps={{clazz: "wide"}}
-          title="Naïve Leafy 2-Zip-Tree"
-          caption={<>
-            <P>
-              An example <R n="naive_leafy_2zip_tree"/>, a concrete instantiation of the <R n="naive_leafy_gtree"/> in <Rc n="fig_leafy_gtree"/>. Compare also with <Rc n="fig_2ziptree"/>, which depicts the <R n="kzip_tree">2-zip-tree</R> for the same <Rs n="item"/>.
-            </P>
-          </>}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "leafGtree2Lists.svg"]} />}
-          />
-        </Fig>
-
-        <PreviewScope>
-          <P>
-            The figures clearly show a deficiency of this naïve approach: almost all <Rs n="item"/> have a single pointer to the layer below, except for the first <R n="item"/> of each <R n="rank"/>, which needs two pointers.
-            We can restore uniformity by adding a dummy element <M>\bot</M> at the start of each layer.
-            {" "}<Rcb n="fig_leafy_bot_gtree"/> gives an example of the resulting (proper) <Def n="leafy_gtree" r="leafy G-tree" rs="leafy G-trees"/>; <Rc n="fig_leafy_bot_1zip"/> shows a <Def n="leafy_zip_tree" r="leafy zip-tree"/>, and <Rc n="fig_leafy_bot_2zip"/> shows a <Def n="leafy_2zip_tree" r="leafy 2-zip-tree"/>.
-          </P>
-        </PreviewScope>
-
-        <Fig
-          n="fig_leafy_bot_gtree"
-          title="Leafy G-Tree"
-          wrapperTagProps={{clazz: "wide"}}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "leafBotGtree.svg"]} />}
-          />
-        </Fig>
-
-        <Fig
-          n="fig_leafy_bot_1zip"
-          title="Leafy Zip-Tree"
-          wrapperTagProps={{clazz: "wide"}}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "leafBot1zip.svg"]} />}
-          />
-        </Fig>
-
-        <Fig
-          n="fig_leafy_bot_2zip"
-          title="Leafy 2-Zip-Tree"
-          wrapperTagProps={{clazz: "wide"}}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "leafBot2zip.svg"]} />}
-          />
-        </Fig>
-
-        <P>
-          The reader familiar with <Rs n="skip_list"/> should immediately see that <Rc n="fig_leafy_bot_1zip"/> — the rendering of a <R n="leafy_zip_tree"/> — essentially shows a <R n="skip_list"/>, except that some of the edges within the same layer are missing. <Rcb n="fig_linked_leafy_bot_1zip"/> shows a proper <R n="skip_list"/> with the same <Rs n="item"/> and <Rs n="rank"/> for comparison.
-          Characterizing the <Quotes>missing</Quotes> edges from the perspective of <Rs n="leafy_gtree"/> is trivial: there are no edges between vertices of equal <R n="rank"/> that belong to different <Rs n="gnode"/>.
-        </P>
-
-        <P>
-          Characterizing the missing edges from the perspective of <Rs n="skip_list"/> is quite instructive. Consider the algorithm for searching in a <R n="skip_list"/>: start in the topmost layer, follow pointers within a layer until overshooting the search target, drop down a layer when you would overshoot.
-          The <Quotes>missing</Quotes> edges are exactly the edges that are always guaranteed to overshoot — if they did not overshoot, the search would never have descended into this part of the <R n="skip_list"/> in the first place. Search in a <R n="leafy_zip_tree"/> encounters a null pointer at the end of each <R n="gnode"/>, whereas search in a <R n="skip_list"/> blindly dereferences a pointer and performs a comparison whose result is already predetermined.
-        </P>
-
-        <P>
-          As far as we are aware, this observation of two classes of next-pointers in <Rs n="skip_list"/> — those that always overshoot in a search, and those which might not overshoot in some searches — is novel. The fact that <Rs n="skip_list"/> get to conflate the two classes and algorithmically handle them in a uniform way might well be the underlying reason why <Rs n="skip_list"/> are so appealing compared to binary search trees.
-        </P>
-
-        <PreviewScope>
-          <P>
-            We can easily augment the <Rs n="leafy_gtree"/> to generalize the <Rs n="skip_list"/> by adding pointers between successive <Rs n="gnode"/> of equal <R n="rank"/>. <Rcb n="fig_linked_leafy_bot_gtree"/> shows the resulting <Def n="linked_leafy_gtree" r="linked leafy G-tree" rs="linked leafy G-trees"/> for our running example. <Rcb n="fig_linked_leafy_bot_1zip"/> instantiates with a linked list, obtaining a <Def n="linked_leafy_zip_tree" r="linked leafy zip-tree" rs="linked leafy zip-trees"/>, i.e., a <R n="skip_list"/>. <Rcb n="fig_linked_leafy_bot_2zip"/> shows the instantiation with a <R n="k_list">2-list</R>, yielding a <Def n="linked_leafy_2zip_tree" r="linked leafy 2-zip-tree" rs="linked leafy 2-zip-trees"/>. Instantiating the <Rs n="linked_leafy_zip_tree"/> with <Rs n="k_list"/> gives a family of generalizations of <Rs n="skip_list"/> that store <M>k</M> <Rs n="item"/> per vertex. Finding such a family could easily be reason for a dedicated publication, were it not for the fact that the powerful framework of geometric trees gives us this family essentially for free.
-          </P>
-        </PreviewScope>
-
-        <Fig
-          n="fig_linked_leafy_bot_gtree"
-          title="Linked Leafy G-Tree"
-          wrapperTagProps={{clazz: "wide"}}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "linkedLeafBotGtree.svg"]} />}
-          />
-        </Fig>
-
-        <Fig
-          n="fig_linked_leafy_bot_1zip"
-          title="Linked Leafy Zip-Tree aka Skip-List"
-          wrapperTagProps={{clazz: "wide"}}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "linkedLeafBot1zip.svg"]} />}
-          />
-        </Fig>
-
-        <Fig
-          n="fig_linked_leafy_bot_2zip"
-          title="Linked Leafy 2-Zip-Tree aka 2-Skip-List"
-          wrapperTagProps={{clazz: "wide"}}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "linkedLeafBot2zip.svg"]} />}
-          />
-        </Fig>
-
-        <PreviewScope>
-          <P>
-            To conclude, we point out that linking only the leaves of a <R n="leafy_gtree"/> yields a family analogous to the <Bib item="comer1979ubiquitous">B<Sup>+</Sup>-trees</Bib>. <Rcb n="fig_gplus_gtree"/> shows such a <Def n="gplus_tree" r={<>G<Sup>+</Sup>-tree</>}/>; <Rc n="fig_gplus_1zip"/> shows an instantiation with a linked list (a <Def n="zipplus_tree" r={<>zip<Sup>+</Sup>-tree</>}/>), and <Rc n="fig_gplus_2zip"/> shows an instantiation with a <R n="k_list">2-list</R> (a <Def n="zip2plus_tree" r={<>2-zip<Sup>+</Sup>-tree</>}/>).
-          </P>
-        </PreviewScope>
-
-        <Fig
-          n="fig_gplus_gtree"
-          title={<>G<Sup>+</Sup>-Tree</>}
-          wrapperTagProps={{clazz: "wide"}}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "gPlusGtree.svg"]} />}
-          />
-        </Fig>
-
-        <Fig
-          n="fig_gplus_1zip"
-          title={<>Zip<Sup>+</Sup>-Tree</>}
-          wrapperTagProps={{clazz: "wide"}}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "gPlus1zip.svg"]} />}
-          />
-        </Fig>
-
-        <Fig
-          n="fig_gplus_2zip"
-          title={<>2-Zip<Sup>+</Sup>-Tree</>}
-          wrapperTagProps={{clazz: "wide"}}
-        >
-          <Img
-            src={<ResolveAsset asset={["graphics", "gPlus2zip.svg"]} />}
-          />
-        </Fig>
-      </Hsection>
+    <Hsection title="References" n="bibliography" noNumbering>
+      <Bibliography />
     </Hsection>
-    </ArticleTemplate>
+
+    <Hsection n="practicalities" title="Appendix A: Practicalities" noNumbering>
+      <PreviewScope>
+        <P>
+          The random variable <R n="geo_x"/> can take on arbitrary large numbers, but we often need to represent <R n="geo_x" /> in a computer.
+          To this end, we work with <Def n="truncated"/> <Rs n="geometric_distribution" />, which clamp <R n="geo_x" /> between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
+          Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
+        </P>
+      </PreviewScope>
+
+      <PreviewScope>
+        <P>
+          <Alj>I'm not entirely happy with this paragraph. Could you give a more clear explanation? @Carson</Alj>
+          To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that the probability for not getting a success within the first <R n="geo_k"/> trials is <M post="."><R n="geo_q"/>^<Curly><R n="geo_k"/> - 1</Curly></M>
+          {" "}Since we stop the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num="1" de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
+          {" "}This leads to the truncated expected value <M post="."><Def n="geo_expected_truncated" r="E"/>[<R n="geo_x"/>] = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / (1 - <R n="geo_q"/>) = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / <R n="geo_p"/></M>
+          {" "}For large <R n="geo_N"/>, we can hence simply ignore the effect of <R n="truncated">trunctation</R>.
+        </P>
+      </PreviewScope>
+    </Hsection>
+
+    <Hsection n="variants" title="Appendix B: G-Tree Variants" noNumbering>
+      <P>
+        We now sketch several variants of <Rs n="gtree"/> that might be useful in practice. Highlights include a <R n="gtree"/>-analogon of the <Bib item="comer1979ubiquitous">B<Sup>+</Sup>-tree</Bib>, and a cache-efficient generalization of the <R n="skip_list"/>. 
+      </P>
+
+      <PreviewScope>
+        <P>
+          When search trees store not only keys but key-value pairs, some usecases benefit from storing all key-value pairs in leaves of the tree. To support efficient lookup of the leaves, the inner vertices of the tree store duplicates of certain keys. We easily can adapt <Rs n="gtree"/> to this behavior by placing <R n="item"/> not only in the tree layer corresponding to their <R n="rank"/> but also on all lower layers. <Rcb n="fig_leafy_gtree"/> depicts such a <Def n="naive_leafy_gtree" r="naïve leafy G-tree"/>, and <Rc n="fig_leafy_1zip"/> and <Rc n="fig_leafy_2zip"/> show concrete instantiations with a <R n="k_list">1-list</R> (a <Def n="naive_leafy_zip_tree" r="naïve leafy zip-tree"/>) and a <R n="k_list">2-list</R> (a <Def n="naive_leafy_2zip_tree" r="naïve leafy 2-zip-tree"/>) respectively. We <Sidenote note={<>Spoiler: the ordering is arbitrary <Em>in principle</Em>, but our choice will surface a deep connection to <Rs n="skip_list"/> in a few paragraphs.</>}>arbitrarily</Sidenote> choose to sort <Rs n="item"/> of lower <R n="rank"/> to the right of their copies of higher <R n="rank"/>.
+        </P>
+      </PreviewScope>
+
+      <Fig
+        n="fig_leafy_gtree"
+        wrapperTagProps={{clazz: "wide"}}
+        title="Naïve Leafy G-Tree"
+        caption={<>
+          <P>
+            An example <R n="naive_leafy_gtree"/> that stores the same <Rs n="item"/> as the <R n="gtree"/> in <Rc n="fig_gnodes"/>.
+          </P>
+        </>}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafGtree.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_leafy_1zip"
+        wrapperTagProps={{clazz: "wide"}}
+        title="Naïve Leafy Zip-Tree"
+        caption={<>
+          <P>
+            An example <R n="naive_leafy_zip_tree"/>, a concrete instantiation of the <R n="naive_leafy_gtree"/> in <Rc n="fig_leafy_gtree"/>. Compare also with <Rc n="fig_ziptree_lists"/>, which depicts the <R n="zip_tree"/> for the same <Rs n="item"/>.
+          </P>
+        </>}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafGtreeOfLists.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_leafy_2zip"
+        wrapperTagProps={{clazz: "wide"}}
+        title="Naïve Leafy 2-Zip-Tree"
+        caption={<>
+          <P>
+            An example <R n="naive_leafy_2zip_tree"/>, a concrete instantiation of the <R n="naive_leafy_gtree"/> in <Rc n="fig_leafy_gtree"/>. Compare also with <Rc n="fig_2ziptree"/>, which depicts the <R n="kzip_tree">2-zip-tree</R> for the same <Rs n="item"/>.
+          </P>
+        </>}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafGtree2Lists.svg"]} />}
+        />
+      </Fig>
+
+      <PreviewScope>
+        <P>
+          The figures clearly show a deficiency of this naïve approach: almost all <Rs n="item"/> have a single pointer to the layer below, except for the first <R n="item"/> of each <R n="rank"/>, which needs two pointers.
+          We can restore uniformity by adding a dummy element <M>\bot</M> at the start of each layer.
+          {" "}<Rcb n="fig_leafy_bot_gtree"/> gives an example of the resulting (proper) <Def n="leafy_gtree" r="leafy G-tree" rs="leafy G-trees"/>; <Rc n="fig_leafy_bot_1zip"/> shows a <Def n="leafy_zip_tree" r="leafy zip-tree"/>, and <Rc n="fig_leafy_bot_2zip"/> shows a <Def n="leafy_2zip_tree" r="leafy 2-zip-tree"/>.
+        </P>
+      </PreviewScope>
+
+      <Fig
+        n="fig_leafy_bot_gtree"
+        title="Leafy G-Tree"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafBotGtree.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_leafy_bot_1zip"
+        title="Leafy Zip-Tree"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafBot1zip.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_leafy_bot_2zip"
+        title="Leafy 2-Zip-Tree"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "leafBot2zip.svg"]} />}
+        />
+      </Fig>
+
+      <P>
+        The reader familiar with <Rs n="skip_list"/> should immediately see that <Rc n="fig_leafy_bot_1zip"/> — the rendering of a <R n="leafy_zip_tree"/> — essentially shows a <R n="skip_list"/>, except that some of the edges within the same layer are missing. <Rcb n="fig_linked_leafy_bot_1zip"/> shows a proper <R n="skip_list"/> with the same <Rs n="item"/> and <Rs n="rank"/> for comparison.
+        Characterizing the <Quotes>missing</Quotes> edges from the perspective of <Rs n="leafy_gtree"/> is trivial: there are no edges between vertices of equal <R n="rank"/> that belong to different <Rs n="gnode"/>.
+      </P>
+
+      <P>
+        Characterizing the missing edges from the perspective of <Rs n="skip_list"/> is quite instructive. Consider the algorithm for searching in a <R n="skip_list"/>: start in the topmost layer, follow pointers within a layer until overshooting the search target, drop down a layer when you would overshoot.
+        The <Quotes>missing</Quotes> edges are exactly the edges that are always guaranteed to overshoot — if they did not overshoot, the search would never have descended into this part of the <R n="skip_list"/> in the first place. Search in a <R n="leafy_zip_tree"/> encounters a null pointer at the end of each <R n="gnode"/>, whereas search in a <R n="skip_list"/> blindly dereferences a pointer and performs a comparison whose result is already predetermined.
+      </P>
+
+      <P>
+        As far as we are aware, this observation of two classes of next-pointers in <Rs n="skip_list"/> — those that always overshoot in a search, and those which might not overshoot in some searches — is novel. The fact that <Rs n="skip_list"/> get to conflate the two classes and algorithmically handle them in a uniform way might well be the underlying reason why <Rs n="skip_list"/> are so appealing compared to binary search trees.
+      </P>
+
+      <PreviewScope>
+        <P>
+          We can easily augment the <Rs n="leafy_gtree"/> to generalize the <Rs n="skip_list"/> by adding pointers between successive <Rs n="gnode"/> of equal <R n="rank"/>. <Rcb n="fig_linked_leafy_bot_gtree"/> shows the resulting <Def n="linked_leafy_gtree" r="linked leafy G-tree" rs="linked leafy G-trees"/> for our running example. <Rcb n="fig_linked_leafy_bot_1zip"/> instantiates with a linked list, obtaining a <Def n="linked_leafy_zip_tree" r="linked leafy zip-tree" rs="linked leafy zip-trees"/>, i.e., a <R n="skip_list"/>. <Rcb n="fig_linked_leafy_bot_2zip"/> shows the instantiation with a <R n="k_list">2-list</R>, yielding a <Def n="linked_leafy_2zip_tree" r="linked leafy 2-zip-tree" rs="linked leafy 2-zip-trees"/>. Instantiating the <Rs n="linked_leafy_zip_tree"/> with <Rs n="k_list"/> gives a family of generalizations of <Rs n="skip_list"/> that store <M>k</M> <Rs n="item"/> per vertex. Finding such a family could easily be reason for a dedicated publication, were it not for the fact that the powerful framework of geometric trees gives us this family essentially for free.
+        </P>
+      </PreviewScope>
+
+      <Fig
+        n="fig_linked_leafy_bot_gtree"
+        title="Linked Leafy G-Tree"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "linkedLeafBotGtree.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_linked_leafy_bot_1zip"
+        title="Linked Leafy Zip-Tree aka Skip-List"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "linkedLeafBot1zip.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_linked_leafy_bot_2zip"
+        title="Linked Leafy 2-Zip-Tree aka 2-Skip-List"
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "linkedLeafBot2zip.svg"]} />}
+        />
+      </Fig>
+
+      <PreviewScope>
+        <P>
+          To conclude, we point out that linking only the leaves of a <R n="leafy_gtree"/> yields a family analogous to the <Bib item="comer1979ubiquitous">B<Sup>+</Sup>-trees</Bib>. <Rcb n="fig_gplus_gtree"/> shows such a <Def n="gplus_tree" r={<>G<Sup>+</Sup>-tree</>}/>; <Rc n="fig_gplus_1zip"/> shows an instantiation with a linked list (a <Def n="zipplus_tree" r={<>zip<Sup>+</Sup>-tree</>}/>), and <Rc n="fig_gplus_2zip"/> shows an instantiation with a <R n="k_list">2-list</R> (a <Def n="zip2plus_tree" r={<>2-zip<Sup>+</Sup>-tree</>}/>).
+        </P>
+      </PreviewScope>
+
+      <Fig
+        n="fig_gplus_gtree"
+        title={<>G<Sup>+</Sup>-Tree</>}
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "gPlusGtree.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_gplus_1zip"
+        title={<>Zip<Sup>+</Sup>-Tree</>}
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "gPlus1zip.svg"]} />}
+        />
+      </Fig>
+
+      <Fig
+        n="fig_gplus_2zip"
+        title={<>2-Zip<Sup>+</Sup>-Tree</>}
+        wrapperTagProps={{clazz: "wide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "gPlus2zip.svg"]} />}
+        />
+      </Fig>
+    </Hsection>
+  </ArticleTemplate>
 );
 
 // Evaluate the expression. This has exciting side-effects,
