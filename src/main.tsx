@@ -236,6 +236,7 @@ const exp = (
     <Hsection n="introduction" title="Introduction">
       <P>
         <Alj>TODO: Lead with performance comparison plot zip-tree (i.e., 1-zip-tree) vs 16-zip-tree (or whichever performs best). @Carson</Alj>
+        <Alj>TODO: make toc scrollable on small screens</Alj>
         Randomized set data structures eschew self-balancing logic for more simple, probabilistic item organization.
         When deriving the necessary randomness via pseudorandom functions of the stored items themselves, the resulting graphs depend on the stored set only, but not the order of insertions and deletions.
         This <Def n="history_independent"
@@ -1816,7 +1817,11 @@ const exp = (
 
     <Hsection n="conclusion" title="Conclusion">
       <P>
-        <Wip inline>TODO</Wip>
+          We have generalized the <Rs n="zip_tree"/> to the rich family of <Rs n="gtree"/>. <Rsb n="gtree"/> must be instantiated with a concrete set data structure; using a linked list yields the <Rs n="zip_tree"/>, and direct recursive self-instantiation yields the <Rs n="zipzip"/>. All <Rs n="gtree"/> are <R n="history_independent"/>, and admit the same <R n="implementation">efficient algorithms</R> for mutating them. We have <R n="analysis">proven</R> the <Rs n="gtree"/> to be similar to perfectly balanced search trees with high probability, a property that makes them asymptotically efficient.
+      </P>
+
+      <P>
+        Beyond merely generalizing existing data structures, we have defined the <Rs n="kzip_tree"/>, a conceptually simple family of <R n="history_independent"/> data structures that store up to <M>k</M> <Rs n="item"/> in a single vertex. Such data structures make more efficient use of hardware caches than binary trees, allowing the <Rs n="kzip_tree"/> to significantly outperform<Alj>TODO: turn <Quotes>significantly outperform</Quotes> into a reference to the benchmark splash figure.</Alj> the binary <Rs n="zip_tree"/>. 
       </P>
     </Hsection>
 
