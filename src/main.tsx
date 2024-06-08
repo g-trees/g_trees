@@ -372,14 +372,14 @@ const exp = (
       </P>
 
       <P>
-        The remainder of the paper is structured as follows: <Wip inline>TODO</Wip>.
+        We give an overview of related work in <Rc n="related_work"/>, before introducing preliminary definitions and notation in <Rc n="preliminaries"/>. We present the <R n="gtree_informal">geometric trees</R> in <Rc n="sec_gtrees"/>, including a thorough <R n="analysis">analysis</R> and a an overview of <R n="old_gtrees">old</R> and <R n="new_gtrees">novel</R> <Rs n="gtree_informal"/>. <Rcb n="implementation"/> describes efficient algorithms for mutating <Rs n="gtree_informal"/>.
       </P>
     </Hsection>
 
-    <Hsection title="Related Work" n="related-work">
+    <Hsection title="Related Work" n="related_work">
       <P>
         <Marginale>
-          The practically-minded reader can safely skip ahead to <Rc n="preliminaries"/>, whereas the more academically inclined may wish to stick around for <Rc n="related-work"/>, where we outline the current state of the art and contextualize our contributions.
+          The practically-minded reader can safely skip ahead to <Rc n="preliminaries"/>, whereas the more academically inclined may wish to stick around for <Rc n="related_work"/>, where we outline the current state of the art and contextualize our contributions.
         </Marginale>
         Data structures whose exact shape is determined solely by their contents and not by the order of insertion and deletion operations have been studied for decades.
         This property has been given several names, such as <Bib item="snyder1977uniquely">unique representation</Bib>, <Bib item="auvolat2019merkle">structural unicity</Bib>, <Bib item="driscoll1994fully">confluent persistence</Bib>, and <Bib item="naor2001anti">anti-persistence or history-independence</Bib>.
