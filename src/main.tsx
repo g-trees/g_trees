@@ -223,12 +223,12 @@ const exp = (
       {
         name: "Carson Farmer",
         affiliation: "Textile, Inc",
-        email: "carson@textile.io",
+        email: <A href="mailto:carson@textile.io">carson@textile.io</A>,
       },
       {
         name: "Aljoscha Meyer",
         affiliation: "TU Berlin",
-        email: "mail@aljoscha-meyer.de",
+        email: <A href="mailto:mail@aljoscha-meyer.de">mail@aljoscha-meyer.de</A>,
       },
     ]}
   >
@@ -559,13 +559,12 @@ const exp = (
         </PreviewScope>
 
         <P>
-          <Cjqf>I've tried it both ways with the rank function subscript: (<M>\frac<Curly>1</Curly><Curly>2</Curly></M>) and (<M>1/2</M>), not sure which looks nicer?</Cjqf><Alj>Hadn't considered <M>(1/2)</M> before, it does look nicer imo. I changed it, feel free to remove these two comments to signal approval =)</Alj>
           In practice, <Rank p="(1/2)"><R n="geo_arg_u" /></Rank> can be implemented by hashing <R n="geo_arg_u" /> with a secure hash function and counting the number of trailing zeros in the binary representation of the digest.
           This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh and Teitelbaum<Bib item="pugh1989incremental" />.
           For digests of length <M>l</M>, this <R n="truncated">truncates</R> the distribution to <M post="."><R n="geo_N" /> = 2^l</M>{" "}
           Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers.
           
-          <Cjqf><A href="https://textile.notion.site/Flipping-bits-and-coins-with-hashes-205770b56418498fba4fef8cb037412d">This blog post on bit manipulation</A> might make another useful contribution to the "practicalities" section?</Cjqf><Alj>In content or as a reference? Probably inlining the content into the paper, right? (this is <Em>your</Em> post after all, correct?)</Alj>
+          <Cjqf><A href="https://textile.notion.site/Flipping-bits-and-coins-with-hashes-205770b56418498fba4fef8cb037412d">This blog post on bit manipulation</A> might make another useful contribution to the "practicalities" section?</Cjqf><Alj>In content or as a reference? Probably inlining the content into the paper, right? (this is <Em>your</Em> post after all, correct?)</Alj><Cjqf>Yes just inlining it.</Cjqf>
         </P>
       </Hsection>
 
@@ -593,7 +592,6 @@ const exp = (
             </>
           }
         >
-          <Cjqf>Note that I had to set <Code>relativity: 0</Code> to get this to render properly while "watch"ing the file.</Cjqf><Alj>Huh, where, in which context?</Alj>
           <Img
             src={<ResolveAsset asset={["graphics", "ziptreeBasic.svg"]} />}
             alt="A rendering of a zip tree."
@@ -610,9 +608,7 @@ const exp = (
       <Definition n="zip_tree_recursive" title="Zip-Tree, Recursively">
           <P>
             Define the <Def n="partition" r="partition item" rs="partition items"/> of a set <M><Def n="partition_s" r="S"/>\subseteq <R n="tree_u"/></M> as the least element of <R n="partition_s"/> among those of maximal <R n="rank"/>.
-            <Cjqf>I'm not sure "p" is a good choice here? "i" might work? Or just use something totally different like ρ or π?</Cjqf><Alj>No strong opinion on my side.</Alj>
-            {" "}The <Def n="zip_tree_rec" r="zip-tree" rs="zip-trees"/> of any set <R n="partition_s"/> with <R n="partition"/> <M><Def n="partition_p" r="p"/></M> is the binary <R n="tree"/> whose <R n="item"/> is <R n="partition_p"/>, whose <R n="left"/> <R n="child"/> is the <R n="zip_tree_rec"/> of <M><MSet>s \in <R n="partition_s"/> : s \prec <R n="partition_p"/></MSet></M>, and whose <R n="right"/> <R n="child"/> is the <R n="zip_tree_rec"/> of <M><MSet>s \in <R n="partition_s"/> : s \succ <R n="partition_p"/></MSet></M>.
-            <Cjqf>Last one here: I like these more math-formal definitions, but given we used less formal language earlier (for each item in... all items less than...), should we use prose here instead?</Cjqf><Alj>No strong opinion on my side.</Alj>
+            {" "}The <Def n="zip_tree_rec" r="zip-tree" rs="zip-trees"/> of any set <R n="partition_s"/> with <R n="partition"/> <M><Def n="partition_p" r="ρ"/></M> is the binary <R n="tree"/> whose <R n="item"/> is <R n="partition_p"/>, whose <R n="left"/> <R n="child"/> is the <R n="zip_tree_rec"/> of <M><MSet>s \in <R n="partition_s"/> : s \prec <R n="partition_p"/></MSet></M> (i.e., all items in <R n="partition_s"/> which precede <R n="partition_p"/>), and whose <R n="right"/> <R n="child"/> is the <R n="zip_tree_rec"/> of <M><MSet>s \in <R n="partition_s"/> : s \succ <R n="partition_p"/></MSet></M> (i.e., all items in <R n="partition_s"/> which succeed <R n="partition_p"/>).
           </P>
       </Definition>
 
@@ -731,10 +727,10 @@ const exp = (
 
       <Fig
           n="fig_gnodes"
+          wrapperTagProps={{clazz: "wide"}}
           title="High-Level View — G-Nodes"
           caption={
             <P>
-              <Cjqf>Let's make this bigger, to match the sizes of the previous zip trees.</Cjqf><Alj>Do you want to scale the y axis while keeping the same width, or make the figure wide via the <Code>{`wrapperTagProps={{clazz: "wide"}}`}</Code> prop on the <Code>Fig</Code> macro? Either (or not changing anything) works for me.</Alj>
               A <R n="gtree"/> from a high-level view: we disregard the internal structure of its <Rs n="gnode"/>, rendering them as single vertices. 
               We neither know nor care about the choice of <R n="gtree_g"/>.
               The set of <Rs n="item"/> is identical to that of <Rc n="fig_ziptree_lists"/>.
@@ -753,8 +749,8 @@ const exp = (
       </P>
 
       <P>
-        When interpreted as trees of <Rs n="gnode"/>, <Rsb n="gtree"/> are very similar to the <Rs n="mst">merkle-search-trees</Rs> of Auvolat & Taïani; indeed, <Rc n="fig_gnodes"/> could directly serve as a depiction of a<Alj>I tough you go by the phonetic "Em-As-Tee" for determining "a" vs "an".</Alj> <R n="mst"/>.
-        Structurally, the only difference is that <Rs n="mst"/> insert empty nodes to uphold the B-tree invariant that the difference in <R n="rank"/> bewteen a parent and a child node is at most one.
+        When interpreted as trees of <Rs n="gnode"/>, <Rsb n="gtree"/> are very similar to the <Rs n="mst">merkle-search-trees</Rs> of Auvolat & Taïani; indeed, <Rc n="fig_gnodes"/> could directly serve as a depiction of a<Alj>I tough you go by the phonetic "Em-As-Tee" for determining "a" vs "an".<Cjqf>I'm honestly not sure? You might be right? I just read MST as merkle-serch-tree, which in my brain, starts with a consonant sound. P.S. this nested comment started as an accident, but I kinda like it?</Cjqf></Alj> <R n="mst"/>.
+        {" "}Structurally, the only difference is that <Rs n="mst"/> insert empty nodes to uphold the B-tree invariant that the difference in <R n="rank"/> bewteen a parent and a child node is at most one.
         {" "}<Rsb n="gtree"/>, in contrast, collapse missing <Rs n="rank"/>.
         <Cjqf>I think we can find better ways to highlight the benefits of G-trees over MSTs. This section isn't quite hitting it for me... yet. It also doesn't "flow" into the analysis section, which it totally could, because they don't offer _any_ analysis in the MST paper.</Cjqf>
         <Alj>Agreed, this part is pretty weak as-is.</Alj>
@@ -781,25 +777,32 @@ const exp = (
       </PreviewScope>
 
       <P>
-        Our goal is to maintain <Rs n="gnode"/> with a constant <R n="ana_k"/> number of <Rs n="item"/> on average. In order to achieve this, we require rank collisions to occur with a probability of ... Rank collisions are a direct consequence of ... <Cjqf inline>I'm strugging to write here, but the idea is to try to address your comment and outline why we present things in the order we do.</Cjqf>
+        <Cjqf>I've added this paragraph here. It is clearly repetative in terms of the preceeding two paragraphs, but I think it might be a nice way to present things?. Thoughts? The other reason to write it this way, is because p isn't really "fixed". For heights, it is 1 - 1/k, but for widths, p becomes 1/k. So it is nice to essentially separate q and p as I have done here (I think?).</Cjqf>
+        Our goal is to approximate a perfectly balanced <M post="-ary">(k + 1)</M> tree with a roughly constant <R n="ana_k"/> number of <Rs n="item"/> on average. This occurs when the distribution of node <Rs n="rank"/> (and therefore, <Em>heights</Em>) follows a geometric distribution with <Em>failure</Em> probability <M>q = 1 / k</M>. The resulting node widths — as we will see shortly — are then characterized by a geometric distribution with <Em>success</Em> probability <M>p = 1 / k</M>, and expectation roughly <M>k</M>. As such, we begin with an analysis of tree heights.
       </P>
 
       <Hsection n="gtree_height" title="G-Tree Height">
         <PreviewScope>
           <P>
-            Given these parameters, the <R n="rank"/> of any <R n="gnode"/> is a geometric random variable with parameter <R n="ana_p"/>. The height of <R n="ana_T"/> is upper-bounded by the <R n="rank"/> <M><Def n="ana_Mn" r="M_n"/></M> of its root node, since each child has strictly lesser <R n="rank"/> than its parent.
+            The <R n="rank"/> of any <R n="gnode"/> is a geometric random variable with parameter <M><R n="ana_p"/> = 1 - q</M>. The height of <R n="ana_T"/> is upper-bounded by the <R n="rank"/> <M><Def n="ana_Mn" r="M_n"/></M> of its root node, since each child has a strictly lesser <R n="rank"/> than its parent.
           </P>
         </PreviewScope>
 
         <PreviewScope>
           <P>
-            <Alj>I'd strongly prefer rendering the math in katex via <Code><EscapeHtml>{`<M>Pr[∃g,g.rank ≥ k] ≤ nqk−1</M>`}</EscapeHtml></Code>, for example. Though I must admit, using unicode in the input to katex is pretty slick!</Alj>
-            <R n="ana_Mn"/> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="geometric_distribution"/>. For simplicity, we can bound <R n="ana_Mn"/> as the maximum rank of any <R n="gnode"/> in <R n="ana_T"/> via the union bound: note that for given <M><R n="ana_k"/> much less than ∞</M> the probability that the <R n="rank"/> of a <R n="gnode"/> is at least <R n="ana_k"/> is at most qk−1 (i.e., Pr[g.rank ≥ k] ≤ qk−1). This implies that the probability that there exists some <R n="gnode"/> such that its <R n="rank"/> ≥ <R n="ana_k"/> is <M post=",">Pr[∃g,g.rank ≥ k] ≤ nqk−1</M> and so for some positive constant c, Pr[Mn ≥ (c + 1) logγ n] ≤ n−c <Bib item="golovin2010b" />.
+            <Alj>I'd strongly prefer rendering the math in katex via <Code><EscapeHtml>{`<M>Pr[∃g,g.rank ≥ k] ≤ nqk−1</M>`}</EscapeHtml></Code>, for example. Though I must admit, using unicode in the input to katex is pretty slick!<Cjqf>Oh yes 100% agree, I was just getting lazy and didn't want to lose my spot/flow</Cjqf></Alj>
+
+            The root rank, <R n="ana_Mn"/> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="geometric_distribution"/>. For simplicity, we can bound <R n="ana_Mn"/> as the maximum rank of any <R n="gnode"/> in <R n="ana_T"/> via the union bound: note that for given <M><R n="ana_k"/> ≪ ∞</M> the probability that the <R n="rank"/> of a <R n="gnode"/> <M><Def n="ana_g" r="g"/></M> is at least <R n="ana_k"/> is at most <M><R n="ana_q"/>^<Curly><R n="ana_k"/> − 1</Curly></M> (i.e., <M>\Pr[<Rank><R n="ana_g" /></Rank> ≥ <R n="ana_k"/>] ≤ <R n="ana_q"/>^<Curly><R n="ana_k"/> - 1</Curly></M>).<Cjqf>I'm computing rank directly on g here, maybe it should actually be explicitly the key of g?</Cjqf>
+            {" "}This implies that the probability that there exists some <R n="gnode"/> such that <M><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_k"/></M> is <M post=",">\Pr[∃ <R n="ana_g"/>,<Rank><R n="ana_g" /></Rank> ≥ <R n="ana_k"/>] ≤ <R n="ana_n"/><R n="ana_q"/>^<Curly><R n="ana_k"/>−1</Curly></M> and so for some positive constant <M>c</M>, <M>\Pr[<R n="ana_Mn"/> ≥ (c + 1) \log_<Curly><R n="ana_k"/></Curly> <R n="ana_n"/>] ≤ <R n="ana_n"/>^<Curly>-c</Curly></M><Bib item="golovin2010b" />.
           </P>
           <P>
-          Even for k → ∞, the tail probability contribution is relatively small, and can be estimated via the simplification of the geometric series for values of k {'>'} ⌈logγ n⌉:
-
-          <Cjqf inline>Lost stream, will pick up tomorrow!</Cjqf>
+          Even for <M><R n="ana_k"/> → ∞</M>, the tail probability contribution is relatively small, and can be estimated via the simplification of the geometric series for values of <M><R n="ana_k"/> {'>'} ⌈\log_<Curly><R n="ana_k"/></Curly> <R n="ana_n"/>⌉</M>:
+          <MM>\sum_<Curly><R n="ana_k"/> = ⌈\log_<Curly><R n="ana_k"/></Curly> <R n="ana_n"/>⌉ + 1</Curly>^\infty <R n="ana_n"/> <R n="ana_p"/>^<Curly><R n="ana_k"/>-1</Curly> = <R n="ana_n"/> <R n="ana_p"/>^<Curly>⌈\log_<Curly><R n="ana_k"/></Curly> <R n="ana_n"/>⌉</Curly> ≤ <R n="ana_n"/> <R n="ana_p"/>^<Curly>\log_<Curly><R n="ana_k"/></Curly> <R n="ana_n"/></Curly> = \frac<Curly>1</Curly><Curly>1 - <R n="ana_p"/></Curly> = \frac<Curly>1</Curly><Curly><R n="ana_q"/></Curly></MM>
+          which is <R n="ana_k"/>, and implies that the expected max rank <M>\text<Curly>E</Curly>[<R n="ana_Mn"/>]</M> is <M>⌈\log_<Curly><R n="ana_k"/></Curly> <R n="ana_n"/>⌉</M>, and is at most <M>⌈\log_<Curly><R n="ana_k"/></Curly> <R n="ana_n"/>⌉ + 1 / <R n="ana_q"/></M> (i.e., <M>\log_<Curly><R n="ana_k"/></Curly> <R n="ana_n"/> + <BigO>1</BigO></M>), with high probability. The same expectation for <R n="ana_Mn"/> is given by <Bib item="szpankowski1990yet" /> eq. (2.6) and (2.12), who show that the expected value of <R n="ana_Mn"/> is
+          <MM>
+          <M post={","}>\text<Curly>E</Curly>[<R n="ana_Mn"/>] = - \sum_<Curly><R n="ana_k"/> = 1</Curly>^<Curly><R n="ana_n"/></Curly> (-1)^<Curly><R n="ana_k"/></Curly> \binom<Curly><R n="ana_n"/></Curly><Curly><R n="ana_k"/></Curly>\frac<Curly>1</Curly><Curly>1 - <R n="ana_q"/>^<Curly><R n="ana_k"/></Curly></Curly></M>
+          </MM>
+          which is asymptotically equal to <M>\log_<Curly><R n="ana_k"/></Curly> <R n="ana_n"/> + <BigO>1</BigO></M>.<Cjqf>Ah shoot, I just got down here and realized I'm mixing up my ks. Will continue tomorrow.</Cjqf>
           </P>
         </PreviewScope>
       </Hsection>

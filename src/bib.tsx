@@ -715,7 +715,7 @@ export const bib: BibItemDeclaration[] = [
       author={Forbes, Catherine and Evans, Merran and Hastings, Nicholas and Peacock, Brian},
       year={2011},
       publisher={John Wiley \& Sons}
-    }      
+    }
 `,
     href: "https://link.springer.com/book/10.1007/1-84628-168-7",
   },
@@ -727,7 +727,6 @@ export const bib: BibItemDeclaration[] = [
       pages={253--264},
       year={2016}
     }
-    
 `,
     asset: ["references", "blelloch2016just.pdf"],
     blurb: (
@@ -768,4 +767,35 @@ export const bib: BibItemDeclaration[] = [
       </>
     ),
   },
+  {
+    item: `@article{szpankowski1990yet,
+      title={Yet another application of a binomial recurrence order statistics},
+      author={Szpankowski, Wojciech and Rego, Vernon},
+      journal={Computing},
+      volume={43},
+      number={4},
+      pages={401--410},
+      year={1990},
+      publisher={Springer}
+    }
+`,
+    asset: ["references", "szpankowski1990yet.pdf"],
+    href: "https://link.springer.com/article/10.1007/BF02241658",
+    blurb: (
+      <>
+        <P>
+          We investigate the moments of the maximum of a set of i.i.d geometric
+          random variables. Computationally, the exact formula for the moments
+          (which does not seem to be available in the literature) is inhibited
+          by the presence of an alternating sum. A recursive expression for the
+          moments is shown to be superior. However, the recursion can be both
+          computationally intensive as well as subject to large round-off error
+          when the set of random variables is large, due to the presence of
+          factorial terms. To get around this difficulty we develop accurate
+          asymptotic expressions for the moments and verify our results
+          numerically.
+        </P>
+      </>
+    )
+  }
 ];
