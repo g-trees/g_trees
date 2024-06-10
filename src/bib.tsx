@@ -1,4 +1,4 @@
-import { A, BibItemDeclaration, Em, I, M, P } from "../deps.ts";
+import { A, BibItemDeclaration, Em, I, M, P, Sup } from "../deps.ts";
 import { BigOmega, Mathcal, MFrac } from "./macros.tsx";
 import { BigO, BigTheta, Curly } from "./macros.tsx";
 
@@ -797,5 +797,31 @@ export const bib: BibItemDeclaration[] = [
         </P>
       </>
     )
-  }
+  },
+  {
+    item: `@article{comer1979ubiquitous,
+      title={The Ubiquitous B-tree},
+      author={Comer, Douglas},
+      journal={ACM Computing Surveys (CSUR)},
+      volume={11},
+      number={2},
+      pages={121--137},
+      year={1979},
+      publisher={ACM New York, NY, USA}
+    }
+`,
+    asset: ["references", "comer1979ubiquitous.pdf"],
+    blurb: (
+      <>
+        <P>
+          B-trees have become, de facto, a standard for file organization. File indexes of users,
+          dedicated database systems, and general-purpose access methods have all been proposed
+          and implemented using B-trees. This paper reviews B-trees and shows why they have
+          been so successful. It discusses the major variations of the B-tree, especially the B<Sup>+</Sup>-tree,
+          contrasting the relative merits and costs of each implementation. It illustrates a general
+          purpose access method which uses a B-tree.
+        </P>
+      </>
+    ),
+  },
 ];

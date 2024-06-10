@@ -162,7 +162,7 @@ body {
         width: ${toc}rem;
 
         position: fixed;
-        top: 1.6rem;
+        top: 0.5rem;
         transform: translateX(-${paddingToc + toc}rem);
     }
 }
