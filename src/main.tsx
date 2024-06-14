@@ -109,6 +109,7 @@ import {
   Np,
   MParen,
   OpName,
+  Hash,
   Orange,
   Pink,
   Quotes,
@@ -570,8 +571,6 @@ const exp = (
           This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh and Teitelbaum<Bib item="pugh1989incremental" />.
           For digests of length <M>l</M>, this <R n="truncated">truncates</R> the distribution to <M post="."><R n="geo_N" /> = 2^l</M>{" "}
           Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers.
-          
-          <Cjqf><A href="https://textile.notion.site/Flipping-bits-and-coins-with-hashes-205770b56418498fba4fef8cb037412d">This blog post on bit manipulation</A> might make another useful contribution to the "practicalities" section?</Cjqf><Alj>In content or as a reference? Probably inlining the content into the paper, right? (this is <Em>your</Em> post after all, correct?)</Alj><Cjqf>Yes just inlining it.</Cjqf>
         </P>
       </Hsection>
 
@@ -582,7 +581,10 @@ const exp = (
             Let <Rank p={<>\frac<Curly>1</Curly><Curly>2</Curly></>}/> be a rank function.
             The <Def n="zip_tree" r="zip tree" rs="zip trees"/> of some set <M><Def n="zip_s" r="S"/></M> is the unique <R n="search_tree"/> whose set of <Rs n="item"/> is <R n="zip_s"/>, and which is a <R n="heap"/> when ordering by <R n="rank"/> first, <R n="item"/> second.
             Equivalently, it must be a <R n="heap"/> with respect to <Rs n="rank"/> such that <R n="left"/> <Rs n="child"/> always have strictly lesser <R n="rank"/> than their parents.
-            {" "}<Rcb n="fig_ziptree_basic"/> gives an example. 
+            {" "}<Rcb n="fig_ziptree_basic"/> gives an example.
+            <Marginale>
+              The example tree is taken from a <A href="https://stackoverflow.com/questions/61944198/what-is-a-zip-tree-and-how-does-it-work">stackoverflow answer</A>, the interested reader can find there a detailed description of the isomorphism to <Rs n="skip_list"/> for that same example tree.
+            </Marginale> 
           </P>
         </PreviewScope>
 
@@ -593,7 +595,6 @@ const exp = (
           caption={
             <>
               <P>
-                <Marginale>The example tree is taken from a <A href="https://stackoverflow.com/questions/61944198/what-is-a-zip-tree-and-how-does-it-work">stackoverflow answer</A>, the interested reader can find there a detailed description of the isomorphism to <Rs n="skip_list"/> for that same example tree.</Marginale>
                 <Rsb n="item"/> are the numbers in the vertices, <Rs n="rank"/> are the gray numbers above the vertices. 
                 {" "}<Rsb n="item"/> are increasing from left to right (the tree is a <R n="search_tree"/> with respect to <Rs n="item"/>), <Rs n="rank"/> are decreasing from top to bottom (the tree is a <R n="heap"/> with respect to <Rs n="rank"/>), and no <R n="vertex"/> has a <R n="left"/> <R n="child"/> of equal <R n="rank"/> (yielding a unique tree shape).
               </P>
@@ -798,18 +799,18 @@ const exp = (
 
         <PreviewScope>
           <P>
-            <Alj>I'd strongly prefer rendering the math in katex via <Code><EscapeHtml>{`<M>Pr[∃g,g.rank ≥ k] ≤ nqk−1</M>`}</EscapeHtml></Code>, for example. Though I must admit, using unicode in the input to katex is pretty slick!<Cjqf>Oh yes 100% agree, I was just getting lazy and didn't want to lose my spot/flow</Cjqf></Alj>
-
             The root rank, <M><Def n="ana_Mn" r="M_n"/></M> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="geometric_distribution"/>, <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M>. While it is known that the expected value of <M><R n="ana_Mn"/></M> is roughly <M><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog> + <BigO>1</BigO></M>, there is no simple closed form expression <Bib item={["szpankowski1990yet", "eisenberg2008expectation"]} />. However, it is possible to bound <R n="ana_Mn"/> as the maximum rank of any <R n="gnode"/> in <R n="ana_T"/> via the union bound: for any <M><Def n="ana_r" r="r"/> ≪ ∞</M> the probability that the <R n="rank"/> of a <R n="gnode"/> <M><Def n="ana_g" r="g"/></M> is at least <R n="ana_r"/> is at most <M><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M>, i.e., <M><Pr><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_q"/>^<Curly><R n="ana_r"/> - 1</Curly></M>.<Cjqf>I'm computing rank directly on g here, maybe it should actually be explicitly the key of g?</Cjqf>
             {" "}This implies that the probability that there exists some <R n="gnode"/> such that <M><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></M> is <M post=","><Pr>∃ <R n="ana_g"/>,<Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_n"/><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M> and so for some positive constant <M>c</M>, <M><Pr><R n="ana_Mn"/> ≥ (c + 1) <MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></Pr> ≤ <R n="ana_n"/>^<Curly>-c</Curly></M><Bib item="golovin2010b" />.
           </P>
         </PreviewScope>
         <PreviewScope>
           <P>
-            Even for <M><R n="ana_r"/> → ∞</M>, the tail probability contribution is relatively small, and can be estimated via the simplification of the geometric series for values of <M><R n="ana_r"/> {'>'} <MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil></M>:
+            Even for <M><R n="ana_r"/> → ∞</M>, the tail probability contribution is relatively small, and can be estimated via the simplification of the geometric series for values of <M><R n="ana_r"/> {'>'} <MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil></M>, as in
+            
             <MM>
               <Sum sub={<><R n="ana_r"/> = <MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil> + 1</>} sup="∞"><R n="ana_n"/> <R n="ana_p"/>^<Curly><R n="ana_r"/>-1</Curly></Sum> = <R n="ana_n"/> <R n="ana_p"/>^<Curly><MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil></Curly> ≤ <R n="ana_n"/> <R n="ana_p"/>^<Curly><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></Curly> = \frac<Curly>1</Curly><Curly>1 - <R n="ana_p"/></Curly> = \frac<Curly>1</Curly><Curly><R n="ana_q"/></Curly>
             </MM>
+
             which is <R n="ana_k"/>, and again implies that <M post={","}><E><R n="ana_Mn"/></E> ≈ <MCeil><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></MCeil></M> and is at most <M><MCeil><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></MCeil> + <R n="ana_k"/></M>, with high probability.
           </P>
         </PreviewScope>
@@ -832,23 +833,23 @@ const exp = (
         </PreviewScope>
         <PreviewScope>
           <P>
-            The above node layout implies that the size <M>|<R n="ana_g" /> | </M> of a <R n="gnode" /> is itself a random variable drawn from a geometric distribution, this time with <Em>success</Em> probability <M>1 / <R n="ana_k" /></M> and support <M>[n] = <MSet>1, \ldots, <R n="ana_n" /></MSet></M>. The expected value is roughly <R n="ana_k" />, and the observed size is at most <M>c</M> times the expected value with probability at least <M>1 − (1 − 1 / <R n="ana_k" />)^<Curly>c⋅<R n="ana_k" /></Curly></M>. In other words, <M><Pr>|<R n="ana_g" />| ≥ c⋅<R n="ana_k" /></Pr> ≤ (1 − 1 / <R n="ana_k" />)^<Curly>c⋅<R n="ana_k" /></Curly></M>. 
+            The above node layout implies that the size <M>|<R n="ana_g" /> | </M> of a <R n="gnode" /> is itself a random variable drawn from a geometric distribution, this time with <Em>success</Em> probability <M><MFrac num={"1"} de={<R n="ana_k" />}/></M> and support <M>[n] = <MSet>1, \ldots, <R n="ana_n" /></MSet></M>. The expected value is roughly <R n="ana_k" />, and the observed size is at most <M>c</M> times the expected value with probability at least <M>1 − (1 − <MFrac num={"1"} de={<R n="ana_k" />} />)^<Curly>c <R n="ana_k" /></Curly></M>. In other words, <M><Pr>|<R n="ana_g" />| ≥ c <R n="ana_k" /></Pr> ≤ (1 − <MFrac num={"1"} de={<R n="ana_k" />} />)^<Curly>c <R n="ana_k" /></Curly></M>. 
 
-            Setting <M>c = <MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil></M>, and using <M>1 - 1 / <R n="ana_k" /> ≤ <Exp>- 1 / <R n="ana_k" /></Exp></M>, we have that 
+            Setting <M>c = <MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil></M>, and using <M>1 - <MFrac num={"1"} de={<R n="ana_k" />} /> ≤ <Exp>- <MFrac num={"1"} de={<R n="ana_k" />} /></Exp></M>, we have that 
 
             <MM>
             <MAligned>
-              <Pr>|<R n="ana_g" />| ≥ <MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil>⋅<R n="ana_k" /></Pr>
-              &≤ (1 − 1 / <R n="ana_k" />)^<Curly><MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil>⋅<R n="ana_k" /></Curly>\\\
-              &≤ <Exp>-1 / <R n="ana_k" /></Exp>^<Curly><MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil>⋅<R n="ana_k" /></Curly>\\\
-              &= <Exp>-1 / <R n="ana_k" />⋅<MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil>⋅<R n="ana_k" /></Exp>
+              <Pr>|<R n="ana_g" />| ≥ <MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil> <R n="ana_k" /></Pr>
+              &≤ <MParen>1 − <MFrac num={"1"} de={<R n="ana_k" />} /></MParen>^<Curly><MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil> <R n="ana_k" /></Curly>\\\
+              &≤ <Exp>-<MFrac num={"1"} de={<R n="ana_k" />} /></Exp>^<Curly><MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil> <R n="ana_k" /></Curly>\\\
+              &= <Exp>-<MFrac num={"1"} de={<R n="ana_k" />} /> <MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil> <R n="ana_k" /></Exp>
             </MAligned>
             </MM>
 
             which for large <M><R n="ana_n" /></M>, where <M><MCeil><MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></MCeil> ≈ <MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></M>, we get 
 
-            <MM post = ".">
-            <Exp>-1 / <R n="ana_k" />⋅<MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog>⋅<R n="ana_k" /></Exp>
+            <MM>
+            <Exp>-<MFrac num={"1"} de={<R n="ana_k" />} /> <MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog> <R n="ana_k" /></Exp>
             = <Exp>- <MLog base={<R n="ana_k" />}><R n="ana_n" /></MLog></Exp>
             = <R n="ana_n" />^<Curly>-1</Curly>
             </MM>
@@ -860,7 +861,7 @@ const exp = (
       <Hsection n="gtree_size" title="G-Tree Size">
         <PreviewScope>
           <P>
-            The total expected number of <Rs n="gnode" /> in a <R n="gtree" /> is intuitively <M><E>|<R n="ana_T"/>|</E> = <R n="ana_n"/> / <R n="ana_k"/> + 1</M>. Given that <M><R n="ana_q"/> = 1 / <R n="ana_k"/></M> this can also be expressed as <M><R n="ana_n"/><R n="ana_q"/> + 1</M>. While this expectation is intuitive, it can be estimated more directly as the sum of the expected number of <Rs n="gnode" /> at every possible <R n="rank" /> (plus a root node).
+            The total expected number of <Rs n="gnode" /> in a <R n="gtree" /> is intuitively <M><E>|<R n="ana_T"/>|</E> = <MFrac num={<R n="ana_n"/>} de={<R n="ana_k"/>} /> + 1</M>. Given that <M><R n="ana_q"/> = <MFrac num={"1"} de={<R n="ana_k" />} /></M> this can also be expressed as <M><R n="ana_n"/><R n="ana_q"/> + 1</M>. While this expectation is intuitive, it can be estimated more directly as the sum of the expected number of <Rs n="gnode" /> at every possible <R n="rank" /> (plus a root node).
 
             Since the number of <Rs n="gnode" /> at <R n="rank" /> <R n="ana_r" /> is equal to the number of <Em><Rs n="item" /></Em> having <R n="rank" /> <M><R n="ana_r" /> + 1</M>, and since the <R n="rank" /> assignments for <Rs n="item" /> are independent, the number of <Rs n="gnode" /> with <R n="rank" /> <M><R n="ana_r" /></M> in a <R n="gtree" /> can be modeled as a binomial random variable <Def n="ana_Xr" r={<M>X_r</M>}/>, with parameters <M><R n="ana_n" /></M> (the number of trials, i.e., the number of <Rs n="item" />) and <M>p = (1 - <R n="ana_q" />)<R n="ana_q" />^<Curly><R n="ana_r" /></Curly></M> (the probability of success, i.e., the probability that a <R n="item" /> has <R n="rank" /> <M><R n="ana_r" /> + 1</M>).
 
@@ -868,13 +869,13 @@ const exp = (
                 To see why, consider that a binomial random variable describes the number of successes in a fixed number of independent trials, where each trial has the same probability of success. Here each <R n="item" /> is an independent trial, the <Quotes>success</Quotes> is the event that a <R n="item" /> has <R n="rank" /> <M><R n="ana_r" /></M>, and the probability of success is <M>(1 - <R n="ana_q" />)<R n="ana_q" />^<Curly><R n="ana_r" /></Curly></M>.
             </Marginale>
 
-            {" "}Thus, the expected number of <Rs n="gnode" /> at <R n="rank" /> <M><R n="ana_r" /></M> is <M><E><R n="ana_Xr" /></E> = (1 - <R n="ana_q" />)<R n="ana_q" />^<Curly><R n="ana_r" /></Curly></M>, and the total expected number of <Rs n="gnode" /> in a <R n="gtree" /> is a geometric series with sum
+            {" "}Thus, the expected number of <Rs n="gnode" /> at <R n="rank" /> <M><R n="ana_r" /></M> is <M><E><R n="ana_Xr" /></E> = <R n="ana_n" />(1 - <R n="ana_q" />)<R n="ana_q" />^<Curly><R n="ana_r" /></Curly></M>, and by the linearity of expectation, the total expected number of <Rs n="gnode" /> in a <R n="gtree" /> is a geometric series with sum
 
-            <MM post=",">
+            <MM>
             <E>|<R n="ana_T"/>|</E> = <Sum sub={<><R n="ana_r" />=1</>} sup={"∞"}> n(1 - <R n="ana_q" />)<R n="ana_q" />^<Curly><R n="ana_r" /></Curly></Sum> + 1= <R n="ana_n" />(1 - <R n="ana_q" />) <Sum sub={<><R n="ana_r" />=1</>} sup="∞"> <R n="ana_q" />^<Curly><R n="ana_r" /></Curly></Sum> + 1
             </MM>
 
-            and recognizing that for <M>|q| {"<"} 1</M> the rightmost infinite sum simplifies to <M><R n="ana_q" /> / (1 - <R n="ana_q" />)</M>, we get
+            and recognizing that for <M>|q| {"<"} 1</M> the rightmost infinite sum simplifies to <M><MFrac num={<R n="ana_q" />} de={<>1 - <R n="ana_q" /></>}/></M>, we get
 
             <MM post=".">
             <E>|<R n="ana_T"/>|</E> = <R n="ana_n" /> (1 - <R n="ana_q" />) \frac<Curly><R n="ana_q" /></Curly><Curly>1 - <R n="ana_q" /></Curly> + 1= <R n="ana_n" /><R n="ana_q" /> + 1
@@ -882,17 +883,17 @@ const exp = (
 
             To provide bounds, we can use the usual multiplicative form of a Chernoff bound for the sum of independent (but not identically distributed) Bernoulli random variables<Sidenote note={<>Again, you'll probably want to look this up <A href="https://en.wikipedia.org/wiki/Chernoff_bound#Multiplicative_form_(relative_error)">on Wikipedia</A> rather than in a textbook.</>}><Bib item="dubhashiChernoff2009"/></Sidenote>. Then, for any <M>c {">"} 0</M>
 
-            <MM post=",">
+            <MM>
               <Pr>|<R n="ana_T"/>| ≥ (1 + c)<R n="ana_n" /><R n="ana_q" /></Pr> ≤ <MParen><MFrac num={<Exp sup>c</Exp>} de={<>(1 + c)^<Curly>1 + c</Curly></>}/></MParen>^<Curly><R n="ana_n" /><R n="ana_q" /></Curly>
             </MM>
 
-            or perhaps more conveniently, for <M>0 {"<"} c {"<"} 1</M> and recalling that <M><R n="ana_q"/> = 1 / <R n="ana_k"/></M>,
+            or perhaps more conveniently, for <M>0 {"<"} c {"<"} 1</M> and recalling that <M><R n="ana_q"/> = <MFrac num={"1"} de={<R n="ana_k" />} /></M>,
 
             <MM post=".">
-              <Pr>|<R n="ana_T"/>| {">"} (1 + c)<R n="ana_n" /> / <R n="ana_k" /></Pr> ≤ <Exp><MFrac num={<>-c^2<R n="ana_n" /></>} de={<>3 <R n="ana_k" /></>}/></Exp>
+              <Pr>|<R n="ana_T"/>| {">"} (1 + c)<MFrac num={<R n="ana_n" />} de={<R n="ana_k" />}/></Pr> ≤ <Exp><MFrac num={<>-c^2<R n="ana_n" /></>} de={<>3 <R n="ana_k" /></>}/></Exp>
             </MM>
             
-            This provides an exponentially small probability that the total number of <Rs n="gnode" /> in a <R n="gtree" /> is much more than <M><R n="ana_n" /> / <R n="ana_k" /> + 1</M>.
+            This provides an exponentially small probability that the total number of <Rs n="gnode" /> in a geometric tree is much more than <M><MFrac num={<R n="ana_n" />} de={<R n="ana_k" />}/> + 1</M>, and thus the <R n="gtree" /> size is in <M><BigO><R n="ana_n" /></BigO></M>.
           </P>
         </PreviewScope>
       </Hsection>
@@ -1913,23 +1914,69 @@ const exp = (
     </Hsection>
 
     <Hsection n="practicalities" title="Appendix A: Practicalities" noNumbering>
-      <PreviewScope>
-        <P>
-          The random variable <R n="geo_x"/> can take on arbitrary large numbers, but we often need to represent <R n="geo_x" /> in a computer.
-          To this end, we work with <Def n="truncated"/> <Rs n="geometric_distribution" />, which clamp <R n="geo_x" /> between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
-          Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
-        </P>
-      </PreviewScope>
+      <Hsection n="truncation" title="Truncation" noNumbering>
+        <PreviewScope>
+          <P>
+            In a <R n="gtree_informal">geometric tree</R>, the <R n="rank"/> associated with an <R n="item"/> is drawn from a <R n="geometric_distribution"/>. In theory, this random variable <R n="geo_x"/> can take on arbitrarily large numbers, but we often need to represent <R n="geo_x" /> in a computer.
+            To this end, we work with a <Def n="truncated"/> <R n="geometric_distribution" />, which clamps <R n="geo_x" /> to integers between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
+            Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
+          </P>
+        </PreviewScope>
 
-      <PreviewScope>
+        <PreviewScope>
+          <P>
+            In terms of probabilities, this only affects the <M><Pr><R n="geo_x"/> = <R n="geo_N" /></Pr></M>, which is equivalent to <M><Pr><R n="geo_x"/> ≥ <R n="geo_N" /></Pr></M> in a normal <R n="geometric_distribution"/>. This is simply the probability of not getting a success within the first <M><R n="geo_N"/> - 1</M> trials, which is <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
+            {" "}To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that since we <Quotes>stop</Quotes> the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num={"1"} de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
+            {" "}This leads to the truncated expected value <M post="."><E><R n="geo_x"/></E> = <MFrac num={<>1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></>} de={<>1 - <R n="geo_q"/></>}/> = <MFrac num={<>1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></>} de={<R n="geo_p"/>} /></M>
+            <Marginale>
+              This result makes intuitive sense, because if we had an unlimited number of trails, the expected value for <M><R n="geo_x"/></M> would be the usual <M>1 / <R n="geo_p"/></M>. However, since we are guaranteed to stop by the <M><R n="geo_N" /></M>th trail, and the probability of requiring this many trails to acheive a success in the first place is relatively small, we reduce the expected value of the truncated random variable by <M><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>.
+            </Marginale>
+            {" "}Truncation obviously affects the properties of <Rs n="gtree"/>, and our prior analyses would require adjustment. In practice however, this simply leads to shorter and wider trees, which are still efficient.
+          </P>
+        </PreviewScope>
+      </Hsection>
+      <Hsection n="pseudorandom_rank_functions" title="Pseudorandom Rank Functions" noNumbering>
+        <PreviewScope>
+          <P>
+            As stated in <Rc n="prelim_geometric_distribution"/>, we require a rank function <Rank p={<Def n="rand_p" r="p" />}><Def n="rand_arg_u" r="u"/></Rank> that, when given an input <M><R n="rand_arg_u" /></M>, outputs an integer value derived from a <R n="geometric_distribution"/> <GeoDistribution><R n="rand_p" /></GeoDistribution>, with parameter <M><R n="rand_p" /></M>. This output is a pseudorandom integer that is deterministically derived from <M><R n="rand_arg_u" /></M>.
+            A simple variant for <Rank p="(1/2)"><R n="rand_arg_u" /></Rank> based on hashing <R n="rand_arg_u" /> with a secure hash function was previously provided.
+            <Marginale>
+              Something about SipHash being sufficiently secure for this purpose.
+            </Marginale>
+            {" "}However, it is of general interest to efficiently derive deterministic pseudorandom ranks for arbitrary <M><R n="rand_p" /></M>. 
+          </P>
+        </PreviewScope>
         <P>
-          <Alj>I'm not entirely happy with this paragraph. Could you give a more clear explanation? @Carson</Alj>
-          To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that the probability for not getting a success within the first <R n="geo_k"/> trials is <M post="."><R n="geo_q"/>^<Curly><R n="geo_k"/> - 1</Curly></M>
-          {" "}Since we stop the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num="1" de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
-          {" "}This leads to the truncated expected value <M post="."><Def n="geo_expected_truncated" r="E"/>[<R n="geo_x"/>] = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / (1 - <R n="geo_q"/>) = (1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly>) / <R n="geo_p"/></M>
-          {" "}For large <R n="geo_N"/>, we can hence simply ignore the effect of <R n="truncated">trunctation</R>.
+          To start, we take the binary representation of the digest from <Hash><R n="rand_arg_u" /></Hash>, and treat it as a sequence of fair Bernoulli trials, each with <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>. If we assume that our hash function is indifferentiable from a random oracle, then each bit in the digest can be thought of as a result from a fair Bernoulli trial — either <M>0</M> (<Quotes>failure</Quotes>) or <M>1</M> (<Quotes>success</Quotes>).
         </P>
-      </PreviewScope>
+        <PreviewScope>
+          <P>
+            To simulate a <R n="geometric_distribution" /> with a probability that is not <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>, i.e., <M><R n="rand_p" /> = <MFrac num={"1"} de={<Def n="rand_k" r="k"/>} /></M>, we manipulate this sequence of fair trials to create <Em>groups</Em> of bits where the group collectively has success probability <M><MFrac num={"1"} de={<R n="rand_k" />} /></M>. To find the number of bits <M><Def n="rand_b" r="b" /></M> per group, we calculate the smallest <M><R n="rand_b" /></M> for which <M>2^<Curly><R n="rand_b" /></Curly> ≥ <R n="rand_k" /></M>, which is determined by <M><R n="rand_b" /> = <MCeil><MLog base="2"><R n="rand_k" /></MLog></MCeil></M>.
+          </P>
+        </PreviewScope>
+        <P>
+          The hash digest is then divided into groups of <M><R n="rand_b" /></M> bits, where each group is treated as a single trial with the desired success probability. For each group of <M><R n="rand_b" /></M> bits, we consider the trial a <Quotes>success</Quotes> if all <M><R n="rand_b" /></M> bits are <M>0</M>, which occurs with probability <M><MParen><MFrac num={"1"} de={"2"} /></MParen>^<Curly><R n="rand_b" /></Curly></M>. Thus, the count of groups until the first <Quotes>success</Quotes> is our geometric random variable.
+
+          The following pseudocode should clarify the process:
+          </P>
+
+          <Pseudocode n="code_pseudorandom_rank" lineNumbering>
+            <FunctionItem
+              comment={<>Simulate a geometric distribution with probability p = 1 / k using a series of fair Bernoulli trials (p = <MFrac num={"1"} de={"2"} />). The number of trials is limited to 256 independent trials.</>}
+              id={["rank", "c_rank"]}
+              args={[
+                ["bytes", "c_rank_bytes", <M>[u8; 32]</M>],
+                ["k", "c_rank_k", <M>\N</M>],
+              ]}
+              multilineArgs
+              ret={<M>\N</M>}
+              body={[
+                <>TODO</>
+              ]}
+            />
+            <Loc/>
+          </Pseudocode>
+      </Hsection>
     </Hsection>
 
     <Hsection n="variants" title="Appendix B: G-Tree Variants" noNumbering>

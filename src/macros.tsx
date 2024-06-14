@@ -337,6 +337,14 @@ export function Rank(
   );
 }
 
+export function Hash(
+  { children }: { children?: Expressions },
+): Expression {
+  return (
+    <M><OpName>hash</OpName>\left(<exps x={children} />\right)</M>
+  );
+}
+
 export function Orange({ children }: { children: Expressions }): Expression {
   return (
     <Span style="color: #ff8000">
