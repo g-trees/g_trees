@@ -236,11 +236,11 @@ li> :is(ul, ol) {
 ul,
 ol {
   list-style-position: outside;
+  padding-left: var(--default-spacing);
 }
 
 ul {
   list-style-type: disc;
-  padding-left: var(--default-spacing);
 }
 
 ol {

@@ -30,6 +30,62 @@ export function Mathcal({ children }: { children?: Expressions }): Expression {
   );
 }
 
+export function MAligned({ children }: { children?: Expressions }): Expression {
+  return (
+    <M>
+      \begin<Curly>aligned</Curly>
+        <exps x={children}/>
+      \end<Curly>aligned</Curly>
+    </M>
+  );
+}
+
+export function MParen({ children }: { children?: Expressions }): Expression {
+  return (
+    <M>
+      \left(<exps x={children}/>\right)
+    </M>
+  );
+}
+
+export function Sum({ sub, sup, children }: { sub?: Expressions, sup?: Expressions, children?: Expressions }): Expression {
+  return (
+    <M>
+      \sum
+      {sub
+        ? (
+          <>
+            _<Curly>
+            <exps x={sub} />
+            </Curly>
+          </>
+        )
+        : ""}
+      {sup
+        ? (
+          <>
+            ^<Curly>
+            <exps x={sup} />
+            </Curly>
+          </>
+        )
+        : ""}
+        <exps x={children}/>
+    </M>
+  );
+}
+
+export function Exp({ sup, children }: { sup?: boolean, children?: Expressions }): Expression {
+  return (
+    <M>
+      { sup
+        ? <>e^<Curly><exps x={children}/></Curly></>
+        : <>\exp\left(<exps x={children}/>\right)</>
+      }
+    </M>
+  );
+}
+
 export function Mathfrak({ children }: { children?: Expressions }): Expression {
   return (
     <M>\mathfrak<Curly><exps x={children}/></Curly></M>
@@ -57,10 +113,23 @@ export function MSet({ children }: { children?: Expressions }): Expression {
 export function BigO({ children }: { children?: Expressions }): Expression {
   return (
     <M>
-      <Mathcal>O</Mathcal>
-      {"("}
-      <exps x={children} />
-      {")"}
+      <Mathcal>O</Mathcal>(<exps x={children} />)
+    </M>
+  );
+}
+
+export function Pr({ children }: { children?: Expressions }): Expression {
+  return (
+    <M>
+      ℙ \left(<exps x={children} />\right)
+    </M>
+  );
+}
+
+export function E({ children }: { children?: Expressions }): Expression {
+  return (
+    <M>
+      𝔼 \left(<exps x={children} />\right)
     </M>
   );
 }
@@ -265,6 +334,14 @@ export function Rank(
         </>
       )}
     </M>
+  );
+}
+
+export function Hash(
+  { children }: { children?: Expressions },
+): Expression {
+  return (
+    <M><OpName>hash</OpName>\left(<exps x={children} />\right)</M>
   );
 }
 
