@@ -1545,8 +1545,8 @@ const exp = (
                               ]}/>,
                               [
                                 <LetRaw lhs={<Tuple multiline fields={[
-                                  <Tuple fields={[<BlankPattern/>, <DefValue n="r_leftmost_subtree"/>]}/>,
-                                  <BlankPattern/>,
+                                  <Tuple fields={[<DefValue n="r_leftmost_item"/>, <DefValue n="r_leftmost_subtree"/>]}/>,
+                                  <DefValue n="r_remaining"/>,
                                 ]}/>}>
                                   <Application fun="c_neset_remove_min" args={[<R n="c_r_0"/>]} />
                                 </LetRaw>,
@@ -1567,10 +1567,17 @@ const exp = (
                                       <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>,
                                     ]}/>,
                                     <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} fields={[
-                                      <Application fun="c_update_leftmost" args={[
-                                        <R n="c_unzip_set"/>,
-                                        <R n="c_right_0"/>
-                                      ]}/>,
+                                      <Struct name="c_gtree_node" multiline fields={[
+                                        ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
+                                        ["c_gtree_node_set", <Application fun="c_set_insert_min" multilineArgs args={[
+                                          <R n="r_remaining"/>,
+                                          <Tuple fields={[
+                                            <R n="r_leftmost_item"/>,
+                                            <R n="c_right_1"/>,
+                                          ]}/>
+                                        ]}/>],
+                                        ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="c_unzip_set"/></AccessStruct>],
+                                      ]} />,
                                     ]} />,
                                   ]}/>
                                 </Return>,
