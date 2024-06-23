@@ -778,7 +778,7 @@ const exp = (
 
       <P>
         When interpreted as trees of <Rs n="gnode"/>, the <Rs n="gtree"/> are exactly the <Rs n="dense_skip_tree"/> of Spiegel and Reynolds Jr<Bib item="spiegel2009dense"/>.
-        They never consider the internal structure of the <Rs n="gnode"/>, however, thus missing the instantiations that we discuss later.
+        Spiegel and Reynolds Jr never consider the internal structure of the <Rs n="gnode"/>, however, thus missing the instantiations that we discuss later.
       </P>
 
       <Hsection title="Analysis" n="analysis">
