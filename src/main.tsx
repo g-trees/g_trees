@@ -46,6 +46,14 @@ import {
   TypeApplication,
   While,
   Wip,
+  Table,
+  Tr,
+  Td,
+  Tbody,
+  Th,
+  H5,
+  Thead,
+  H6,
 } from "../deps.ts";
 import {
   A,
@@ -788,7 +796,7 @@ const exp = (
         </Marginale>
         <Alj>TODO (not anchored here, just taking notes): explicitly mention that it would make more sense to do width first, height second. (keep in head that we are using heights to define width)</Alj>
         <Alj>TODO (not anchored here, just taking notes): explicitly compare our bounds to the (tighter) zip-paper bounds.</Alj>
-        We now give a formal analysis of the performance-related properties of <Rs n="gtree"/>. Roughly speaking, we show that <Rs n="gtree"/> with a <R n="geometric_distribution"/> of some probability <M>1 - <MFrac num="1" de="k"/></M> are similar to perfectly balanced <M post="-ary">(k + 1)</M> trees with high probability: the height (in terms of <Rs n="gnode"/>) stays within a constant factor of <M><MLog base="k">n</MLog></M>, and the maximal number of <Rs n="item"/> per <R n="gnode"/> stays within a constant factor of <M>k</M>.
+        We now give a formal analysis of the performance-related properties of <Rs n="gtree"/>. Roughly speaking, we show that <Rs n="gtree"/> with a <R n="geometric_distribution"/> of some probability <M>1 - <MFrac num="1" de="k"/></M> are similar to perfectly balanced <M post="-ary">k</M> trees with high probability: the height (in terms of <Rs n="gnode"/>) stays within a constant factor of <M><MLog base="k">n</MLog></M>, and the maximal number of <Rs n="item"/> per <R n="gnode"/> stays within a constant factor of <M>k</M>.
       </P>
 
       <PreviewScope>
@@ -799,8 +807,7 @@ const exp = (
       </PreviewScope>
 
       <P>
-        <Cjqf>I've added this paragraph here. It is clearly repetative in terms of the preceeding two paragraphs, but I think it might be a nice way to present things?. Thoughts? The other reason to write it this way, is because p isn't really "fixed". For heights, it is 1 - 1/k, but for widths, p becomes 1/k. So it is nice to essentially separate q and p as I have done here (I think?).</Cjqf>
-        Our goal is to approximate a perfectly balanced <M post="-ary">(k + 1)</M> tree with a roughly constant <R n="ana_k"/> number of <Rs n="item"/> on average. This occurs when the distribution of node <Rs n="rank"/> (and therefore, <Em>heights</Em>) follows a geometric distribution with <Em>failure</Em> probability <M>q = 1 / k</M>. The resulting node widths — as we will see shortly — are then characterized by a geometric distribution with <Em>success</Em> probability <M>p = 1 / k</M>, and expectation roughly <M>k</M>. As such, we begin with an analysis of tree heights.
+        Our goal is to approximate a perfectly balanced <M post="-ary">(k + 1)</M> tree with a roughly constant <R n="ana_k"/> number of <Rs n="item"/> per <R n="gnode"/> on average. This occurs when the distribution of node <Rs n="rank"/> (and therefore, <Em>heights</Em>) follows a geometric distribution with <Em>failure</Em> probability <M>q = 1 / k</M>. The resulting node widths — as we will see shortly — are then characterized by a geometric distribution with <Em>success</Em> probability <M>p = 1 / k</M>, and expectation roughly <M>k</M>. As such, we begin with an analysis of tree heights.
       </P>
 
       <Hsection n="gtree_height" title="G-Tree Height">
@@ -812,7 +819,7 @@ const exp = (
 
         <PreviewScope>
           <P>
-            The root rank, <M><Def n="ana_Mn" r="M_n"/></M> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="geometric_distribution"/>, <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M>. While it is known that the expected value of <M><R n="ana_Mn"/></M> is roughly <M><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog> + <BigO>1</BigO></M>, there is no simple closed form expression <Bib item={["szpankowski1990yet", "eisenberg2008expectation"]} />. However, it is possible to bound <R n="ana_Mn"/> as the maximum rank of any <R n="gnode"/> in <R n="ana_T"/> via the union bound: for any <M><Def n="ana_r" r="r"/> ≪ ∞</M> the probability that the <R n="rank"/> of a <R n="gnode"/> <M><Def n="ana_g" r="g"/></M> is at least <R n="ana_r"/> is at most <M><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M>, i.e., <M><Pr><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_q"/>^<Curly><R n="ana_r"/> - 1</Curly></M>.<Cjqf>I'm computing rank directly on g here, maybe it should actually be explicitly the key of g?</Cjqf>
+            The root rank, <M><Def n="ana_Mn" r="M_n"/></M> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M>. While it is known that the expected value of <M><R n="ana_Mn"/></M> is roughly <M><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog> + <BigO>1</BigO></M>, there is no simple closed form expression <Bib item={["szpankowski1990yet", "eisenberg2008expectation"]} />. However, it is possible to bound <R n="ana_Mn"/> as the maximum rank of any <R n="gnode"/> in <R n="ana_T"/> via the union bound: for any <M><Def n="ana_r" r="r"/> ≪ ∞</M> the probability that the <R n="rank"/> of a <R n="gnode"/> <M><Def n="ana_g" r="g"/></M> is at least <R n="ana_r"/> is at most <M><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M>, i.e., <M><Pr><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_q"/>^<Curly><R n="ana_r"/> - 1</Curly></M>.<Cjqf>I'm computing rank directly on g here, maybe it should actually be explicitly the key of g?</Cjqf>
             {" "}This implies that the probability that there exists some <R n="gnode"/> such that <M><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></M> is <M post=","><Pr>∃ <R n="ana_g"/>,<Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_n"/><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M> and so for some positive constant <M>c</M>, <M><Pr><R n="ana_Mn"/> ≥ (c + 1) <MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></Pr> ≤ <R n="ana_n"/>^<Curly>-c</Curly></M><Bib item="golovin2010b" />.
           </P>
         </PreviewScope>
@@ -834,8 +841,105 @@ const exp = (
               While we don't bother with tight bounds on this compressed height, <Bib item="archibald2006number"></Bib> provides an expectation on the number of <Em>distinct</Em> <Rs n="rank" /> in a geometrically distributed random sample, which could provide slightly tighter bounds.
             </Marginale>
             {" "}as such, <M><E><OpName><R n="height_fn" /></OpName>(<R n="ana_T" />)</E> ≤ <E><R n="ana_Mn"/></E> ≤ <MCeil><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></MCeil> + <R n="ana_k"/></M>. Thus we have that the height of a geometric tree is in <BigO>\log <R n="ana_n"/></BigO> with high probability.
+            {" "}<Rcb n="fig_stats_gheight"/> confirms our analysis with experimental data.
           </P>
         </PreviewScope>
+
+        <Fig
+          n="fig_stats_gheight"
+          title="G-Tree Maximum Ranks"
+          caption={
+            <P>
+              Average maximal ranks and heights (in <Rs n="gnode"/>) of 1,000 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+              The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
+            </P>
+          }
+        >
+          <H6 clazz="dataHeading">Maximum Rank</H6>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th></Th>
+                <Th><M>n = 100</M></Th>
+                <Th><M>n = 1,000</M></Th>
+                <Th><M>n = 10,000</M></Th>
+                <Th><M>n = 100,000</M></Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              <Tr>
+                <Th><M>k = 2</M></Th>
+                <Td>8.0 (3.48)</Td>
+                <Td>11.3 (4.00)</Td>
+                <Td>14.7 (3.88)</Td>
+                <Td>17.9 (3.27)</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 4</M></Th>
+                <Td>4.2 (0.90)</Td>
+                <Td>5.9 (0.98)</Td>
+                <Td>7.5 (0.86)</Td>
+                <Td>9.2 (0.92)</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 16</M></Th>
+                <Td>2.4 (0.30)</Td>
+                <Td>3.2 (0.21)</Td>
+                <Td>4.1 (0.25)</Td>
+                <Td>TBD</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 64</M></Th>
+                <Td>1.8 (0.19)</Td>
+                <Td>2.2 (0.19)</Td>
+                <Td>3.0 (0.12)</Td>
+                <Td>TBD</Td>
+              </Tr>
+            </Tbody>
+          </Table>
+          <H6 clazz="dataHeading">Height</H6>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th></Th>
+                <Th><M>n = 100</M></Th>
+                <Th><M>n = 1,000</M></Th>
+                <Th><M>n = 10,000</M></Th>
+                <Th><M>n = 100,000</M></Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              <Tr>
+                <Th><M>k = 2</M></Th>
+                <Td>6.7 (0.75)</Td>
+                <Td>9.9 (0.75)</Td>
+                <Td>13.2 (0.72)</Td>
+                <Td>16.7 (0.73)</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 4</M></Th>
+                <Td>4.0 (0.51)</Td>
+                <Td>5.6 (0.51)</Td>
+                <Td>7.3 (0.44)</Td>
+                <Td>9.0 (0.47)</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 16</M></Th>
+                <Td>2.3 (0.24)</Td>
+                <Td>3.2 (0.18)</Td>
+                <Td>4.1 (0.25)</Td>
+                <Td>TBD</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 64</M></Th>
+                <Td>1.8 (0.18)</Td>
+                <Td>2.2 (0.17)</Td>
+                <Td>3.0 (0.11)</Td>
+                <Td>TBD</Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </Fig>
       </Hsection>
 
       <Hsection n="gtree_node_size" title="G-Node Size">
@@ -870,7 +974,68 @@ const exp = (
             This bound demonstrates that the probability that the size of any <R n="gnode" /> deviates from <M><R n="ana_k" /></M> decreases exponentially with <M><R n="ana_n" /></M>.
           </P>
         </PreviewScope>
+
+        <P>
+          <Rcb n="fig_stats_gnode_size"/> shows experimental measurements of average <R n="gnode"/> sizes.
+          For low <R n="ana_n" />, nodes contain slightly too few items: items are spread-out, and there are not enough items to <Quotes>fill up</Quotes> all nodes.
+          The variances are small; average <R n="gnode"/> sizes are indeed as stable as our analysis suggests.
+        </P>
+
+        <Fig
+          n="fig_stats_gnode_size"
+          title="G-Node Average Sizes"
+          caption={
+            <P>
+              Average <R n="gnode"/> sizes of 1,000 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+              The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
+            </P>
+          }
+        >
+          <H6 clazz="dataHeading">Average G-Node Size</H6>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th></Th>
+                <Th><M>n = 100</M></Th>
+                <Th><M>n = 1,000</M></Th>
+                <Th><M>n = 10,000</M></Th>
+                <Th><M>n = 100,000</M></Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              <Tr>
+                <Th><M>k = 2</M></Th>
+                <Td>1.9095 (0.0000334)</Td>
+                <Td>1.9940 (0.0000162)</Td>
+                <Td>1.9983 (0.0000006)</Td>
+                <Td>1.9998 (0.0000000)</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 4</M></Th>
+                <Td>3.6374 (0.0000063)</Td>
+                <Td>3.9516 (0.0000036)</Td>
+                <Td>3.9942 (0.0000012)</Td>
+                <Td>4.0002 (0.0000008)</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 16</M></Th>
+                <Td>12.1596 (0.0257947)</Td>
+                <Td>15.2423 (0.0011409)</Td>
+                <Td>15.9084 (0.0001009)</Td>
+                <Td>TBD</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 64</M></Th>
+                <Td>30.6534 (0.0817688)</Td>
+                <Td>56.3768 (0.0023357)</Td>
+                <Td>62.6815 (0.0219051)</Td>
+                <Td>TBD</Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </Fig>
       </Hsection>
+
       <Hsection n="gtree_size" title="G-Tree Size">
         <PreviewScope>
           <P>
@@ -907,13 +1072,63 @@ const exp = (
             </MM>
             
             This provides an exponentially small probability that the total number of <Rs n="gnode" /> in a geometric tree is much more than <M><MFrac num={<R n="ana_n" />} de={<R n="ana_k" />}/> + 1</M>, and thus the <R n="gtree" /> size is in <M><BigO><R n="ana_n" /></BigO></M>.
+            {" "}<Rcb n="fig_stats_gnode_count"/> gives expiremental measurements that confirm the analysis.
           </P>
         </PreviewScope>
-      </Hsection>
-      <Hsection n="gtree_simulation" title="Simulation">
-        <P>
-          <Wip inline>TODO</Wip> <Alj inline>Figures for height and node size distributions. @Carson your domain probably.</Alj>
-        </P>
+
+        <Fig
+          n="fig_stats_gnode_count"
+          title="G-Node Counts"
+          caption={
+            <P>
+              Average number of <R n="gnode"/> in 1,000 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+              The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
+            </P>
+          }
+        >
+          <H6 clazz="dataHeading">Average Number of G-Nodes</H6>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th></Th>
+                <Th><M>n = 100</M></Th>
+                <Th><M>n = 1,000</M></Th>
+                <Th><M>n = 10,000</M></Th>
+                <Th><M>n = 100,000</M></Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              <Tr>
+                <Th><M>k = 2</M></Th>
+                <Td>52.21 (25.081)</Td>
+                <Td>502.5 (257.2)</Td>
+                <Td>5002 (2394.5)</Td>
+                <Td>50001 (26339)</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 4</M></Th>
+                <Td>27.51 (19.086)</Td>
+                <Td>252.9 (191.70)</Td>
+                <Td>2504 (1826.1)</Td>
+                <Td>25004 (18939)</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 16</M></Th>
+                <Td>8.33 (6.716)</Td>
+                <Td>65.46 (57.22)</Td>
+                <Td>628.2 (572.4)</Td>
+                <Td>TBD</Td>
+              </Tr>
+              <Tr>
+                <Th><M>k = 64</M></Th>
+                <Td>3.29 (2.213)</Td>
+                <Td>17.75 (15.25)</Td>
+                <Td>159.16 (160.2)</Td>
+                <Td>TBD</Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </Fig>
       </Hsection>
     </Hsection>
 
@@ -1033,7 +1248,7 @@ const exp = (
           </P>
 
           <P>
-            The space amplification of <Rs n="k_list"/> might seem concerning at first glance: in the worst case, every <R n="item"/> would be in its own <R n="k_list"/>, resulting in an amplification factor of <M>k</M>. Intuitively, this occurs only rarely, however: the expected size of each <R n="gnode"/> is <M>k</M>, and the probability for a <R n="gnode"/> to have size <M>s \lt k</M> decreases exponentially in <M>k - s</M>. Any overfull <R n="gnode"/> consists of one or more full linked-list vertices, plus exactly one underfull linked-list vertex. Hence, the overfull <R n="gnode"/> contribute an amplification factor of at most two. <Rcb n="fig_space_amplification"/> backs up this intuition with experimental data.<Alj>TODO: @Carson, can you create that figure? Later: actually, as part of writing the pseudocode, I have accidentally implemented G-trees in rust. So I can generate the data myself as well.</Alj> 
+            The space amplification of <Rs n="k_list"/> might seem concerning at first glance: in the worst case, every <R n="item"/> would be in its own <R n="k_list"/>, resulting in an amplification factor of <M>k</M>. Intuitively, this occurs only rarely, however: the expected size of each <R n="gnode"/> is <M>k</M>, and the probability for a <R n="gnode"/> to have size <M>s \lt k</M> decreases exponentially in <M>k - s</M>. Any overfull <R n="gnode"/> consists of one or more full linked-list vertices, plus exactly one underfull linked-list vertex. Hence, the overfull <R n="gnode"/> contribute an amplification factor of at most two. <Rcb n="fig_space_amplification"/> backs up this intuition with experimental data.<Alj>TODO: create the figure.</Alj> 
           </P>
 
           <PreviewScope>

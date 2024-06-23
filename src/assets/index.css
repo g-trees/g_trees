@@ -256,6 +256,21 @@ img {
   height: auto;
 }
 
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+tr:nth-child(2n), thead {
+  background-color: #eeeeee;
+}
+
+td, th {
+  padding: 2px 0;
+  text-align: center;
+}
+
 figure {
   margin-top: calc(2 * var(--default-spacing));
   margin-left: var(--default-spacing);
@@ -401,4 +416,10 @@ a.bib {
   *:last-child {
     margin-bottom: 0;
   }
+}
+
+.dataHeading {
+  text-align: center;
+  font-size: 0.95em;
+  margin-top: 1rem;
 }
