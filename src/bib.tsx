@@ -903,5 +903,27 @@ export const bib: BibItemDeclaration[] = [
         scientists as well as probabilists and discrete mathematicians.
       </P>
     )
-  }
+  },
+  {
+    item: `@article{spiegel2009dense,
+  title={The Dense Skip Tree: A Cache-Conscious Randomized Data Structure},
+  author={Spiegel, Michael and Reynolds Jr, Paul F},
+  year={2009},
+  publisher={Citeseer}
+}
+`,
+    asset: ["references", "spiegel2009dense.pdf"],
+    blurb: (
+      <>
+        <P>
+        We introduce the dense skip tree, a novel cache-conscious randomized data structure. Algorithms for search, insertion, and deletion are presented, and they are shown to have expected
+        cost <BigO>\log n</BigO>. The dense skip tree obeys the same asymptotic properties as the skip list and
+        the skip tree. A series of properties on the dense skip tree is proven, in order to show the
+        probabilistic organization of data in a cache-conscious design. Performance benchmarks show
+        the dense skip tree to outperform the skip list and the self-balancing binary search tree when
+        the working set cannot be contained in cache.
+        </P>
+      </>
+    ),
+  },
 ];

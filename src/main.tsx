@@ -220,8 +220,8 @@ const exp = (
     abstract={
       <>
         <P>
-          We describe the G-trees, a general family of randomized, history-independent search tree data structures that encompasses several previously unconnected data structures such as zip-trees, skip-trees, and merkle-search-trees.
-          The family further contains novel trees of arity greater than two.
+          We describe the G-trees, a family of randomized, history-independent search tree data structures. The G-trees encompass several independently-discovered data structures such as zip-trees, zip-zip-trees, and dense skip-trees.
+          The family further contains novel trees of arity greater than two, which are significantly more efficient in the presence of cache hierarchies or block storage than zip-trees.
           Traditionally, such randomized trees have been significantly more complex than their binary counterparts, whereas our <M>k</M>-ary G-trees have no additional conceptual overhead at all.
           We generalize the zip and unzip operations of zip-trees to provide a uniform, simple, and efficient implementation technique for all members of our family of data structures.
         </P>
@@ -236,7 +236,7 @@ const exp = (
       {
         name: "Aljoscha Meyer",
         affiliation: "TU Berlin",
-        email: <A href="mailto:mail@aljoscha-meyer.de">mail@aljoscha-meyer.de</A>,
+        email: <A href="mailto:research@aljoscha-meyer.de">research@aljoscha-meyer.de</A>,
       },
     ]}
   >
@@ -302,8 +302,7 @@ const exp = (
       </P>
 
       <P>
-        While binary trees are highly efficient in theory, they are less efficient on actual hardware than trees that store more than one item
-        per vertex.
+        While <Em>binary</Em> trees are highly efficient in theory, they are less efficient on actual hardware than trees that store more than one item per vertex.
         Unfortunately, generalizing binary randomized data structures to higher-arity counterparts has proven more difficult than in the case of deterministically self-balancing trees.
         Providing a simple such generalization is the impetus for our work.
       </P>
@@ -336,7 +335,22 @@ const exp = (
             }
           >
             skip-trees
-          </Def><Bib item="messeguer1997skip" />, and <Def
+          </Def><Bib item="messeguer1997skip" />, <Def
+            n="dense_skip_tree"
+            r="dense skip-tree"
+            rs="dense skip-trees"
+            preview={
+              <>
+                <P>
+                  The <Def n="dense_skip_tree" fake>dense skip-trees</Def><Bib item="spiegel2009dense" /> are randomized search trees that randomly select the height of each item.
+                  Heights without any items are omitted from the tree.
+                  The number of items per vertex is random and can grow arbitrarily large.
+                </P>
+              </>
+            }
+          >
+            dense skip-trees
+          </Def><Bib item="spiegel2009dense" />, and <Def
             n="mst"
             r="MST"
             rs="MSTs"
@@ -344,6 +358,7 @@ const exp = (
               <>
                 <P>
                   The <Def n="mst" fake>merkle-search-trees</Def><Bib item="auvolat2019merkle" /> are randomized search trees that randomly select the height of each item.
+                  Heights without any items result in empty vertices in the tree.
                   The number of items per vertex is random and can grow arbitrarily large.
                 </P>
               </>
@@ -359,7 +374,7 @@ const exp = (
       <P>
         Our key insight is to take a byproduct of the usual definition of <Rs n="zip_informal" />, turn it into a defining property of its own, and to then generalize it.
         <Rsb n="zip_informal" />{" "} assign geometrically chosen <Rs n="rank_informal" /> to their items, and use these <Rs n="rank_informal" /> for probabilistic balancing.
-        A consequence of their balancing mechanism is that certain sequences of items with colliding <Rs n="rank_informal" /> form linked lists.
+        A consequence of their balancing mechanism is that certain sequences of items with colliding <Rs n="rank_informal" /> form sorted linked lists.
         It turns out we can view and even <Em>define</Em> <Rs n="zip_informal" /> as collections of such linked lists.
       </P>
 
@@ -367,8 +382,8 @@ const exp = (
         From this definition, which is based on arranging <Em>sorted linked lists</Em> in a certain fashion, it is only a small step to arranging <Em>arbitrary set data structures</Em> in the same fashion.
         This yields our <Rs n="gtree_informal" />, a family of trees that is parameterized over a secondary search data structure.
         Using simple linked lists as the underlying data structure yields the <Rs n="zip_informal" />.
-        Using an <Bib item="shao1994unrolling">unrolled linked list</Bib> with nodes of size <M>k</M> yields a generalization of the <Rs n="zip_informal" /> where each node can store up to <M>k</M> items.
-        And finally, recursively instantiating the <Rs n="gtree_informal" /> with other <Rs n="gtree_informal" /> yields a natural (and efficient) generalization of the <Rs n="zipzip" />.
+        Recursively instantiating the <Rs n="gtree_informal" /> with other <Rs n="gtree_informal" /> yields a natural (and efficient) generalization of the <Rs n="zipzip" />.
+        And finally, using linked lists of <M>k</M> items per vertex yields a generalization of the <Rs n="zip_informal" /> where each node can store up to <M>k</M> items.
       </P>
 
       <P>
@@ -446,11 +461,15 @@ const exp = (
       </P>
 
       <P>
-        A rare exception are the <Rs n="mst">merkle-search-trees</Rs> (<Rs n="mst" />)<Bib item="auvolat2019merkle" />.
-        {" "}<Rsb n="mst" /> use a simple construction to approximate the distribution of items in a B-tree.
-        Unfortunately, <Rs n="mst" /> cannot provide a non-probabilistic upper bound on the number of items per vertex.
+        All prior work that <Em>does</Em> achieve sufficient simplicity buys it at the price of vertices that must store a dynamic, unbounded number of items.
+        The <Rs n="skip_tree" /><Bib item="messeguer1997skip" /> are the first such data structure, effectively converting a <R n="skip_list"/> into a tree: each vertex stores sequences of items that are being skipped-over together in the corresponding <R n="skip_list"/>.
+        The relatively unknown <Rs n="dense_skip_tree"/><Bib item="spiegel2009dense" /> provide two optimizations: expected node size can be increased by flipping coins of success probabilities <M post=","><MFrac num="1" de="k"/></M> and empty vertices are eliminated from the tree.
+        The <Rs n="mst">merkle-search-trees</Rs> (<Rs n="mst" />)<Bib item="auvolat2019merkle" /> independently reinvent <Rs n="skip_tree" /> with flexible probabilities but without the compression of empty vertices.
+      </P>
+
+      <P>
+        None of these data structures can provide a non-probabilistic upper bound on the number of items per vertex.
         This hampers efficient implementation; and adversarial data suppliers can trivially produce <M>n</M> items in <BigO>n</BigO> expected time that must all be stored in the same vertex.
-        The <Rs n="skip_tree" /><Bib item="messeguer1997skip" /> are essentially the radix-two specialization of <Rs n="mst" />.
       </P>
     </Hsection>
 
@@ -758,14 +777,8 @@ const exp = (
       </P>
 
       <P>
-        When interpreted as trees of <Rs n="gnode"/>, <Rsb n="gtree"/> are very similar to the <Rs n="mst">merkle-search-trees</Rs> of Auvolat & Taïani; indeed, <Rc n="fig_gnodes"/> could directly serve as a depiction of an <R n="mst"/>.
-        Structurally, the only difference is that <Rs n="mst"/> insert empty nodes to uphold the B-tree invariant that the difference in <R n="rank"/> bewteen a parent and a child node is at most one.
-        {" "}<Rsb n="gtree"/>, in contrast, collapse missing <Rs n="rank"/>.
-        <Cjqf>I think we can find better ways to highlight the benefits of G-trees over MSTs. This section isn't quite hitting it for me... yet. It also doesn't "flow" into the analysis section, which it totally could, because they don't offer _any_ analysis in the MST paper.</Cjqf>
-        <Alj>Agreed, this part is pretty weak as-is.</Alj>
-        More importantly, however, Auvolat and Taïani treat <Rs n="gnode"/> as atomic, never considering how they might be represented in memory.
-        Whereas we determine the common interface of all possible realizations of <Rs n="gnode"/> to be that of set data structures, and then explore the impact of various reifications, they disregard the issue and their reference implementation simply uses the dynamic array type of their programming language.
-        Hence, they miss the useful instantiations that we uncover in <Rc n="new_gtrees"/>.
+        When interpreted as trees of <Rs n="gnode"/>, the <Rs n="gtree"/> are exactly the <Rs n="dense_skip_tree"/> of Spiegel and Reynolds Jr<Bib item="spiegel2009dense"/>.
+        They never consider the internal structure of the <Rs n="gnode"/>, however, thus missing the instantiations that we discuss later.
       </P>
 
       <Hsection title="Analysis" n="analysis">
@@ -1016,7 +1029,7 @@ const exp = (
 
           <P>
             The <Rs n="k_list"/> are inefficient data structures — inserting or deleting the first item requires <BigO>n</BigO> time in a <R n="k_list"/> of <M>n</M> items.
-            The <Rs n="kzip_tree"/> are nevertheless efficient, because the expected size of the <Rs n="gnode"/>, and hence, the expected length of the <Rs n="k_list"/>, is constant for any <R n="geo_p"/>.
+            The <Rs n="kzip_tree"/> are nevertheless efficient, because the expected size of the <Rs n="gnode"/>, and hence, the expected length of the <Rs n="k_list"/>, is constant for any <R n="geo_p"/>. More efficient alternatives to <Rs n="k_list"/> exist, such as <Bib item="shao1994unrolling">unrolled linked lists</Bib>. These are not <R n="history_independent"/>, however.
           </P>
 
           <P>
@@ -1908,7 +1921,7 @@ const exp = (
 
     <Hsection n="conclusion" title="Conclusion">
       <P>
-          We have generalized the <Rs n="zip_tree"/> to the rich family of <Rs n="gtree"/>. <Rsb n="gtree"/> must be instantiated with a concrete set data structure; using a linked list yields the <Rs n="zip_tree"/>, and direct recursive self-instantiation yields the <Rs n="zipzip"/>. All <Rs n="gtree"/> are <R n="history_independent"/>, and admit the same <R n="implementation">efficient algorithms</R> for mutating them. We have <R n="analysis">proven</R> the <Rs n="gtree"/> to be similar to perfectly balanced search trees with high probability, a property that makes them asymptotically efficient.
+          We have generalized the <Rs n="zip_tree"/> to the rich family of <Rs n="gtree"/>. <Rsb n="gtree"/> must be instantiated with a concrete set data structure; using a linked list yields the <Rs n="zip_tree"/>, and direct recursive self-instantiation yields the <Rs n="zipzip"/>. All <Rs n="gtree"/> are <R n="history_independent"/> if the underlying set data structure is <R n="history_independent"/>, and admit the same <R n="implementation">efficient algorithms</R> for mutating them. We have <R n="analysis">proven</R> the <Rs n="gtree"/> to be similar to perfectly balanced search trees with high probability, a property that makes them asymptotically and practically efficient.
       </P>
 
       <P>
