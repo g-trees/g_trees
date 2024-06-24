@@ -8,9 +8,9 @@ macromania_pseudocode
     --rb0: #344cb7;
     --rb1: #819331;
     --rb2: #7b3814;
-    --kw: #4e8ab5;
+    --kw: #20689b;
     /* based off solarized-blue, but desaturated */
-    --kw2: #c45755;
+    --kw2: #843515;
     /* based off solarized-red, but desaturated */
 }
 
@@ -203,7 +203,16 @@ macromania_rustic
 
 :root {
     /* Solarized https://ethanschoonover.com/solarized/ */
-    --sol-yellow: #b58900;
+    /* But darkened and desaturized. */
+    --sol-yellow: #8c6d0c;
+    --sol-orange: #843515;
+    --sol-red: #952725;
+    --sol-magenta: #8e2c5c;
+    --sol-violet: #4a4e8e;
+    --sol-blue: #20689b;
+    --sol-cyan: #206f69;
+    --sol-green: #657307;
+    /* --sol-yellow: #b58900;
     --sol-orange: #cb4b16;
     --sol-red: #dc322f;
     --sol-magenta: #d33682;
@@ -211,6 +220,7 @@ macromania_rustic
     --sol-blue: #268bd2;
     --sol-cyan: #2aa198;
     --sol-green: #859900;
+    --sol-yellow: #8c6d0c; */
 }
 
 
