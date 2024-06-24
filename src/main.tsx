@@ -1056,6 +1056,7 @@ const exp = (
       <Hsection n="gtree_size" title="G-Tree Size">
         <PreviewScope>
           <P>
+            <Alj>Delete this section? We don't refer to or use the results anywhere.</Alj>
             The total expected number of <Rs n="gnode" /> in a <R n="gtree" /> is intuitively <M><E>|<R n="ana_T"/>|</E> = <MFrac num={<R n="ana_n"/>} de={<R n="ana_k"/>} /> + 1</M>. Given that <M><R n="ana_q"/> = <MFrac num={"1"} de={<R n="ana_k" />} /></M> this can also be expressed as <M><R n="ana_n"/><R n="ana_q"/> + 1</M>. While this expectation is intuitive, it can be estimated more directly as the sum of the expected number of <Rs n="gnode" /> at every possible <R n="rank" /> (plus a root node).
 
             Since the number of <Rs n="gnode" /> at <R n="rank" /> <R n="ana_r" /> is equal to the number of <Em><Rs n="item" /></Em> having <R n="rank" /> <M><R n="ana_r" /> + 1</M>, and since the <R n="rank" /> assignments for <Rs n="item" /> are independent, the number of <Rs n="gnode" /> with <R n="rank" /> <M><R n="ana_r" /></M> in a <R n="gtree" /> can be modeled as a binomial random variable <Def n="ana_Xr" r={<M>X_r</M>}/>, with parameters <M><R n="ana_n" /></M> (the number of trials, i.e., the number of <Rs n="item" />) and <M>p = (1 - <R n="ana_q" />)<R n="ana_q" />^<Curly><R n="ana_r" /></Curly></M> (the probability of success, i.e., the probability that a <R n="item" /> has <R n="rank" /> <M><R n="ana_r" /> + 1</M>).
@@ -2517,6 +2518,7 @@ const exp = (
     </Hsection>
 
     <Hsection n="practicalities" title="Appendix C: Practicalities" noNumbering>
+      <Alj>Delete this appendix? It is not referenced anywhere right now.</Alj>
       <Hsection n="truncation" title="Truncation" noNumbering>
         <PreviewScope>
           <P>
