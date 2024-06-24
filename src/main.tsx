@@ -886,7 +886,7 @@ const exp = (
                 <Td>2.4 (0.30)</Td>
                 <Td>3.2 (0.21)</Td>
                 <Td>4.1 (0.25)</Td>
-                <Td>TBD</Td>
+                <Td>4.9 (0.29)</Td>
               </Tr>
               <Tr>
                 <Th><M>k = 64</M></Th>
@@ -928,7 +928,7 @@ const exp = (
                 <Td>2.3 (0.24)</Td>
                 <Td>3.2 (0.18)</Td>
                 <Td>4.1 (0.25)</Td>
-                <Td>TBD</Td>
+                <Td>4.9 (0.24)</Td>
               </Tr>
               <Tr>
                 <Th><M>k = 64</M></Th>
@@ -1022,7 +1022,7 @@ const exp = (
                 <Td>12.1596 (0.0257947)</Td>
                 <Td>15.2423 (0.0011409)</Td>
                 <Td>15.9084 (0.0001009)</Td>
-                <Td>TBD</Td>
+                <Td>15.9850 (0.0000016)</Td>
               </Tr>
               <Tr>
                 <Th><M>k = 64</M></Th>
@@ -1117,7 +1117,7 @@ const exp = (
                 <Td>8.33 (6.716)</Td>
                 <Td>65.46 (57.22)</Td>
                 <Td>628.2 (572.4)</Td>
-                <Td>TBD</Td>
+                <Td>6255.3 (6113.3)</Td>
               </Tr>
               <Tr>
                 <Th><M>k = 64</M></Th>
@@ -1248,8 +1248,164 @@ const exp = (
           </P>
 
           <P>
-            The space amplification of <Rs n="k_list"/> might seem concerning at first glance: in the worst case, every <R n="item"/> would be in its own <R n="k_list"/>, resulting in an amplification factor of <M>k</M>. Intuitively, this occurs only rarely, however: the expected size of each <R n="gnode"/> is <M>k</M>, and the probability for a <R n="gnode"/> to have size <M>s \lt k</M> decreases exponentially in <M>k - s</M>. Any overfull <R n="gnode"/> consists of one or more full linked-list vertices, plus exactly one underfull linked-list vertex. Hence, the overfull <R n="gnode"/> contribute an amplification factor of at most two. <Rcb n="fig_space_amplification"/> backs up this intuition with experimental data.<Alj>TODO: create the figure.</Alj> 
+            What is the expected height of a <R n="kzip_tree"/>? Asymptotically, we know it to be in <BigO>\log n</BigO>, since we have <Rs n="gnode"/> of <BigO>\log n</BigO> different <Rs n="rank"/>, each containing <BigO>k</BigO> <Rs n="item"/>. <Rcb n="fig_kzip_height"/> gives experimental measures for some specific <M>n</M> and <M>k</M>.
+            The <Dfn>height amplification</Dfn> we report is the height of each tree divided by the height of a perfectly-balancd <M>k+1</M>-ary tree on <M>n</M> vertices.
           </P>
+
+          <Fig
+            n="fig_kzip_height"
+            title="K-Zip-Tree Height"
+            caption={
+              <P>
+                Total number of <R n="item"/> slots divided by total number of <Rs n="item"/> in 1,000 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+                The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
+              </P>
+            }
+          >
+            <H6 clazz="dataHeading">Tree Height</H6>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th></Th>
+                  <Th><M>n = 100</M></Th>
+                  <Th><M>n = 1,000</M></Th>
+                  <Th><M>n = 10,000</M></Th>
+                  <Th><M>n = 100,000</M></Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <Tr>
+                  <Th><M>k = 1</M></Th>
+                  <Td>15.29 (5.61)</Td>
+                  <Td>26.59 (8.89)</Td>
+                  <Td>38.20 (9.47)</Td>
+                  <Td>50.58 (11.86)</Td>
+                </Tr>
+                <Tr>
+                  <Th><M>k = 3</M></Th>
+                  <Td>8.61 (2.40)</Td>
+                  <Td>14.92 (3.38)</Td>
+                  <Td>21.97 (4.41)</Td>
+                  <Td>29.13 (4.93)</Td>
+                </Tr>
+                <Tr>
+                  <Th><M>k = 15</M></Th>
+                  <Td>4.28 (0.98)</Td>
+                  <Td>8.06 (2.04)</Td>
+                  <Td>12.36 (2.43)</Td>
+                  <Td>16.66 (2.45)</Td>
+                </Tr>
+                <Tr>
+                  <Th><M>k = 63</M></Th>
+                  <Td>2.37 (0.24)</Td>
+                  <Td>5.05 (1.43)</Td>
+                  <Td>8.43 (1.69)</Td>
+                  <Td>TBD</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+
+            <H6 clazz="dataHeading">Height Amplification</H6>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th></Th>
+                  <Th><M>n = 100</M></Th>
+                  <Th><M>n = 1,000</M></Th>
+                  <Th><M>n = 10,000</M></Th>
+                  <Th><M>n = 100,000</M></Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <Tr>
+                  <Th><M>k = 1</M></Th>
+                  <Td>2.18 (0.11)</Td>
+                  <Td>2.66 (0.09)</Td>
+                  <Td>2.73 (0.05)</Td>
+                  <Td>2.98 (0.04)</Td>
+                </Tr>
+                <Tr>
+                  <Th><M>k = 3</M></Th>
+                  <Td>2.15 (0.15)</Td>
+                  <Td>2.98 (0.14)</Td>
+                  <Td>3.14 (0.09)</Td>
+                  <Td>3.24 (0.06)</Td>
+                </Tr>
+                <Tr>
+                  <Th><M>k = 15</M></Th>
+                  <Td>2.14 (0.24)</Td>
+                  <Td>2.69 (0.23)</Td>
+                  <Td>3.09 (0.15)</Td>
+                  <Td>3.33 (0.10)</Td>
+                </Tr>
+                <Tr>
+                  <Th><M>k = 63</M></Th>
+                  <Td>1.18 (0.06)</Td>
+                  <Td>2.53 (0.36)</Td>
+                  <Td>2.81 (0.19)</Td>
+                  <Td>TBD</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </Fig>
+
+          <P>
+            Another concern of interest is space amplification: in the worst case, every <R n="item"/> would be in its own <R n="k_list"/>, resulting in a space amplification factor of <M>k</M>. Intuitively, this occurs only rarely, however: the expected size of each <R n="gnode"/> is <M>k</M>, and the probability for a <R n="gnode"/> to have size <M>s \lt k</M> decreases exponentially in <M>k - s</M>. Any overfull <R n="gnode"/> consists of one or more full linked-list vertices, plus exactly one underfull linked-list vertex. Hence, the overfull <Rs n="gnode"/> contribute an amplification factor of at most two. Roughly half of the nodes will be overful, so we can expect a space amplification around <M>1.5</M>. <Rcb n="fig_space_amplification"/> backs up this intuition with experimental data.
+          </P>
+
+          <Fig
+            n="fig_space_amplification"
+            title="Space Amplification"
+            caption={
+              <P>
+                Total number of <R n="item"/> slots divided by total number of <Rs n="item"/> in 1,000 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+                The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
+              </P>
+            }
+          >
+            <H6 clazz="dataHeading">Space Amplification</H6>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th></Th>
+                  <Th><M>n = 100</M></Th>
+                  <Th><M>n = 1,000</M></Th>
+                  <Th><M>n = 10,000</M></Th>
+                  <Th><M>n = 100,000</M></Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <Tr>
+                  <Th><M>k = 1</M></Th>
+                  <Td>1 (0)</Td>
+                  <Td>1 (0)</Td>
+                  <Td>1 (0)</Td>
+                  <Td>1 (0)</Td>
+                </Tr>
+                <Tr>
+                  <Th><M>k = 3</M></Th>
+                  <Td>1.338 (0.0055)</Td>
+                  <Td>1.302 (0.0006)</Td>
+                  <Td>1.298 (0.0000)</Td>
+                  <Td>1.297 (0.0000)</Td>
+                </Tr>
+                <Tr>
+                  <Th><M>k = 15</M></Th>
+                  <Td>1.743 (0.0786)</Td>
+                  <Td>1.544 (0.0061)</Td>
+                  <Td>1.515 (0.0006)</Td>
+                  <Td>1.512 (0.0000)</Td>
+                </Tr>
+                <Tr>
+                  <Th><M>k = 63</M></Th>
+                  <Td>2.431 (0.612)</Td>
+                  <Td>1.669 (0.0316)</Td>
+                  <Td>1.578 (0.0032)</Td>
+                  <Td>TBD</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </Fig>
 
           <PreviewScope>
             <P>
