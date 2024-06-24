@@ -250,7 +250,6 @@ const exp = (
   >
     <Hsection n="introduction" title="Introduction">
       <P>
-        <Alj>TODO: Lead with performance comparison plot zip-tree (i.e., 1-zip-tree) vs 16-zip-tree (or whichever performs best). @Carson</Alj>
         Randomized set data structures eschew self-balancing logic for more simple, probabilistic item organization.
         When deriving the necessary randomness via pseudorandom functions of the stored items themselves, the resulting graphs depend on the stored set only, but not the order of insertions and deletions.
         This <Def n="history_independent"
@@ -313,7 +312,26 @@ const exp = (
         While <Em>binary</Em> trees are highly efficient in theory, they are less efficient on actual hardware than trees that store more than one item per vertex.
         Unfortunately, generalizing binary randomized data structures to higher-arity counterparts has proven more difficult than in the case of deterministically self-balancing trees.
         Providing a simple such generalization is the impetus for our work.
+        {" "}<Rcb n="fig_search_performance"/> plots lookup performance of a <R n="zip_informal"/> versus a 32-ary tree of ours; our tree is roughly twice as fast (note the logarithmic y-axis). On secondary storage, we can expect the performance difference to be even more pronounced.
       </P>
+
+      <Fig
+          n="fig_search_performance"
+          wrapperTagProps={{clazz: "wide"}}
+          title="Lookup Performance"
+          caption={
+            <>
+              <P>
+                Benchmarking search times for 100 randomly chosen items in randomly generated <Rs n="zip_informal"/> (red, top line) and 32-zip-trees (green, lower line). The latter is a novel variant of <Rs n="zip_informal"/> that arises naturally from our generalization of <Rs n="zip_informal"/> to <Rs n="gtree_informal"/>.
+              </P>
+            </>
+          }
+        >
+          <Img
+            src={<ResolveAsset asset={["graphics", "search_performance.png"]} />}
+            alt="A plot showing search performance of a zip-tree versus a 32-zip-tree; the latter is roughly twice as fast."
+          />
+        </Fig>
 
       <PreviewScope>
         <P>
@@ -435,7 +453,7 @@ const exp = (
 
       <P>
         All these data structures approximate the vertex distribution of <Em>binary</Em> balanced search trees.
-        While binary search trees are theoretically efficient, CPU caches or block-sized reads from secondary storage make it so that trees that store more than a single item per vertex significantly outperform binary trees in practice.
+        While binary search trees are theoretically efficient, CPU caches or block-sized reads from secondary storage make it so that trees that store more than a single item per vertex outperform binary trees in practice.
         Theoretical models to capture this behavior in the analysis of algorithms and data structures include <Bib item="aggarwal1988input">external memory models</Bib> and <Bib item="frigo1999cache">cache-oblivious models</Bib>.
       </P>
 
@@ -2296,7 +2314,7 @@ const exp = (
       </P>
 
       <P>
-        Beyond merely generalizing existing data structures, we have defined the <Rs n="kzip_tree"/>, a conceptually simple family of <R n="history_independent"/> data structures that store up to <M>k</M> <Rs n="item"/> in a single vertex. Such data structures make more efficient use of hardware caches than binary trees, allowing the <Rs n="kzip_tree"/> to significantly outperform<Alj>TODO: turn <Quotes>significantly outperform</Quotes> into a reference to the benchmark splash figure.</Alj> the binary <Rs n="zip_tree"/>. 
+        Beyond merely generalizing existing data structures, we have defined the <Rs n="kzip_tree"/>, a conceptually simple family of <R n="history_independent"/> data structures that store up to <M>k</M> <Rs n="item"/> in a single vertex. Such data structures make more efficient use of hardware caches than binary trees, allowing the <Rs n="kzip_tree"/> to <R n="fig_search_performance">outperform</R> the binary <Rs n="zip_tree"/>. 
       </P>
     </Hsection>
 
