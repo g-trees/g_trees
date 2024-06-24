@@ -2320,70 +2320,14 @@ const exp = (
       <Bibliography />
     </Hsection>
 
-    <Hsection n="practicalities" title="Appendix A: Practicalities" noNumbering>
-      <Hsection n="truncation" title="Truncation" noNumbering>
-        <PreviewScope>
-          <P>
-            In a <R n="gtree_informal">geometric tree</R>, the <R n="rank"/> associated with an <R n="item"/> is drawn from a <R n="geometric_distribution"/>. In theory, this random variable <R n="geo_x"/> can take on arbitrarily large numbers, but we often need to represent <R n="geo_x" /> in a computer.
-            To this end, we work with a <Def n="truncated"/> <R n="geometric_distribution" />, which clamps <R n="geo_x" /> to integers between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
-            Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
-          </P>
-        </PreviewScope>
+    <Hsection n="experiments" title="Appendix A: Code" noNumbering>
+      <P>
+        We have published the code powering our experiments <A href="https://github.com/AljoschaMeyer/gtree_experiments">on github</A> (under the MIT license). The implementation written is in <A href="https://www.rust-lang.org/">rust</A>, and can be built with the <A href="https://doc.rust-lang.org/cargo/">cargo package manager</A>.
 
-        <PreviewScope>
-          <P>
-            In terms of probabilities, this only affects the <M><Pr><R n="geo_x"/> = <R n="geo_N" /></Pr></M>, which is equivalent to <M><Pr><R n="geo_x"/> ≥ <R n="geo_N" /></Pr></M> in a normal <R n="geometric_distribution"/>. This is simply the probability of not getting a success within the first <M><R n="geo_N"/> - 1</M> trials, which is <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
-            {" "}To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that since we <Quotes>stop</Quotes> the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num={"1"} de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
-            {" "}This leads to the truncated expected value <M post="."><E><R n="geo_x"/></E> = <MFrac num={<>1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></>} de={<>1 - <R n="geo_q"/></>}/> = <MFrac num={<>1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></>} de={<R n="geo_p"/>} /></M>
-            <Marginale>
-              This result makes intuitive sense, because if we had an unlimited number of trails, the expected value for <M><R n="geo_x"/></M> would be the usual <M>1 / <R n="geo_p"/></M>. However, since we are guaranteed to stop by the <M><R n="geo_N" /></M>th trail, and the probability of requiring this many trails to acheive a success in the first place is relatively small, we reduce the expected value of the truncated random variable by <M><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>.
-            </Marginale>
-            {" "}Truncation obviously affects the properties of <Rs n="gtree"/>, and our prior analyses would require adjustment. In practice however, this simply leads to shorter and wider trees, which are still efficient.
-          </P>
-        </PreviewScope>
-      </Hsection>
-      <Hsection n="pseudorandom_rank_functions" title="Pseudorandom Rank Functions" noNumbering>
-        <PreviewScope>
-          <P>
-            As stated in <Rc n="prelim_geometric_distribution"/>, we require a rank function <Rank p={<Def n="rand_p" r="p" />}><Def n="rand_arg_u" r="u"/></Rank> that, when given an input <M><R n="rand_arg_u" /></M>, outputs an integer value derived from a <R n="geometric_distribution"/> <GeoDistribution><R n="rand_p" /></GeoDistribution>, with parameter <M><R n="rand_p" /></M>. This output is a pseudorandom integer that is deterministically derived from <M><R n="rand_arg_u" /></M>.
-            A simple variant for <Rank p="(1/2)"><R n="rand_arg_u" /></Rank> based on hashing <R n="rand_arg_u" /> with a secure hash function was previously provided.
-            <Marginale>
-              Something about SipHash being sufficiently secure for this purpose.
-            </Marginale>
-            {" "}However, it is of general interest to efficiently derive deterministic pseudorandom ranks for arbitrary <M><R n="rand_p" /></M>. 
-          </P>
-        </PreviewScope>
-        <P>
-          To start, we take the binary representation of the digest from <Hash><R n="rand_arg_u" /></Hash>, and treat it as a sequence of fair Bernoulli trials, each with <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>. If we assume that our hash function is indifferentiable from a random oracle, then each bit in the digest can be thought of as a result from a fair Bernoulli trial — either <M>0</M> (<Quotes>failure</Quotes>) or <M>1</M> (<Quotes>success</Quotes>).
-        </P>
-        <PreviewScope>
-          <P>
-            To simulate a <R n="geometric_distribution" /> with a probability that is not <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>, i.e., <M><R n="rand_p" /> = <MFrac num={"1"} de={<Def n="rand_k" r="k"/>} /></M>, we manipulate this sequence of fair trials to create <Em>groups</Em> of bits where the group collectively has success probability <M><MFrac num={"1"} de={<R n="rand_k" />} /></M>. To find the number of bits <M><Def n="rand_b" r="b" /></M> per group, we calculate the smallest <M><R n="rand_b" /></M> for which <M>2^<Curly><R n="rand_b" /></Curly> ≥ <R n="rand_k" /></M>, which is determined by <M><R n="rand_b" /> = <MCeil><MLog base="2"><R n="rand_k" /></MLog></MCeil></M>.
-          </P>
-        </PreviewScope>
-        <P>
-          The hash digest is then divided into groups of <M><R n="rand_b" /></M> bits, where each group is treated as a single trial with the desired success probability. For each group of <M><R n="rand_b" /></M> bits, we consider the trial a <Quotes>success</Quotes> if all <M><R n="rand_b" /></M> bits are <M>0</M>, which occurs with probability <M><MParen><MFrac num={"1"} de={"2"} /></MParen>^<Curly><R n="rand_b" /></Curly></M>. Thus, the count of groups until the first <Quotes>success</Quotes> is our geometric random variable.
+        Run <Code>cargo run --bin stats</Code> to replicate the experiments for <Rc n="fig_stats_gheight"/>, <Rc n="fig_stats_gnode_size"/>, <Rc n="fig_stats_gnode_count"/>, <Rc n="fig_kzip_height"/>, and <Rc n="fig_space_amplification"/>.
 
-          The following pseudocode should clarify the process:
-          </P>
-
-          <Pseudocode n="code_pseudorandom_rank" lineNumbering>
-            <FunctionItem
-              comment={<>Simulate a geometric distribution with probability p = 1 / k using a series of fair Bernoulli trials (p = <MFrac num={"1"} de={"2"} />). The number of trials is limited to 256 independent trials.</>}
-              id={["rank", "c_rank"]}
-              args={[
-                ["bytes", "c_rank_bytes", <M>[u8; 32]</M>],
-                ["k", "c_rank_k", <M>\N</M>],
-              ]}
-              multilineArgs
-              ret={<M>\N</M>}
-              body={[
-                <>TODO</>
-              ]}
-            />
-            <Loc/>
-          </Pseudocode>
-      </Hsection>
+        Run <Code>cargo bench</Code> to recreate the benchmark for <Rc n="fig_search_performance"/>.
+      </P>
     </Hsection>
 
     <Hsection n="variants" title="Appendix B: G-Tree Variants" noNumbering>
@@ -2565,6 +2509,72 @@ const exp = (
           src={<ResolveAsset asset={["graphics", "gPlus2zip.svg"]} />}
         />
       </Fig>
+    </Hsection>
+
+    <Hsection n="practicalities" title="Appendix C: Practicalities" noNumbering>
+      <Hsection n="truncation" title="Truncation" noNumbering>
+        <PreviewScope>
+          <P>
+            In a <R n="gtree_informal">geometric tree</R>, the <R n="rank"/> associated with an <R n="item"/> is drawn from a <R n="geometric_distribution"/>. In theory, this random variable <R n="geo_x"/> can take on arbitrarily large numbers, but we often need to represent <R n="geo_x" /> in a computer.
+            To this end, we work with a <Def n="truncated"/> <R n="geometric_distribution" />, which clamps <R n="geo_x" /> to integers between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
+            Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
+          </P>
+        </PreviewScope>
+
+        <PreviewScope>
+          <P>
+            In terms of probabilities, this only affects the <M><Pr><R n="geo_x"/> = <R n="geo_N" /></Pr></M>, which is equivalent to <M><Pr><R n="geo_x"/> ≥ <R n="geo_N" /></Pr></M> in a normal <R n="geometric_distribution"/>. This is simply the probability of not getting a success within the first <M><R n="geo_N"/> - 1</M> trials, which is <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
+            {" "}To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that since we <Quotes>stop</Quotes> the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num={"1"} de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
+            {" "}This leads to the truncated expected value <M post="."><E><R n="geo_x"/></E> = <MFrac num={<>1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></>} de={<>1 - <R n="geo_q"/></>}/> = <MFrac num={<>1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></>} de={<R n="geo_p"/>} /></M>
+            <Marginale>
+              This result makes intuitive sense, because if we had an unlimited number of trails, the expected value for <M><R n="geo_x"/></M> would be the usual <M>1 / <R n="geo_p"/></M>. However, since we are guaranteed to stop by the <M><R n="geo_N" /></M>th trail, and the probability of requiring this many trails to acheive a success in the first place is relatively small, we reduce the expected value of the truncated random variable by <M><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>.
+            </Marginale>
+            {" "}Truncation obviously affects the properties of <Rs n="gtree"/>, and our prior analyses would require adjustment. In practice however, this simply leads to shorter and wider trees, which are still efficient.
+          </P>
+        </PreviewScope>
+      </Hsection>
+      <Hsection n="pseudorandom_rank_functions" title="Pseudorandom Rank Functions" noNumbering>
+        <PreviewScope>
+          <P>
+            As stated in <Rc n="prelim_geometric_distribution"/>, we require a rank function <Rank p={<Def n="rand_p" r="p" />}><Def n="rand_arg_u" r="u"/></Rank> that, when given an input <M><R n="rand_arg_u" /></M>, outputs an integer value derived from a <R n="geometric_distribution"/> <GeoDistribution><R n="rand_p" /></GeoDistribution>, with parameter <M><R n="rand_p" /></M>. This output is a pseudorandom integer that is deterministically derived from <M><R n="rand_arg_u" /></M>.
+            A simple variant for <Rank p="(1/2)"><R n="rand_arg_u" /></Rank> based on hashing <R n="rand_arg_u" /> with a secure hash function was previously provided.
+            <Marginale>
+              Something about SipHash being sufficiently secure for this purpose.
+            </Marginale>
+            {" "}However, it is of general interest to efficiently derive deterministic pseudorandom ranks for arbitrary <M><R n="rand_p" /></M>. 
+          </P>
+        </PreviewScope>
+        <P>
+          To start, we take the binary representation of the digest from <Hash><R n="rand_arg_u" /></Hash>, and treat it as a sequence of fair Bernoulli trials, each with <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>. If we assume that our hash function is indifferentiable from a random oracle, then each bit in the digest can be thought of as a result from a fair Bernoulli trial — either <M>0</M> (<Quotes>failure</Quotes>) or <M>1</M> (<Quotes>success</Quotes>).
+        </P>
+        <PreviewScope>
+          <P>
+            To simulate a <R n="geometric_distribution" /> with a probability that is not <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>, i.e., <M><R n="rand_p" /> = <MFrac num={"1"} de={<Def n="rand_k" r="k"/>} /></M>, we manipulate this sequence of fair trials to create <Em>groups</Em> of bits where the group collectively has success probability <M><MFrac num={"1"} de={<R n="rand_k" />} /></M>. To find the number of bits <M><Def n="rand_b" r="b" /></M> per group, we calculate the smallest <M><R n="rand_b" /></M> for which <M>2^<Curly><R n="rand_b" /></Curly> ≥ <R n="rand_k" /></M>, which is determined by <M><R n="rand_b" /> = <MCeil><MLog base="2"><R n="rand_k" /></MLog></MCeil></M>.
+          </P>
+        </PreviewScope>
+        <P>
+          The hash digest is then divided into groups of <M><R n="rand_b" /></M> bits, where each group is treated as a single trial with the desired success probability. For each group of <M><R n="rand_b" /></M> bits, we consider the trial a <Quotes>success</Quotes> if all <M><R n="rand_b" /></M> bits are <M>0</M>, which occurs with probability <M><MParen><MFrac num={"1"} de={"2"} /></MParen>^<Curly><R n="rand_b" /></Curly></M>. Thus, the count of groups until the first <Quotes>success</Quotes> is our geometric random variable.
+
+          The following pseudocode should clarify the process:
+          </P>
+
+          <Pseudocode n="code_pseudorandom_rank" lineNumbering>
+            <FunctionItem
+              comment={<>Simulate a geometric distribution with probability p = 1 / k using a series of fair Bernoulli trials (p = <MFrac num={"1"} de={"2"} />). The number of trials is limited to 256 independent trials.</>}
+              id={["rank", "c_rank"]}
+              args={[
+                ["bytes", "c_rank_bytes", <M>[u8; 32]</M>],
+                ["k", "c_rank_k", <M>\N</M>],
+              ]}
+              multilineArgs
+              ret={<M>\N</M>}
+              body={[
+                <>TODO</>
+              ]}
+            />
+            <Loc/>
+          </Pseudocode>
+      </Hsection>
     </Hsection>
   </ArticleTemplate>
 );
