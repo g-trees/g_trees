@@ -830,19 +830,25 @@ const exp = (
 
         <PreviewScope>
           <P>
-            The root rank, <M><Def n="ana_Mn" r="M_T"/></M> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M>. While it is known that the expected value of <M><R n="ana_Mn"/></M> is roughly <M><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog> + <BigO>1</BigO></M>, there is no simple closed form expression <Bib item={["szpankowski1990yet", "eisenberg2008expectation"]} />. However, it is possible to bound <R n="ana_Mn"/> as the maximum rank of any <R n="gnode"/> in <R n="ana_T"/> via the union bound: for any <M><Def n="ana_r" r="r"/> ≪ ∞</M> the probability that the <R n="rank"/> of a <R n="gnode"/> <M><Def n="ana_g" r="g"/></M> is at least <R n="ana_r"/> is at most <M><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M>, i.e., <M><Pr><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_q"/>^<Curly><R n="ana_r"/> - 1</Curly></M>.
-            {" "}This implies that the probability that there exists <Em>some</Em> <R n="gnode"/> such that <M><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></M> is <M post=","><Pr>∃ <R n="ana_g"/>,<Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_n"/><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M> and so for some positive constant <M>c</M>, <M><Pr><R n="ana_Mn"/> ≥ (c + 1) <MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></Pr> ≤ <R n="ana_n"/>^<Curly>-c</Curly></M><Bib item="golovin2010b" />.
+            The root rank, <M><Def n="ana_Mn" r="M_T"/></M> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M>. While it is known that the expected value of <M><R n="ana_Mn"/></M> is roughly <M><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog> + <BigO>1</BigO></M>, there is no simple closed form expression <Bib item={["szpankowski1990yet", "eisenberg2008expectation"]} />.
           </P>
         </PreviewScope>
         <PreviewScope>
           <P>
-            Even for <M><R n="ana_r"/> → ∞</M>, the tail probability contribution is relatively small, and can be estimated via the simplification of the geometric series for values of <M><R n="ana_r"/> {'>'} <MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil></M>, as in
+            To explicitly bound <R n="ana_Mn"/>, fix any <M post="."><Def n="ana_r" r="r"/> \leq <MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil></M>
+            {" "}Then, the probability that the <R n="rank"/> of a <R n="gnode"/> <M><Def n="ana_g" r="g"/></M> is at least <R n="ana_r"/> is at most <M><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M>, i.e., <M post="."><Pr><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_q"/>^<Curly><R n="ana_r"/> - 1</Curly></M>
+            {" "}By the union bound, the probability that there exists <Em>some</Em> <R n="gnode"/> such that <M><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></M> is <M post=","><Pr>∃ <R n="ana_g"/>,<Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_n"/><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M> and so for some positive constant <M>c</M>, <M><Pr><R n="ana_Mn"/> ≥ (c + 1) <MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></Pr> ≤ <R n="ana_n"/>^<Curly>-c</Curly></M><Bib item="golovin2010b" />.
+          </P>
+        </PreviewScope>
+        <PreviewScope>
+          <P>
+            Even for <M><R n="ana_r"/> \gt <MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil></M>, the tail probability contribution is relatively small; we can estimate it by simplifying the geometric series:
             
             <MM>
-              <Sum sub={<><R n="ana_r"/> = <MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil> + 1</>} sup="∞"><R n="ana_n"/> <R n="ana_p"/>^<Curly><R n="ana_r"/>-1</Curly></Sum> = <R n="ana_n"/> <R n="ana_p"/>^<Curly><MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil></Curly> ≤ <R n="ana_n"/> <R n="ana_p"/>^<Curly><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></Curly> = \frac<Curly>1</Curly><Curly>1 - <R n="ana_p"/></Curly> = \frac<Curly>1</Curly><Curly><R n="ana_q"/></Curly>
+              <Sum sub={<><R n="ana_r"/> = <MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil> + 1</>} sup="∞"><R n="ana_n"/> <R n="ana_p"/>^<Curly><R n="ana_r"/>-1</Curly></Sum> = <R n="ana_n"/> <R n="ana_p"/>^<Curly><MCeil><MLog base={<R n="ana_k"/>}> <R n="ana_n"/></MLog></MCeil></Curly> ≤ <R n="ana_n"/> <R n="ana_p"/>^<Curly><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></Curly> = \frac<Curly>1</Curly><Curly>1 - <R n="ana_p"/></Curly> = \frac<Curly>1</Curly><Curly><R n="ana_q"/></Curly> = <R n="ana_k"/>.
             </MM>
 
-            which is <R n="ana_k"/>, and again implies that <M post={","}><E><R n="ana_Mn"/></E> ≈ <MCeil><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></MCeil></M> and is at most <M><MCeil><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></MCeil> + <R n="ana_k"/></M>, with high probability.
+            Hence, <M post={","}><E><R n="ana_Mn"/></E> ≈ <MCeil><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></MCeil></M> and <M><E><R n="ana_Mn"/></E></M> is at most <M><MCeil><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></MCeil> + <R n="ana_k"/></M>, with high probability.
           </P>
         </PreviewScope>
         <PreviewScope>
@@ -956,7 +962,7 @@ const exp = (
       <Hsection n="gtree_node_size" title="G-Node Size">
         <PreviewScope>
           <P>
-            Given the geometric distribution of (independent) <Rs n="rank" /> over input values <M>s ∈ <R n="gtree_s"/></M>, the expected number of values with <R n="rank" /> <M><R n="ana_r"/></M> is about <M><R n="ana_k"/></M> times the expected number of values with <R n="rank" /> <M><R n="ana_r"/> + 1</M>, i.e. <M><Pr><Rank>s</Rank> {">"} <R n="ana_r"/> | <Rank>s</Rank> ≥ <R n="ana_r"/></Pr> = <R n="ana_q"/></M>. Recall that each <R n="gnode"/> in a geometric tree contains a set of <Rs n="item" /> with the same <R n="rank" />, and that the <R n="rank" /> of the <R n="gnode" /> is the maximum <R n="rank" /> of its <Rs n="item" />. Thus, we can think of <Rs n="gnode" /> within <R n="ana_T" /> as disjoint subsets formed by splitting the (sorted) items of <R n="rank" /> <M><R n="ana_r" /></M> at values of <R n="rank" /> <M><R n="ana_r" /> + 1</M>. In other words, the number of nodes with a given <R n="rank" /> <M><R n="ana_r" /></M> is a direct function of the number of <Rs n="gnode" /> with <R n="rank" /> <M><R n="ana_r" /> + 1</M>.
+            Given the geometric distribution of (independent) <Rs n="rank" /> over input values <M>s ∈ <R n="gtree_s"/></M>, the expected number of values with <R n="rank" /> <M><R n="ana_r"/></M> is about <M><R n="ana_k"/></M> times the expected number of values with <R n="rank" /> <M><R n="ana_r"/> + 1</M>, i.e., <M><Pr><Rank>s</Rank> {">"} <R n="ana_r"/> | <Rank>s</Rank> ≥ <R n="ana_r"/></Pr> = <R n="ana_q"/></M>. Recall that each <R n="gnode"/> in a geometric tree contains a set of <Rs n="item" /> with the same <R n="rank" />, and that the <R n="rank" /> of the <R n="gnode" /> is the maximum <R n="rank" /> of its <Rs n="item" />. Thus, we can think of <Rs n="gnode" /> within <R n="ana_T" /> as disjoint subsets formed by splitting the (sorted) items of <R n="rank" /> <M><R n="ana_r" /></M> at values of <R n="rank" /> <M><R n="ana_r" /> + 1</M>. In other words, the number of nodes with a given <R n="rank" /> <M><R n="ana_r" /></M> is a direct function of the number of <Rs n="gnode" /> with <R n="rank" /> <M><R n="ana_r" /> + 1</M>.
           </P>
         </PreviewScope>
         <PreviewScope>
@@ -1083,7 +1089,7 @@ const exp = (
             </MM>
             
             This provides an exponentially small probability that the total number of <Rs n="gnode" /> in a geometric tree is much more than <M><MFrac num={<R n="ana_n" />} de={<R n="ana_k" />}/> + 1</M>, and thus the <R n="gtree" /> size is in <M><BigO><R n="ana_n" /></BigO></M>.
-            {" "}<Rcb n="fig_stats_gnode_count"/> gives expiremental measurements that confirm the analysis.
+            {" "}<Rcb n="fig_stats_gnode_count"/> gives experimental measurements that confirm the analysis.
           </P>
         </PreviewScope>
 
