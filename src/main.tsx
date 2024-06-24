@@ -1265,18 +1265,23 @@ const exp = (
           </P>
 
           <P>
-            What is the expected height of a <R n="kzip_tree"/>? Asymptotically, we know it to be in <BigO>\log n</BigO>, since we have <Rs n="gnode"/> of <BigO>\log n</BigO> different <Rs n="rank"/>, each containing <BigO>k</BigO> <Rs n="item"/>. <Rcb n="fig_kzip_height"/> gives experimental measures for some specific <M>n</M> and <M>k</M>.
-            The <Dfn>height amplification</Dfn> we report is the height of each tree divided by the height of a perfectly-balancd <M>k+1</M>-ary tree on <M>n</M> vertices.
+            What is the expected height of a <R n="kzip_tree"/>? Asymptotically, we know it to be in <BigO>\log n</BigO>, since we have <Rs n="gnode"/> of <BigO>\log n</BigO> different <Rs n="rank"/>, each a list of <BigO>k</BigO> <Rs n="item"/> (which has a length in <BigO>k</BigO>). <Rcb n="fig_kzip_height"/> gives experimental measures for some specific <M>n</M> and <M>k</M>.
+            The <Dfn>height amplification</Dfn> we report is the height of each tree divided by the height of a perfectly-balanced <M>k+1</M>-ary tree on <M>n</M> vertices.
           </P>
 
           <Fig
             n="fig_kzip_height"
             title="K-Zip-Tree Height"
             caption={
-              <P>
-                Total number of <R n="item"/> slots divided by total number of <Rs n="item"/> in 200 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
-                The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
-              </P>
+              <>
+                <P>
+                  The heights of 200 randomly generated <Rs n="gtree"/>, i.e., the maximal number of pointers to traverse from the root to a leaf; for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+                  The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
+                </P>
+                <P>
+                  The second table normalizes the heights by the heights of perfectly-balanced <M>k+1</M>-ary trees on <M>n</M> vertices.
+                </P>
+              </>
             }
           >
             <H6 clazz="dataHeading">Tree Height</H6>
@@ -1438,7 +1443,7 @@ const exp = (
 
     <Hsection title="Algorithms" n="implementation">
       <P>
-        We now present asymptotically efficient algorithms to mutate <Rs n="gtree"/>. To optimize for clarity of presentation, we describe purely functional algorithms: all functions return new values rather than mutating their inputs.
+        We now present asymptotically efficient algorithms for working with <Rs n="gtree"/>. To optimize for clarity of presentation, we describe purely functional algorithms: all functions return new values rather than mutating their inputs.
       </P>
 
       <P>
@@ -1482,7 +1487,7 @@ const exp = (
                 multiline: true,
               },
               {
-                comment: <>Join two sets <R n="c_neset_join_left"/> and <R n="c_neset_join_right"/> into a single set, assuming that all <Rs n="item"/> in <R n="c_neset_join_left"/> are less than any <R n="item"/> in <R n="c_neset_join_right"/>.</>,
+                comment: <>Join two sets <R n="c_neset_join_left"/> and <R n="c_neset_join_right"/> into a single set, assuming that all <Rs n="item"/> in <R n="c_neset_join_left"/> are less than any <Rs n="item"/> in <R n="c_neset_join_right"/>.</>,
                 id: ["join", "c_neset_join"],
                 args: [
                   ["left", "c_neset_join_left", <Self/>],
@@ -1506,7 +1511,7 @@ const exp = (
                 multiline: true,
               },
               {
-                comment: <>Insert an <R n="item"/> and its <R n="gtree_left_subtree"/> into <R n="c_neset_remove_min_self"/>. The new <R n="item"/> is must strictly less than any <R n="item"/> in <R n="c_neset_remove_min_self"/>.</>,
+                comment: <>Insert an <R n="item"/> and its <R n="gtree_left_subtree"/> into <R n="c_neset_remove_min_self"/>. The new <R n="item"/> must be strictly less than any <R n="item"/> in <R n="c_neset_remove_min_self"/>.</>,
                 id: ["insert_min", "c_neset_insert_min"],
                 args: [
                   ["self", "c_neset_insert_min_self", <Self/>],
@@ -1631,7 +1636,7 @@ const exp = (
 
       <Pseudocode n="code_helpers" lineNumbering>
         <FunctionItem
-          comment={<>Insert an <R n="item"/> and its <R n="gtree_left_subtree"/> into a possibly empty set. The new <R n="item"/> is must be strictly less than any <R n="item"/> in <R n="c_set_insert_min_set"/>.</>}
+          comment={<>Insert an <R n="item"/> and its <R n="gtree_left_subtree"/> into a possibly empty set. The new <R n="item"/> must be strictly less than any <R n="item"/> in <R n="c_set_insert_min_set"/>.</>}
           id={["set_insert_min", "c_set_insert_min"]}
           generics={[{
             id: ["I", "c_set_insert_min_item"], 
@@ -1791,7 +1796,7 @@ const exp = (
       </P>
 
       <P>
-        We build our insertion and deletion algorithms from algorithms for unzipping and zipping <Rs n="gtree"/>. Unzipping takes a key, and splits a <R n="gtree"/> into the tree of all <Rs n="item"/> less than the key and the tree of all <Rs n="item"/> greater than the key. Zipping takes two trees, the first containing only <Rs n="item"/> strictly lesser than any <R n="item"/> of the second, and joins them together into a single tree. We call this version of zipping <Code>zip2</Code>, because it takes <Em>two</Em> arguments. We also use a <Code>zip3</Code> function, which additionally incorporates a single <R n="item"/> into the tree that is strictly greater than all <Rs n="item"/> of the first tree, and strictly less than all <Rs n="item"/> of the second tree. Insertion and deletion can then be implemented as composition of unzipping and zipping (<Code>zip3</Code> and <Code>zip2</Code>, respectively) — see <Rc n="fig_insert_and_delete"/>.
+        We build our insertion and deletion algorithms from algorithms for unzipping and zipping <Rs n="gtree"/>. Unzipping takes a key and splits a <R n="gtree"/> into the tree of all <Rs n="item"/> less than the key and the tree of all <Rs n="item"/> greater than the key<Marginale>The key itself occurs in neither returned tree, even if it is part of the input tree.</Marginale>. Zipping takes two trees, the first containing only <Rs n="item"/> strictly lesser than any <R n="item"/> of the second, and joins them together into a single tree. We call this version of zipping <Code>zip2</Code>, because it takes <Em>two</Em> arguments. We also use a <Code>zip3</Code> function, which additionally incorporates a single <R n="item"/> into the tree that is strictly greater than all <Rs n="item"/> of the first tree, and strictly less than all <Rs n="item"/> of the second tree. Insertion and deletion can then be implemented as composition of unzipping and zipping (<Code>zip3</Code> and <Code>zip2</Code>, respectively) — see <Rc n="fig_insert_and_delete"/>.
       </P>
 
       <Fig
@@ -2006,7 +2011,7 @@ const exp = (
 
       <Pseudocode n="code_zip2" lineNumbering>
         <FunctionItem
-          comment={<>Join two trees <R n="c_zip2_left"/> and <R n="c_zip2_right"/> into a single tree, assuming that all <Rs n="item"/> in <R n="c_zip2_left"/> are less than any <R n="item"/> in <R n="c_zip2_right"/>.</>}
+          comment={<>Join two trees <R n="c_zip2_left"/> and <R n="c_zip2_right"/> into a single tree, assuming that all <Rs n="item"/> in <R n="c_zip2_left"/> are less than any <Rs n="item"/> in <R n="c_zip2_right"/>.</>}
           id={["zip2", "c_zip2"]}
           generics={[
             {
@@ -2337,7 +2342,7 @@ const exp = (
 
       <PreviewScope>
         <P>
-          When search trees store not only keys but key-value pairs, some usecases benefit from storing all key-value pairs in leaves of the tree. To support efficient lookup of the leaves, the inner vertices of the tree store duplicates of certain keys. We easily can adapt <Rs n="gtree"/> to this behavior by placing <R n="item"/> not only in the tree layer corresponding to their <R n="rank"/> but also on all lower layers. <Rcb n="fig_leafy_gtree"/> depicts such a <Def n="naive_leafy_gtree" r="naïve leafy G-tree"/>, and <Rc n="fig_leafy_1zip"/> and <Rc n="fig_leafy_2zip"/> show concrete instantiations with a <R n="k_list">1-list</R> (a <Def n="naive_leafy_zip_tree" r="naïve leafy zip-tree"/>) and a <R n="k_list">2-list</R> (a <Def n="naive_leafy_2zip_tree" r="naïve leafy 2-zip-tree"/>) respectively. We <Sidenote note={<>Spoiler: the ordering is arbitrary <Em>in principle</Em>, but our choice will surface a deep connection to <Rs n="skip_list"/> in a few paragraphs.</>}>arbitrarily</Sidenote> choose to sort <Rs n="item"/> of lower <R n="rank"/> to the right of their copies of higher <R n="rank"/>.
+          When search trees store not only keys but key-value pairs, some usecases benefit from storing all key-value pairs in leaves of the tree. To support efficient lookup of the leaves, the inner vertices of the tree store duplicates of certain keys. We can easily adapt <Rs n="gtree"/> to this behavior by placing <Rs n="item"/> not only in the tree layer corresponding to their <R n="rank"/> but also on all lower layers. <Rcb n="fig_leafy_gtree"/> depicts such a <Def n="naive_leafy_gtree" r="naïve leafy G-tree"/>, and <Rc n="fig_leafy_1zip"/> and <Rc n="fig_leafy_2zip"/> show concrete instantiations with a <R n="k_list">1-list</R> (a <Def n="naive_leafy_zip_tree" r="naïve leafy zip-tree"/>) and a <R n="k_list">2-list</R> (a <Def n="naive_leafy_2zip_tree" r="naïve leafy 2-zip-tree"/>) respectively. We <Sidenote note={<>Spoiler: the ordering is arbitrary <Em>in principle</Em>, but our choice will surface a deep connection to <Rs n="skip_list"/> in a few paragraphs.</>}>arbitrarily</Sidenote> choose to sort <Rs n="item"/> of lower <R n="rank"/> to the right of their copies of higher <R n="rank"/>.
         </P>
       </PreviewScope>
 
@@ -2476,7 +2481,7 @@ const exp = (
 
       <PreviewScope>
         <P>
-          To conclude, we point out that linking only the leaves of a <R n="leafy_gtree"/> yields a family analogous to the <Bib item="comer1979ubiquitous">B<Sup>+</Sup>-trees</Bib>. <Rcb n="fig_gplus_gtree"/> shows such a <Def n="gplus_tree" r={<>G<Sup>+</Sup>-tree</>}/>; <Rc n="fig_gplus_1zip"/> shows an instantiation with a linked list (a <Def n="zipplus_tree" r={<>zip<Sup>+</Sup>-tree</>}/>), and <Rc n="fig_gplus_2zip"/> shows an instantiation with a <R n="k_list">2-list</R> (a <Def n="zip2plus_tree" r={<>2-zip<Sup>+</Sup>-tree</>}/>).
+          To conclude, we point out that linking only the <Em>leaves</Em> of a <R n="leafy_gtree"/> yields a family analogous to the <Bib item="comer1979ubiquitous">B<Sup>+</Sup>-trees</Bib>. <Rcb n="fig_gplus_gtree"/> shows such a <Def n="gplus_tree" r={<>G<Sup>+</Sup>-tree</>}/>; <Rc n="fig_gplus_1zip"/> shows an instantiation with a linked list (a <Def n="zipplus_tree" r={<>zip<Sup>+</Sup>-tree</>}/>), and <Rc n="fig_gplus_2zip"/> shows an instantiation with a <R n="k_list">2-list</R> (a <Def n="zip2plus_tree" r={<>2-zip<Sup>+</Sup>-tree</>}/>).
         </P>
       </PreviewScope>
 
