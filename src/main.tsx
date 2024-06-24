@@ -867,7 +867,7 @@ const exp = (
           title="G-Tree Maximum Ranks"
           caption={
             <P>
-              Average maximal ranks and heights (in <Rs n="gnode"/>) of 1,000 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+              Average maximal ranks and heights (in <Rs n="gnode"/>) of 200 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
               The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
             </P>
           }
@@ -910,7 +910,7 @@ const exp = (
                 <Td>1.8 (0.19)</Td>
                 <Td>2.2 (0.19)</Td>
                 <Td>3.0 (0.12)</Td>
-                <Td>TBD</Td>
+                <Td>3.35 (0.24)</Td>
               </Tr>
             </Tbody>
           </Table>
@@ -952,7 +952,7 @@ const exp = (
                 <Td>1.8 (0.18)</Td>
                 <Td>2.2 (0.17)</Td>
                 <Td>3.0 (0.11)</Td>
-                <Td>TBD</Td>
+                <Td>3.3 (0.23)</Td>
               </Tr>
             </Tbody>
           </Table>
@@ -1003,7 +1003,7 @@ const exp = (
           title="G-Node Average Sizes"
           caption={
             <P>
-              Average <R n="gnode"/> sizes of 1,000 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+              Average <R n="gnode"/> sizes of 200 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
               The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
             </P>
           }
@@ -1046,7 +1046,7 @@ const exp = (
                 <Td>30.6534 (0.0817688)</Td>
                 <Td>56.3768 (0.0023357)</Td>
                 <Td>62.6815 (0.0219051)</Td>
-                <Td>TBD</Td>
+                <Td>63.7859 (0.0235732)</Td>
               </Tr>
             </Tbody>
           </Table>
@@ -1098,7 +1098,7 @@ const exp = (
           title="G-Node Counts"
           caption={
             <P>
-              Average number of <R n="gnode"/> in 1,000 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+              Average number of <R n="gnode"/> in 200 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
               The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
             </P>
           }
@@ -1141,7 +1141,7 @@ const exp = (
                 <Td>3.29 (2.213)</Td>
                 <Td>17.75 (15.25)</Td>
                 <Td>159.16 (160.2)</Td>
-                <Td>TBD</Td>
+                <Td>1564 (1486.8)</Td>
               </Tr>
             </Tbody>
           </Table>
@@ -1274,7 +1274,7 @@ const exp = (
             title="K-Zip-Tree Height"
             caption={
               <P>
-                Total number of <R n="item"/> slots divided by total number of <Rs n="item"/> in 1,000 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+                Total number of <R n="item"/> slots divided by total number of <Rs n="item"/> in 200 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
                 The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
               </P>
             }
@@ -1317,7 +1317,7 @@ const exp = (
                   <Td>2.37 (0.24)</Td>
                   <Td>5.05 (1.43)</Td>
                   <Td>8.43 (1.69)</Td>
-                  <Td>TBD</Td>
+                  <Td>12.08 (2.52)</Td>
                 </Tr>
               </Tbody>
             </Table>
@@ -1360,7 +1360,7 @@ const exp = (
                   <Td>1.18 (0.06)</Td>
                   <Td>2.53 (0.36)</Td>
                   <Td>2.81 (0.19)</Td>
-                  <Td>TBD</Td>
+                  <Td>4.03 (0.28)</Td>
                 </Tr>
               </Tbody>
             </Table>
@@ -1375,7 +1375,7 @@ const exp = (
             title="Space Amplification"
             caption={
               <P>
-                Total number of <R n="item"/> slots divided by total number of <Rs n="item"/> in 1,000 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+                Total number of <R n="item"/> slots divided by total number of <Rs n="item"/> in 200 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
                 The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
               </P>
             }
@@ -1418,7 +1418,7 @@ const exp = (
                   <Td>2.431 (0.612)</Td>
                   <Td>1.669 (0.0316)</Td>
                   <Td>1.578 (0.0032)</Td>
-                  <Td>TBD</Td>
+                  <Td>1.565 (0.0003)</Td>
                 </Tr>
               </Tbody>
             </Table>
