@@ -635,7 +635,6 @@ const exp = (
 
         <Fig
           n="fig_ziptree_basic"
-          wrapperTagProps={{clazz: "wide"}}
           title="A Zip-Tree"
           caption={
             <>
@@ -812,33 +811,27 @@ const exp = (
         <Marginale>
           The math-averse reader can safely skip ahead to <Rc n="old_gtrees"/>, as long as they believe us when we say that <Rs n="gnode"/> form trees of logarithmic height with high probability, and that each <R n="gnode"/> contains <BigO>1</BigO> <Rs n="item"/> with high probability.
         </Marginale>
-        <Alj>TODO (not anchored here, just taking notes): explicitly mention that it would make more sense to do width first, height second. (keep in head that we are using heights to define width)</Alj>
-        <Alj>TODO (not anchored here, just taking notes): explicitly compare our bounds to the (tighter) zip-paper bounds.</Alj>
         We now give a formal analysis of the performance-related properties of <Rs n="gtree"/>. Roughly speaking, we show that <Rs n="gtree"/> with a <R n="geometric_distribution"/> of some probability <M>1 - <MFrac num="1" de="k"/></M> are similar to perfectly balanced <M post="-ary">k</M> trees with high probability: the height (in terms of <Rs n="gnode"/>) stays within a constant factor of <M><MLog base="k">n</MLog></M>, and the maximal number of <Rs n="item"/> per <R n="gnode"/> stays within a constant factor of <M>k</M>.
       </P>
 
       <PreviewScope>
         <P>
-          Throughout our analyses, we let <M><Def n="ana_k" r="k"/></M> be a natural number greater than or equal to two; <R n="ana_k"/> is the intended average number of <Rs n="item"/> per <R n="gnode"/>.
-          We let <M><Def n="ana_T" r="T"/></M> be a <R n="gtree"/> of <M><Def n="ana_n" r="n"/></M> <Rs n="gnode"/>. We then consider <Rs n="gtree"/> for the <R n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M> with <M><Def n="ana_p" r="p"/> := 1 - <MFrac num="1" de={<R n="ana_k"/>}/></M>, and set <M><Def n="ana_q" r="q"/> := 1 - <R n="ana_p"/> = <MFrac num="1" de={<R n="ana_k"/>}/></M>.
+          Throughout our analyses, we let <M><Def n="ana_k" r="k"/></M> be a natural number greater than or equal to two; <R n="ana_k"/> is the intended average number of children per <R n="gnode"/> (leaving us with an intended average of <M><R n="ana_k"/> - 1</M> <Rs n="item"/> per <R n="gnode"/>).
+          We let <M><Def n="ana_T" r="T"/></M> be a <R n="gtree"/> of <M><Def n="ana_n" r="n"/></M> <Rs n="item"/>. We then consider <Rs n="gtree"/> for the <R n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M> with <M><Def n="ana_p" r="p"/> := 1 - <MFrac num="1" de={<R n="ana_k"/>}/></M>, and set <M post=","><Def n="ana_q" r="q"/> := 1 - <R n="ana_p"/> = <MFrac num="1" de={<R n="ana_k"/>}/></M> as this will yield the intended average <R n="gnode"/> size.
         </P>
       </PreviewScope>
-
-      <P>
-        Our goal is to approximate a perfectly balanced <M post="-ary">(k + 1)</M> tree with a roughly constant <R n="ana_k"/> number of <Rs n="item"/> per <R n="gnode"/> on average. This occurs when the distribution of node <Rs n="rank"/> (and therefore, <Em>heights</Em>) follows a geometric distribution with <Em>failure</Em> probability <M>q = 1 / k</M>. The resulting node widths — as we will see shortly — are then characterized by a geometric distribution with <Em>success</Em> probability <M>p = 1 / k</M>, and expectation roughly <M>k</M>. As such, we begin with an analysis of tree heights.
-      </P>
 
       <Hsection n="gtree_height" title="G-Tree Height">
         <PreviewScope>
           <P>
-            The <R n="rank"/> of any <R n="gnode"/> is a geometric random variable with parameter <M><R n="ana_p"/> = 1 - <R n="ana_q"/></M>. The height of <R n="ana_T"/> is upper-bounded by the <R n="rank"/> of its root node, since each child has a strictly lesser <R n="rank"/> than its parent.
+            The <R n="rank"/> of any <R n="gnode"/> is a geometric random variable with parameter <M><R n="ana_p"/> = 1 - <MFrac num="1" de={<R n="ana_k"/>}/> = 1 - <R n="ana_q"/></M>. The height of <R n="ana_T"/> is upper-bounded by the <R n="rank"/> of its root node, since each child has a strictly lesser <R n="rank"/> than its parent.
           </P>
         </PreviewScope>
 
         <PreviewScope>
           <P>
-            The root rank, <M><Def n="ana_Mn" r="M_n"/></M> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M>. While it is known that the expected value of <M><R n="ana_Mn"/></M> is roughly <M><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog> + <BigO>1</BigO></M>, there is no simple closed form expression <Bib item={["szpankowski1990yet", "eisenberg2008expectation"]} />. However, it is possible to bound <R n="ana_Mn"/> as the maximum rank of any <R n="gnode"/> in <R n="ana_T"/> via the union bound: for any <M><Def n="ana_r" r="r"/> ≪ ∞</M> the probability that the <R n="rank"/> of a <R n="gnode"/> <M><Def n="ana_g" r="g"/></M> is at least <R n="ana_r"/> is at most <M><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M>, i.e., <M><Pr><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_q"/>^<Curly><R n="ana_r"/> - 1</Curly></M>.<Cjqf>I'm computing rank directly on g here, maybe it should actually be explicitly the key of g?</Cjqf>
-            {" "}This implies that the probability that there exists some <R n="gnode"/> such that <M><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></M> is <M post=","><Pr>∃ <R n="ana_g"/>,<Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_n"/><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M> and so for some positive constant <M>c</M>, <M><Pr><R n="ana_Mn"/> ≥ (c + 1) <MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></Pr> ≤ <R n="ana_n"/>^<Curly>-c</Curly></M><Bib item="golovin2010b" />.
+            The root rank, <M><Def n="ana_Mn" r="M_T"/></M> is the maximum of the <Rs n="rank"/> of all <Rs n="item"/> in <R n="ana_T"/>, i.e., it is the maximum of <R n="ana_n"/> independent samples of the <R n="geometric_distribution"/> <M><GeoDistribution><R n="ana_p" /></GeoDistribution></M>. While it is known that the expected value of <M><R n="ana_Mn"/></M> is roughly <M><MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog> + <BigO>1</BigO></M>, there is no simple closed form expression <Bib item={["szpankowski1990yet", "eisenberg2008expectation"]} />. However, it is possible to bound <R n="ana_Mn"/> as the maximum rank of any <R n="gnode"/> in <R n="ana_T"/> via the union bound: for any <M><Def n="ana_r" r="r"/> ≪ ∞</M> the probability that the <R n="rank"/> of a <R n="gnode"/> <M><Def n="ana_g" r="g"/></M> is at least <R n="ana_r"/> is at most <M><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M>, i.e., <M><Pr><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_q"/>^<Curly><R n="ana_r"/> - 1</Curly></M>.
+            {" "}This implies that the probability that there exists <Em>some</Em> <R n="gnode"/> such that <M><Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></M> is <M post=","><Pr>∃ <R n="ana_g"/>,<Rank><R n="ana_g" /></Rank> ≥ <R n="ana_r"/></Pr> ≤ <R n="ana_n"/><R n="ana_q"/>^<Curly><R n="ana_r"/> − 1</Curly></M> and so for some positive constant <M>c</M>, <M><Pr><R n="ana_Mn"/> ≥ (c + 1) <MLog base={<R n="ana_k"/>}><R n="ana_n"/></MLog></Pr> ≤ <R n="ana_n"/>^<Curly>-c</Curly></M><Bib item="golovin2010b" />.
           </P>
         </PreviewScope>
         <PreviewScope>
@@ -1179,7 +1172,7 @@ const exp = (
           <PreviewScope>
             <P>
               More generally, we can instantiate <Rs n="gtree"/> with <Rs n="gtree"/> that are themselves recursively instantiated, to an arbitrary depth and choice of recursion anchor.
-              Using sorted linked lists as recursion anchors yields a family of <Def n="zipk_tree" r={<><M>\text<Curly>zip</Curly>^k</M>-tree</>} rs={<><M>\text<Curly>zip</Curly>^k</M>-trees</>}><><M>\mathit<Curly>zip</Curly>^k</M>-trees</></Def> whose first two members are the <Rs n="zip_tree"/> and the <Rs n="zipzip"/>.<Alj>At the end of the analysis chapter, harken back to this familiy and describe how many bits are needed at each level of nesting to store ranks.</Alj>
+              Using sorted linked lists as recursion anchors yields a family of <Def n="zipk_tree" r={<><M>\text<Curly>zip</Curly>^k</M>-tree</>} rs={<><M>\text<Curly>zip</Curly>^k</M>-trees</>}><><M>\mathit<Curly>zip</Curly>^k</M>-trees</></Def> whose first two members are the <Rs n="zip_tree"/> and the <Rs n="zipzip"/>.
             </P>
           </PreviewScope>
         </Hsection>
@@ -2303,7 +2296,6 @@ const exp = (
       </Pseudocode>
 
       <P>
-        <Alj>TODO: Update this paragraph if we add efficient pseudocode and/or a link to a real, efficient implementation.</Alj>
         We want to emphasize that our choice of algorithms optimizes for elegance, not for (non-asymptotic) efficiency. Implementations based on in-place mutations will outperform our immutable algorithms. A direct implementation of <R n="c_zip3"/> will outperform the reduction to two applications of <R n="c_zip2"/>. Iterative implementations might outperform recursive implementations. And finally, direct implementations of insertion and deletion should outperform those based off unzipping and zipping the full trees. The <Bib item="tarjan2021zip">original zip-tree paper</Bib> contains examples of direct algorithms that zip and unzip only parts of a tree, our algorithms can be adapted to work analogously.
       </P>
     </Hsection>
