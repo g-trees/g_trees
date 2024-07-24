@@ -2581,6 +2581,215 @@ const exp = (
             />
             <Loc/>
           </Pseudocode>
+
+          Explicit deletion pseudocode:
+
+          <Pseudocode n="code_explicit_delete" lineNumbering>
+            <FunctionItem
+              comment={<>Delete an <R n="item"/> from a <R n="gtree"/>.</>}
+              id={["delete", "x_delete"]}
+              generics={[
+                {
+                  id: ["I", "x_delete_i"], 
+                }, {
+                  id: [<><Mathfrak>S</Mathfrak></>, "x_delete_s"],
+                  bounds: [<TypeApplication constr="c_neset" args={[<R n="x_delete_i"/>]}/>],
+                },
+              ]}
+              args={[
+                ["t", "x_delete_t", <TypeApplication constr="c_gtree" args={[<R n="x_delete_s"/>]} />],
+                ["item", "x_delete_item", <R n="x_delete_i"/>],
+              ]}
+              multilineArgs
+              ret={<TypeApplication constr="c_gtree" args={[<R n="x_delete_s"/>]} />}
+              body={[
+                <Match
+                  exp={<R n="x_delete_t"/>}
+                  cases={[
+                    {
+                      commented: {
+                        comment: "Deletion in the empty tree is trivial.",
+                        dedicatedLine: true,
+                        segment: [
+                          <QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_empty" />,
+                          <>
+                            <Return><R n="c_gtree_empty"/></Return>
+                            <SpliceLoc/>
+                          </>,
+                        ],
+                      },
+                    },
+
+                    {
+                      commented: {
+                        comment: <>
+                          For non-empty trees, split the inner set.
+                        </>,
+                        dedicatedLine: true,
+                        segment: [
+                          <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} fields={[<DefValue n="x_delete_set" r="s" />]} />,
+                          <Match
+                            exp={<Application fun="c_neset_split" args={[
+                              <AccessStruct field="c_gtree_node_set"><R n="x_delete_set"/></AccessStruct>,
+                              <R n="x_delete_item"/>
+                            ]} />}
+                            cases={[
+                              {
+                                commented: {
+                                  comment: <>Bla</>,
+                                  dedicatedLine: true,
+                                  segment: [
+                                    <Tuple multiline fields={[
+                                      <DefValue n="x_left_set_0" r="left_set"/>,
+                                      <Tuple name={<QualifiedMember type={<R n="Option"/>} member="OptionSome" />} fields={[<DefValue n="x_left_subtree_of_key" r="left_subtree_of_key" />]} />,
+                                      <DefValue n="x_right_set_0" r="right_set"/>,
+                                    ]} />,
+                                    <Return>
+                                      <Application fun="c_zip2" multilineArgs args={[
+                                        <Application fun="c_norm" args={[
+                                          <R n="x_left_set_0"/>,
+                                          <R n="x_left_subtree_of_key"/>,
+                                          <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>,
+                                        ]}/>,
+                                        <Application fun="c_norm" args={[
+                                          <R n="x_right_set_0"/>,
+                                          <AccessStruct field="c_gtree_node_right"><R n="x_delete_set"/></AccessStruct>,
+                                          <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>,
+                                        ]}/>,
+                                      ]}/>
+                                    </Return>,
+                                  ],
+                                },                          
+                              },
+
+                              {
+                                commented: {
+                                  comment: <>Bli</>,
+                                  dedicatedLine: true,
+                                  segment: [
+                                    <Tuple fields={[
+                                      <DefValue n="x_left_set_1" r="left_set"/>,
+                                      <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
+                                      <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
+                                    ]} />,
+                                    [
+                                      <Return>
+                                        <Application fun="c_norm" multilineArgs args={[
+                                          <R n="x_left_set_1"/>,
+                                          <Application fun="x_delete" args={[
+                                            <AccessStruct field="c_gtree_node_right"><R n="x_delete_set"/></AccessStruct>,
+                                            <R n="x_delete_item"/>,
+                                          ]}/>,
+                                          <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>,
+                                        ]}/>
+                                      </Return>,
+                                    ],
+                                  ],
+                                },                          
+                              },
+
+                              {
+                                commented: {
+                                  comment: <>Blu</>,
+                                  dedicatedLine: true,
+                                  segment: [
+                                    <Tuple fields={[
+                                      <DefValue n="x_left_set_2" r="left_set"/>,
+                                      <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
+                                      <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="x_r_0" r="r"/>]}/>,
+                                    ]}/>,
+                                    [
+                                      <LetRaw lhs={<Tuple multiline fields={[
+                                        <Tuple fields={[<DefValue n="x_leftmost_item" r="leftmost_item"/>, <DefValue n="x_leftmost_subtree" r="leftmost_subtree"/>]}/>,
+                                        <DefValue n="x_remaining" r="remaining"/>,
+                                      ]}/>}>
+                                        <Application fun="c_neset_remove_min" args={[<R n="x_r_0"/>]} />
+                                      </LetRaw>,
+                                      <Let id={["new_right", "x_new_right"]}>
+                                        <Application fun="c_neset_insert_min" args={[
+                                          <R n="x_remaining"/>,
+                                          <Tuple multiline fields={[
+                                            <R n="x_leftmost_item"/>,
+                                            <Application fun="x_delete" args={[
+                                              <R n="x_leftmost_subtree"/>,
+                                              <R n="x_delete_item"/>,
+                                            ]}/>
+                                          ]}/>
+                                        ]} />
+                                      </Let>,
+                                      <Return>
+                                        TODO
+                                      </Return>
+                                    ]
+                                  ],
+                                },                          
+                              },
+                            ]}
+                          />,
+                        ],
+                      },
+                    },
+                  ]}
+                />
+              ]}
+            />
+            {/*
+            cases={[
+              {
+                commented: {
+                  comment: <>If <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct> does not contain the split point, but it does contain <Rs n="item"/> greater than the split point, then recursively split the <R n="gtree_left_subtree">leftmost subtree</R> of those greater <Rs n="item"/>.</>,
+                  dedicatedLine: true,
+                  segment: [
+                    <Tuple fields={[
+                      <DefValue n="c_left_set_1" r="left_set"/>,
+                      <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
+                      <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_r_0" r="r"/>]}/>,
+                    ]}/>,
+                    [
+                      <LetRaw lhs={<Tuple multiline fields={[
+                        <Tuple fields={[<DefValue n="r_leftmost_item"/>, <DefValue n="r_leftmost_subtree"/>]}/>,
+                        <DefValue n="r_remaining"/>,
+                      ]}/>}>
+                        <Application fun="c_neset_remove_min" args={[<R n="c_r_0"/>]} />
+                      </LetRaw>,
+                      <LetRaw lhs={<Tuple multiline fields={[
+                        <DefValue n="c_left_1" r="left"/>,
+                        <DefValue n="c_right_1" r="right"/>,
+                      ]}/>}>
+                        <Application fun="c_unzip" args={[
+                          <R n="r_leftmost_subtree"/>,
+                          <R n="c_unzip_key"/>,
+                        ]} />
+                      </LetRaw>,
+                      <Return>
+                        <Tuple multiline fields={[
+                          <Application fun="c_norm" args={[
+                            <R n="c_left_set_1"/>,
+                            <R n="c_left_1"/>,
+                            <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>,
+                          ]}/>,
+                          <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} fields={[
+                            <Struct name="c_gtree_node" multiline fields={[
+                              ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
+                              ["c_gtree_node_set", <Application fun="c_set_insert_min" multilineArgs args={[
+                                <R n="r_remaining"/>,
+                                <Tuple fields={[
+                                  <R n="r_leftmost_item"/>,
+                                  <R n="c_right_1"/>,
+                                ]}/>
+                              ]}/>],
+                              ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="c_unzip_set"/></AccessStruct>],
+                            ]} />,
+                          ]} />,
+                        ]}/>
+                      </Return>,
+                    ],
+                  ],
+                },                          
+              },
+            ]}
+            */}
+          </Pseudocode>
       </Hsection>
     </Hsection>
   </ArticleTemplate>
