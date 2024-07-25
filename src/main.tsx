@@ -2582,6 +2582,44 @@ const exp = (
             <Loc/>
           </Pseudocode>
 
+          Explicit deletion and insertion helper functions:
+
+          <Pseudocode n="code_explicit_helpers" lineNumbering>
+            <FunctionItem
+              comment={<>Join a (possibly empty) <R n="c_set"/> with a greater <R n="c_neset"/>.</>}
+              id={["set_join", "c_set_join"]}
+              generics={[
+                {
+                  id: ["I", "c_set_join_i"], 
+                }, {
+                  id: [<><Mathfrak>S</Mathfrak></>, "c_set_join_s"],
+                  bounds: [<TypeApplication constr="c_neset" args={[<R n="c_set_join_i"/>]}/>],
+                },
+              ]}
+              args={[
+                ["left", "c_set_join_left", <TypeApplication constr="c_set" args={[<R n="c_set_join_s"/>]} />],
+                ["right", "c_set_join_right", <R n="c_set_join_s"/>],
+              ]}
+              multilineArgs
+              ret={<R n="c_set_join_s"/>}
+              body={[
+                <Match exp={<R n="c_set_join_left"/>} cases={[
+                  [
+                    <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
+                    <Return><R n="c_set_join_right"/></Return>,
+                  ],
+                  [
+                    <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_set_join_l" r="l" />]} />,
+                    <Application fun="c_neset_join" args={[
+                      <R n="c_set_join_l"/>,
+                      <R n="c_set_join_right"/>,
+                    ]} />,
+                  ],
+                ]}/>,
+              ]}
+            />
+          </Pseudocode>
+
           Explicit deletion pseudocode:
 
           <Pseudocode n="code_explicit_delete" lineNumbering>
@@ -2718,8 +2756,17 @@ const exp = (
                                         ]} />
                                       </Let>,
                                       <Return>
-                                        TODO
-                                      </Return>
+                                        <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                          <Struct name="c_gtree_node" multiline fields={[
+                                            ["c_gtree_node_set", <Application fun="c_set_join" args={[
+                                              <R n="x_left_set_2"/>,
+                                              <R n="x_new_right"/>,
+                                            ]}/>],
+                                            ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="x_delete_set"/></AccessStruct>],
+                                            ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>],
+                                          ]} />,
+                                        ]} />
+                                      </Return>,
                                     ]
                                   ],
                                 },                          
