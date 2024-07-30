@@ -1,21 +1,12 @@
-import { expressions } from "macromaniajsx/jsx-runtime";
 import {
-  Access,
   AccessStruct,
   AccessTuple,
   Application,
-  ApplicationRaw,
   Bib,
   Bibliography,
-  BibScope,
   BlankPattern,
   Br,
-  ChoiceType,
-  Cite,
-  CommentLine,
-  DefFunction,
   DefValue,
-  DefVariant,
   Dfn,
   Else,
   ElseIf,
@@ -30,59 +21,44 @@ import {
   Lt,
   Match,
   QualifiedMember,
-  RefLoc,
-  S,
   Self,
   SpliceLoc,
   Struct,
   StructDef,
   Sup,
-  Sub,
   Tuple,
-  TupleStruct,
   TupleType,
-  Type,
-  TypeAnnotation,
   TypeApplication,
-  While,
   Wip,
   Table,
   Tr,
   Td,
   Tbody,
   Th,
-  H5,
   Thead,
   H6,
-} from "../deps.ts";
+} from "macromaniajsx/jsx-runtime";
 import {
   A,
-  B,
   Code,
   Context,
   Counter,
-  CssDependency,
   Def,
   Em,
-  EscapeHtml,
   Expression,
   Expressions,
   FunctionItem,
-  H,
   Hsection,
-  JsDependency,
   Li,
   M,
   makeFigureMacro,
   makeNumberingRenderer,
   Marginale,
   MM,
-  Ol,
   P,
   PreviewScope,
   Pseudocode,
   R,
-  Rb,
   Rc,
   Rcb,
   ResolveAsset,
@@ -90,12 +66,9 @@ import {
   Rs,
   Rsb,
   Sidenote,
-  Sidenotes,
   Span,
-  Strong,
   Ul,
-  WaitForMarginales,
-} from "../deps.ts";
+} from "macromaniajsx/jsx-runtime";
 import { ArticleTemplate } from "./articleTemplate.tsx";
 import {
   BigO,
@@ -134,28 +107,14 @@ const ctx = new Context();
 /*
 Create a custom annotation macro.
 */
-function Alj(
+function Todo(
   { children, inline }: { children?: Expressions; inline?: boolean },
 ): Expression {
   return (
     <Wip
       fg="#6804cc"
       bg="#ecdbfc"
-      wrap={(_ctx, inner) => <>alj: {inner}</>}
-      children={children}
-      inline={inline}
-    />
-  );
-}
-
-function Cjqf(
-  { children, inline }: { children?: Expressions; inline?: boolean },
-): Expression {
-  return (
-    <Wip
-      fg="#67595E" // Coffee pot
-      bg="#EED6D3" // Dusty rose
-      wrap={(_ctx, inner) => <>cjqf: {inner}</>} // Carson John Quentry Farmer :)
+      wrap={(_ctx, inner) => <>TODO: {inner}</>}
       children={children}
       inline={inline}
     />
@@ -193,33 +152,6 @@ const Definition = makeFigureMacro(ctx, {
   isTheoremLike: true,
 });
 
-const Example = makeFigureMacro(ctx, {
-  figureCounter: thmCounter, // Shares the same counter as the `Theorem` macro.
-  numberingInfo: {
-    r: "Example",
-    rb: "Example",
-    rs: "Examples",
-    rsb: "Examples",
-    render: makeNumberingRenderer(),
-  },
-  isTheoremLike: true,
-});
-
-// Exercises are rendered as theorem-like blocks, but do not share the same counter.
-const exerciseCounter = new Counter("exercise-counter", 0);
-
-const Exercise = makeFigureMacro(ctx, {
-  figureCounter: exerciseCounter, // Different counter than the `Theorem` macro.
-  numberingInfo: {
-    r: "Exercise",
-    rb: "Exercise",
-    rs: "Exercises",
-    rsb: "Exercises",
-    render: makeNumberingRenderer(),
-  },
-  isTheoremLike: true,
-});
-
 // The full input to Macromania is a single expression, which we then evaluate.
 const exp = (
   <ArticleTemplate
@@ -250,7 +182,7 @@ const exp = (
   >
     <Hsection n="introduction" title="Introduction">
       <P>
-        Randomized set data structures eschew self-balancing logic for more simple, probabilistic item organization.
+        Randomized set data structures eschew self-balancing logic for simpler, probabilistic item organization.
         When deriving the necessary randomness via pseudorandom functions of the stored items themselves, the resulting graphs depend on the stored set only, but not the order of insertions and deletions.
         This <Def n="history_independent"
           r="history-independent"
@@ -312,9 +244,9 @@ const exp = (
         While <Em>binary</Em> trees are highly efficient in theory, they are less efficient on actual hardware than trees that store more than one item per vertex.
         Unfortunately, generalizing binary randomized data structures to higher-arity counterparts has proven more difficult than in the case of deterministically self-balancing trees.
         Providing a simple such generalization is the impetus for our work.
+        <Todo>Obviously we need a better quality version of this figure...</Todo>
         {" "}<Rcb n="fig_search_performance"/> plots lookup performance of a <R n="zip_informal"/> versus a 32-ary tree of ours; our tree is roughly twice as fast (note the logarithmic y-axis). On secondary storage, we can expect the performance difference to be even more pronounced.
       </P>
-
       <Fig
           n="fig_search_performance"
           wrapperTagProps={{clazz: "wide"}}
@@ -461,7 +393,7 @@ const exp = (
         <P>
           Several attempts have been made to find randomized data structures that perform well in an external memory model.
           Golovin<Bib item="golovin2009b" /> has proposed <Def n="b_treap" r="B-treap" rs="B-treaps">bushy treaps</Def> (<Def n="b_treap" fake>B-treaps</Def>) to approximate the behavior of B-trees via treaps.
-          Unfortunately, <Rs n="b_treap" /> are complicated enough that even their author recommends using more simple alternatives such as the <Def n="b_skip_list" r="B-skip-list" rs="B-skip-lists">B-skip-list</Def><Bib item="golovin2010b" />.
+          Unfortunately, <Rs n="b_treap" /> are complicated enough that even their author recommends using simpler alternatives such as the <Def n="b_skip_list" r="B-skip-list" rs="B-skip-lists">B-skip-list</Def><Bib item="golovin2010b" />.
           The <R n="b_skip_list" /> still involves a tuning parameter beyond the probability distribution for assigning node levels, a nontrivial invariant, and virtual memory management via hash tables rather than simple usage of pointers.
           In short, the conceptual complexity goes far beyond that of binary <Rs n="skip_list" /> or <Rs n="treap" />.
         </P>
@@ -490,7 +422,7 @@ const exp = (
         All prior work that <Em>does</Em> achieve sufficient simplicity buys it at the price of vertices that must store a dynamic, unbounded number of items.
         The <Rs n="skip_tree" /><Bib item="messeguer1997skip" /> are the first such data structure, effectively converting a <R n="skip_list"/> into a tree: each vertex stores sequences of items that are being skipped-over together in the corresponding <R n="skip_list"/>.
         The relatively unknown <Rs n="dense_skip_tree"/><Bib item="spiegel2009dense" /> provide two optimizations: expected node size can be increased by flipping coins of success probabilities <M post=","><MFrac num="1" de="k"/></M> and empty vertices are eliminated from the tree.
-        The <Rs n="mst">merkle-search-trees</Rs> (<Rs n="mst" />)<Bib item="auvolat2019merkle" /> independently reinvent <Rs n="skip_tree" /> with flexible probabilities but without the compression of empty vertices.
+        The <Rs n="mst">merkle-search-trees</Rs> (<Rs n="mst" />)<Bib item="auvolat2019merkle" /> independently reinvent <Rs n="skip_tree" /> with flexible probabilities similar to <Rs n="dense_skip_tree"/>, but without the compression of empty vertices.
       </P>
 
       <P>
@@ -614,8 +546,7 @@ const exp = (
         <P>
           In practice, <Rank p="(1/2)"><R n="geo_arg_u" /></Rank> can be implemented by hashing <R n="geo_arg_u" /> with a secure hash function and counting the number of trailing zeros in the binary representation of the digest.
           This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh and Teitelbaum<Bib item="pugh1989incremental" />.
-          For digests of length <M>l</M>, this <R n="truncated">truncates</R> the distribution to <M post="."><R n="geo_N" /> = 2^l</M>{" "}
-          Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers.
+          Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers. We provide an efficient alternative interpretation/implementation for <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> in <R n="pseudorandom_rank_function">Appendix D</R>.
         </P>
       </Hsection>
 
@@ -1056,7 +987,6 @@ const exp = (
       <Hsection n="gtree_size" title="G-Tree Size">
         <PreviewScope>
           <P>
-            <Alj>Delete this section? We don't refer to or use the results anywhere.</Alj>
             The total expected number of <Rs n="gnode" /> in a <R n="gtree" /> is intuitively <M><E>|<R n="ana_T"/>|</E> = <MFrac num={<R n="ana_n"/>} de={<R n="ana_k"/>} /> + 1</M>. Given that <M><R n="ana_q"/> = <MFrac num={"1"} de={<R n="ana_k" />} /></M> this can also be expressed as <M><R n="ana_n"/><R n="ana_q"/> + 1</M>. While this expectation is intuitive, it can be estimated more directly as the sum of the expected number of <Rs n="gnode" /> at every possible <R n="rank" /> (plus a root node).
 
             Since the number of <Rs n="gnode" /> at <R n="rank" /> <R n="ana_r" /> is equal to the number of <Em><Rs n="item" /></Em> having <R n="rank" /> <M><R n="ana_r" /> + 1</M>, and since the <R n="rank" /> assignments for <Rs n="item" /> are independent, the number of <Rs n="gnode" /> with <R n="rank" /> <M><R n="ana_r" /></M> in a <R n="gtree" /> can be modeled as a binomial random variable <Def n="ana_Xr" r={<M>X_r</M>}/>, with parameters <M><R n="ana_n" /></M> (the number of trials, i.e., the number of <Rs n="item" />) and <M>p = (1 - <R n="ana_q" />)<R n="ana_q" />^<Curly><R n="ana_r" /></Curly></M> (the probability of success, i.e., the probability that a <R n="item" /> has <R n="rank" /> <M><R n="ana_r" /> + 1</M>).
@@ -1099,7 +1029,7 @@ const exp = (
           title="G-Node Counts"
           caption={
             <P>
-              Average number of <R n="gnode"/> in 200 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+              Average number of <Rs n="gnode"/> in 200 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
               The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
             </P>
           }
@@ -1147,6 +1077,10 @@ const exp = (
             </Tbody>
           </Table>
         </Fig>
+
+        This analysis provides some intuition for the practical efficiency and scalability of <Rs n="gtree"/>: the expected number of <Rs n="gnode"/> is linear in the number of <Rs n="item"/>, and is very close to a balanced tree structure.
+        By understanding the total number of nodes and their size distribution, we can optimize and parameterize <Rs n="gtree"/> to minimize disk accesses, align nodes with disk block sizes, and design effective caching and buffer management strategies. This ensures that the tree operations are performed with high I/O efficiency, reducing latency and increasing throughput. Moreover, it helps in predicting performance, identifying bottlenecks, and managing storage costs by ensuring efficient space allocation and utilization. 
+        Combined with the fixed size of the <Rs n="k_list" /> (see <Rc n="new_gtrees"/>) this makes <Rs n="gtree"/> potentially well-suited for external memory models while retaining much of their simplicity in practice.
       </Hsection>
     </Hsection>
 
@@ -1201,7 +1135,7 @@ const exp = (
         </P>
 
         <P>
-          A key intuition behind classic <Rs n="zip_tree"/> is that of choosing <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M><R n="geo_p"/> = <MFrac num="1" de="2"/></M> because this is the distribution of the height of a randomly chosen vertex in a perfectly balanced binary <R n="tree"/>.
+          A key intuition behind classic <Rs n="zip_tree"/> is that of choosing <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M><R n="geo_p"/> = 1 - <MFrac num="1" de="2"/> = <MFrac num="1" de="2"/></M> because this is the distribution of the height of a randomly chosen vertex in a perfectly balanced binary <R n="tree"/>.
           For <M>k</M>-ary trees, the same intuition instructs us to draw <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M post=","><R n="geo_p"/> = 1 - <MFrac num="1" de="k"/></M> as this is the distribution of heights in a perfectly balanced <M>k</M>-ary <R n="tree"/>. Our <R n="analysis">analysis</R> confirmes that — with high probability — the resulting trees are of logarithmic height and their <Rs n="gnode"/> store <BigO>k</BigO> <Rs n="item"/>.
         </P>
 
@@ -1626,9 +1560,7 @@ const exp = (
           <>
             Not that we needed an efficient implementation: since <Rs n="gnode"/> have constant expected size, even <BigO>n</BigO> implementations do not hurt the asymptotic efficiency of our algorithms.
           </>
-        }>structures</Sidenote>. The only choice worth commenting on is that of using a specialized <R n="c_neset_insert_min"/> function instead of a generic <DefFunction n="insert" preview={
-          <P>A less efficient and explicit alternative to a specialized <R n="c_neset_insert_min"/> function is a generic <DefFunction n="insert" fake/> function.</P>
-        }/> function. This choice is to allow for more efficient, specialized implementations, as well as to highlight that our algorithms interact with the internal set data structures in a surprisingly constrained manner.
+        }>structures</Sidenote>. The only choice worth commenting on is that of using a specialized <R n="c_neset_insert_min"/> function instead of a generic <Code>insert</Code> function. This choice is to allow for more efficient, specialized implementations, as well as to highlight that our algorithms interact with the internal set data structures in a surprisingly constrained manner.
       </P>
 
       <P>
@@ -1750,6 +1682,7 @@ const exp = (
         <FunctionItem
           comment={<>
             A (non-empty) <R n="c_gtree"/> has a root <R n="c_gtree_node"/> that consists of a <R n="rank"/>, a <R n="gtree_right_subtree"/>, and a non-empty set of pairs of <Rs n="item"/> and their <Rs n="gtree_left_subtree"/>.<Br/>
+
             Occasionally, we need to construct a non-empty <R n="c_gtree"/> from a <R n="rank"/>, a <R n="gtree_right_subtree"/>, and a <Em>possibly empty</Em> set of pairs of <Rs n="item"/> and their <Rs n="gtree_left_subtree"/>. If the set is empty, the lifted <R n="c_gtree"/> is simply the supplied <R n="gtree_right_subtree"/>.
           </>}
           id={["lift", "c_norm"]}
@@ -1793,7 +1726,7 @@ const exp = (
       </Pseudocode>
 
       <P>
-        While it is possible to derive insertion and deletion algorithms by generalizing the original <R n="zip_tree"/> algorithms, we opt for a fully self-contained presentation. Zipping and unzipping are similar to the join and split functions of <Bib item="blelloch2016just">join-based tree algorithms</Bib>. We consistently use zip and unzip terminology when operating on <Rs n="gtree"/>, and join and split terminology when operating on the underlying set datastructure <R n="gtree_g"/>.
+        While it is possible to derive insertion and deletion algorithms by generalizing the original <R n="zip_tree"/> algorithms (see <R n="explicit_implementations">Appendix C</R> for examples), we opt for a fully self-contained presentation here. Zipping and unzipping are similar to the join and split functions of <Bib item="blelloch2016just">join-based tree algorithms</Bib>. We consistently use zip and unzip terminology when operating on <Rs n="gtree"/>, and join and split terminology when operating on the underlying set datastructure <R n="gtree_g"/>.
       </P>
 
       <P>
@@ -2308,7 +2241,7 @@ const exp = (
       </Pseudocode>
 
       <P>
-        We want to emphasize that our choice of algorithms optimizes for elegance, not for (non-asymptotic) efficiency. Implementations based on in-place mutations will outperform our immutable algorithms. A direct implementation of <R n="c_zip3"/> will outperform the reduction to two applications of <R n="c_zip2"/>. Iterative implementations might outperform recursive implementations. And finally, direct implementations of insertion and deletion should outperform those based off unzipping and zipping the full trees. The <Bib item="tarjan2021zip">original zip-tree paper</Bib> contains examples of direct algorithms that zip and unzip only parts of a tree, our algorithms can be adapted to work analogously.
+        We want to emphasize that our choice of algorithms optimizes for elegance, not for (non-asymptotic) efficiency. Implementations based on in-place mutations will outperform our immutable algorithms. A direct implementation of <R n="c_zip3"/> will outperform the reduction to two applications of <R n="c_zip2"/>. Iterative implementations might outperform recursive implementations. And finally, direct implementations of insertion and deletion should outperform those based off unzipping and zipping the full trees. The <Bib item="tarjan2021zip">original zip-tree paper</Bib> contains examples of direct algorithms that zip and unzip only parts of a tree; our algorithms can be adapted to work analogously, and we provide variants for <Rs n="gtree"/> in <R n="explicit_implementations">Appendix C</R>.
       </P>
     </Hsection>
 
@@ -2517,327 +2450,331 @@ const exp = (
       </Fig>
     </Hsection>
 
-    <Hsection n="practicalities" title="Appendix C: Practicalities" noNumbering>
-      <Alj>Delete this appendix? It is not referenced anywhere right now.</Alj>
-      <Hsection n="truncation" title="Truncation" noNumbering>
-        <PreviewScope>
-          <P>
-            In a <R n="gtree_informal">geometric tree</R>, the <R n="rank"/> associated with an <R n="item"/> is drawn from a <R n="geometric_distribution"/>. In theory, this random variable <R n="geo_x"/> can take on arbitrarily large numbers, but we often need to represent <R n="geo_x" /> in a computer.
-            To this end, we work with a <Def n="truncated"/> <R n="geometric_distribution" />, which clamps <R n="geo_x" /> to integers between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
-            Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
-          </P>
-        </PreviewScope>
-
-        <PreviewScope>
-          <P>
-            In terms of probabilities, this only affects the <M><Pr><R n="geo_x"/> = <R n="geo_N" /></Pr></M>, which is equivalent to <M><Pr><R n="geo_x"/> ≥ <R n="geo_N" /></Pr></M> in a normal <R n="geometric_distribution"/>. This is simply the probability of not getting a success within the first <M><R n="geo_N"/> - 1</M> trials, which is <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
-            {" "}To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that since we <Quotes>stop</Quotes> the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num={"1"} de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
-            {" "}This leads to the truncated expected value <M post="."><E><R n="geo_x"/></E> = <MFrac num={<>1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></>} de={<>1 - <R n="geo_q"/></>}/> = <MFrac num={<>1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></>} de={<R n="geo_p"/>} /></M>
-            <Marginale>
-              This result makes intuitive sense, because if we had an unlimited number of trails, the expected value for <M><R n="geo_x"/></M> would be the usual <M>1 / <R n="geo_p"/></M>. However, since we are guaranteed to stop by the <M><R n="geo_N" /></M>th trail, and the probability of requiring this many trails to acheive a success in the first place is relatively small, we reduce the expected value of the truncated random variable by <M><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>.
-            </Marginale>
-            {" "}Truncation obviously affects the properties of <Rs n="gtree"/>, and our prior analyses would require adjustment. In practice however, this simply leads to shorter and wider trees, which are still efficient.
-          </P>
-        </PreviewScope>
-      </Hsection>
-      <Hsection n="pseudorandom_rank_functions" title="Pseudorandom Rank Functions" noNumbering>
-        <PreviewScope>
-          <P>
-            As stated in <Rc n="prelim_geometric_distribution"/>, we require a rank function <Rank p={<Def n="rand_p" r="p" />}><Def n="rand_arg_u" r="u"/></Rank> that, when given an input <M><R n="rand_arg_u" /></M>, outputs an integer value derived from a <R n="geometric_distribution"/> <GeoDistribution><R n="rand_p" /></GeoDistribution>, with parameter <M><R n="rand_p" /></M>. This output is a pseudorandom integer that is deterministically derived from <M><R n="rand_arg_u" /></M>.
-            A simple variant for <Rank p="(1/2)"><R n="rand_arg_u" /></Rank> based on hashing <R n="rand_arg_u" /> with a secure hash function was previously provided.
-            <Marginale>
-              Something about SipHash being sufficiently secure for this purpose.
-            </Marginale>
-            {" "}However, it is of general interest to efficiently derive deterministic pseudorandom ranks for arbitrary <M><R n="rand_p" /></M>. 
-          </P>
-        </PreviewScope>
+    <Hsection n="explicit_implementations" title="Appendix C: Explicit Insertion and Deletion" noNumbering>
+      <PreviewScope>
         <P>
-          To start, we take the binary representation of the digest from <Hash><R n="rand_arg_u" /></Hash>, and treat it as a sequence of fair Bernoulli trials, each with <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>. If we assume that our hash function is indifferentiable from a random oracle, then each bit in the digest can be thought of as a result from a fair Bernoulli trial — either <M>0</M> (<Quotes>failure</Quotes>) or <M>1</M> (<Quotes>success</Quotes>).
+          As alluded to in <Rc n="implementation"/>, it is possible to derive direct insertion and deletion functions for <Rs n="gtree"/> that are analgous to Algorithm 1 from the original <R n="zip_tree"/> paper. For completeness, we provide pseudocode for purely functional variants of these functions for <Rs n="gtree"/>. The functions leverage the previously defined <R n="c_zip2"/> and various helper functions.
         </P>
-        <PreviewScope>
-          <P>
-            To simulate a <R n="geometric_distribution" /> with a probability that is not <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>, i.e., <M><R n="rand_p" /> = <MFrac num={"1"} de={<Def n="rand_k" r="k"/>} /></M>, we manipulate this sequence of fair trials to create <Em>groups</Em> of bits where the group collectively has success probability <M><MFrac num={"1"} de={<R n="rand_k" />} /></M>. To find the number of bits <M><Def n="rand_b" r="b" /></M> per group, we calculate the smallest <M><R n="rand_b" /></M> for which <M>2^<Curly><R n="rand_b" /></Curly> ≥ <R n="rand_k" /></M>, which is determined by <M><R n="rand_b" /> = <MCeil><MLog base="2"><R n="rand_k" /></MLog></MCeil></M>.
-          </P>
-        </PreviewScope>
-        <P>
-          The hash digest is then divided into groups of <M><R n="rand_b" /></M> bits, where each group is treated as a single trial with the desired success probability. For each group of <M><R n="rand_b" /></M> bits, we consider the trial a <Quotes>success</Quotes> if all <M><R n="rand_b" /></M> bits are <M>0</M>, which occurs with probability <M><MParen><MFrac num={"1"} de={"2"} /></MParen>^<Curly><R n="rand_b" /></Curly></M>. Thus, the count of groups until the first <Quotes>success</Quotes> is our geometric random variable.
+      </PreviewScope>
+      <P>
+        We also define an additional helper function which joins a possibly empty <R n="c_set"/> with a greater <R n="c_neset"/>.:
+      </P>
 
-          The following pseudocode should clarify the process:
-          </P>
-
-          <Pseudocode n="code_pseudorandom_rank" lineNumbering>
-            <FunctionItem
-              comment={<>Simulate a geometric distribution with probability p = 1 / k using a series of fair Bernoulli trials (p = <MFrac num={"1"} de={"2"} />). The number of trials is limited to 256 independent trials.</>}
-              id={["rank", "c_rank"]}
-              args={[
-                ["bytes", "c_rank_bytes", <M>[u8; 32]</M>],
-                ["k", "c_rank_k", <M>\N</M>],
-              ]}
-              multilineArgs
-              ret={<M>\N</M>}
-              body={[
-                <>TODO</>
-              ]}
-            />
-            <Loc/>
-          </Pseudocode>
-
-          Explicit deletion and insertion helper functions:
-
-          <Pseudocode n="code_explicit_helpers" lineNumbering>
-            <FunctionItem
-              comment={<>Join a (possibly empty) <R n="c_set"/> with a greater <R n="c_neset"/>.</>}
-              id={["set_join", "c_set_join"]}
-              generics={[
-                {
-                  id: ["I", "c_set_join_i"], 
-                }, {
-                  id: [<><Mathfrak>S</Mathfrak></>, "c_set_join_s"],
-                  bounds: [<TypeApplication constr="c_neset" args={[<R n="c_set_join_i"/>]}/>],
-                },
-              ]}
-              args={[
-                ["left", "c_set_join_left", <TypeApplication constr="c_set" args={[<R n="c_set_join_s"/>]} />],
-                ["right", "c_set_join_right", <R n="c_set_join_s"/>],
-              ]}
-              multilineArgs
-              ret={<R n="c_set_join_s"/>}
-              body={[
-                <Match exp={<R n="c_set_join_left"/>} cases={[
-                  [
-                    <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
-                    <Return><R n="c_set_join_right"/></Return>,
-                  ],
-                  [
-                    <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_set_join_l" r="l" />]} />,
-                    <Application fun="c_neset_join" args={[
-                      <R n="c_set_join_l"/>,
-                      <R n="c_set_join_right"/>,
-                    ]} />,
-                  ],
-                ]}/>,
-              ]}
-            />
-          </Pseudocode>
-
-          Explicit deletion pseudocode:
-
-          <Pseudocode n="code_explicit_delete" lineNumbering>
-            <FunctionItem
-              comment={<>Delete an <R n="item"/> from a <R n="gtree"/>.</>}
-              id={["delete", "x_delete"]}
-              generics={[
-                {
-                  id: ["I", "x_delete_i"], 
-                }, {
-                  id: [<><Mathfrak>S</Mathfrak></>, "x_delete_s"],
-                  bounds: [<TypeApplication constr="c_neset" args={[<R n="x_delete_i"/>]}/>],
-                },
-              ]}
-              args={[
-                ["t", "x_delete_t", <TypeApplication constr="c_gtree" args={[<R n="x_delete_s"/>]} />],
-                ["item", "x_delete_item", <R n="x_delete_i"/>],
-              ]}
-              multilineArgs
-              ret={<TypeApplication constr="c_gtree" args={[<R n="x_delete_s"/>]} />}
-              body={[
-                <Match
-                  exp={<R n="x_delete_t"/>}
-                  cases={[
-                    {
-                      commented: {
-                        comment: "Deletion in the empty tree is trivial.",
-                        dedicatedLine: true,
-                        segment: [
-                          <QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_empty" />,
-                          <>
-                            <Return><R n="c_gtree_empty"/></Return>
-                            <SpliceLoc/>
-                          </>,
-                        ],
-                      },
-                    },
-
-                    {
-                      commented: {
-                        comment: <>
-                          For non-empty trees, split the inner set.
-                        </>,
-                        dedicatedLine: true,
-                        segment: [
-                          <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} fields={[<DefValue n="x_delete_set" r="s" />]} />,
-                          <Match
-                            exp={<Application fun="c_neset_split" args={[
-                              <AccessStruct field="c_gtree_node_set"><R n="x_delete_set"/></AccessStruct>,
-                              <R n="x_delete_item"/>
-                            ]} />}
-                            cases={[
-                              {
-                                commented: {
-                                  comment: <>Bla</>,
-                                  dedicatedLine: true,
-                                  segment: [
-                                    <Tuple multiline fields={[
-                                      <DefValue n="x_left_set_0" r="left_set"/>,
-                                      <Tuple name={<QualifiedMember type={<R n="Option"/>} member="OptionSome" />} fields={[<DefValue n="x_left_subtree_of_key" r="left_subtree_of_key" />]} />,
-                                      <DefValue n="x_right_set_0" r="right_set"/>,
-                                    ]} />,
-                                    <Return>
-                                      <Application fun="c_zip2" multilineArgs args={[
-                                        <Application fun="c_norm" args={[
-                                          <R n="x_left_set_0"/>,
-                                          <R n="x_left_subtree_of_key"/>,
-                                          <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>,
-                                        ]}/>,
-                                        <Application fun="c_norm" args={[
-                                          <R n="x_right_set_0"/>,
-                                          <AccessStruct field="c_gtree_node_right"><R n="x_delete_set"/></AccessStruct>,
-                                          <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>,
-                                        ]}/>,
-                                      ]}/>
-                                    </Return>,
-                                  ],
-                                },                          
-                              },
-
-                              {
-                                commented: {
-                                  comment: <>Bli</>,
-                                  dedicatedLine: true,
-                                  segment: [
-                                    <Tuple fields={[
-                                      <DefValue n="x_left_set_1" r="left_set"/>,
-                                      <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
-                                      <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
-                                    ]} />,
-                                    [
-                                      <Return>
-                                        <Application fun="c_norm" multilineArgs args={[
-                                          <R n="x_left_set_1"/>,
-                                          <Application fun="x_delete" args={[
-                                            <AccessStruct field="c_gtree_node_right"><R n="x_delete_set"/></AccessStruct>,
-                                            <R n="x_delete_item"/>,
-                                          ]}/>,
-                                          <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>,
-                                        ]}/>
-                                      </Return>,
-                                    ],
-                                  ],
-                                },                          
-                              },
-
-                              {
-                                commented: {
-                                  comment: <>Blu</>,
-                                  dedicatedLine: true,
-                                  segment: [
-                                    <Tuple fields={[
-                                      <DefValue n="x_left_set_2" r="left_set"/>,
-                                      <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
-                                      <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="x_r_0" r="r"/>]}/>,
-                                    ]}/>,
-                                    [
-                                      <LetRaw lhs={<Tuple multiline fields={[
-                                        <Tuple fields={[<DefValue n="x_leftmost_item" r="leftmost_item"/>, <DefValue n="x_leftmost_subtree" r="leftmost_subtree"/>]}/>,
-                                        <DefValue n="x_remaining" r="remaining"/>,
-                                      ]}/>}>
-                                        <Application fun="c_neset_remove_min" args={[<R n="x_r_0"/>]} />
-                                      </LetRaw>,
-                                      <Let id={["new_right", "x_new_right"]}>
-                                        <Application fun="c_neset_insert_min" args={[
-                                          <R n="x_remaining"/>,
-                                          <Tuple multiline fields={[
-                                            <R n="x_leftmost_item"/>,
-                                            <Application fun="x_delete" args={[
-                                              <R n="x_leftmost_subtree"/>,
-                                              <R n="x_delete_item"/>,
-                                            ]}/>
-                                          ]}/>
-                                        ]} />
-                                      </Let>,
-                                      <Return>
-                                        <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
-                                          <Struct name="c_gtree_node" multiline fields={[
-                                            ["c_gtree_node_set", <Application fun="c_set_join" args={[
-                                              <R n="x_left_set_2"/>,
-                                              <R n="x_new_right"/>,
-                                            ]}/>],
-                                            ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="x_delete_set"/></AccessStruct>],
-                                            ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>],
-                                          ]} />,
-                                        ]} />
-                                      </Return>,
-                                    ]
-                                  ],
-                                },                          
-                              },
-                            ]}
-                          />,
-                        ],
-                      },
-                    },
-                  ]}
-                />
-              ]}
-            />
-            {/*
-            cases={[
+        <Pseudocode n="code_explicit_helpers" lineNumbering>
+          <FunctionItem
+            comment={<>Join a (possibly empty) <R n="c_set"/> with a greater <R n="c_neset"/>.</>}
+            id={["set_join", "c_set_join"]}
+            generics={[
               {
-                commented: {
-                  comment: <>If <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct> does not contain the split point, but it does contain <Rs n="item"/> greater than the split point, then recursively split the <R n="gtree_left_subtree">leftmost subtree</R> of those greater <Rs n="item"/>.</>,
-                  dedicatedLine: true,
-                  segment: [
-                    <Tuple fields={[
-                      <DefValue n="c_left_set_1" r="left_set"/>,
-                      <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
-                      <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_r_0" r="r"/>]}/>,
-                    ]}/>,
-                    [
-                      <LetRaw lhs={<Tuple multiline fields={[
-                        <Tuple fields={[<DefValue n="r_leftmost_item"/>, <DefValue n="r_leftmost_subtree"/>]}/>,
-                        <DefValue n="r_remaining"/>,
-                      ]}/>}>
-                        <Application fun="c_neset_remove_min" args={[<R n="c_r_0"/>]} />
-                      </LetRaw>,
-                      <LetRaw lhs={<Tuple multiline fields={[
-                        <DefValue n="c_left_1" r="left"/>,
-                        <DefValue n="c_right_1" r="right"/>,
-                      ]}/>}>
-                        <Application fun="c_unzip" args={[
-                          <R n="r_leftmost_subtree"/>,
-                          <R n="c_unzip_key"/>,
-                        ]} />
-                      </LetRaw>,
-                      <Return>
-                        <Tuple multiline fields={[
-                          <Application fun="c_norm" args={[
-                            <R n="c_left_set_1"/>,
-                            <R n="c_left_1"/>,
-                            <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>,
-                          ]}/>,
-                          <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} fields={[
-                            <Struct name="c_gtree_node" multiline fields={[
-                              ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
-                              ["c_gtree_node_set", <Application fun="c_set_insert_min" multilineArgs args={[
-                                <R n="r_remaining"/>,
-                                <Tuple fields={[
-                                  <R n="r_leftmost_item"/>,
-                                  <R n="c_right_1"/>,
-                                ]}/>
-                              ]}/>],
-                              ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="c_unzip_set"/></AccessStruct>],
-                            ]} />,
-                          ]} />,
-                        ]}/>
-                      </Return>,
-                    ],
-                  ],
-                },                          
+                id: ["I", "c_set_join_i"], 
+              }, {
+                id: [<><Mathfrak>S</Mathfrak></>, "c_set_join_s"],
+                bounds: [<TypeApplication constr="c_neset" args={[<R n="c_set_join_i"/>]}/>],
               },
             ]}
-            */}
-          </Pseudocode>
-      </Hsection>
+            args={[
+              ["left", "c_set_join_left", <TypeApplication constr="c_set" args={[<R n="c_set_join_s"/>]} />],
+              ["right", "c_set_join_right", <R n="c_set_join_s"/>],
+            ]}
+            multilineArgs
+            ret={<R n="c_set_join_s"/>}
+            body={[
+              <Match exp={<R n="c_set_join_left"/>} cases={[
+                [
+                  <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
+                  <Return><R n="c_set_join_right"/></Return>,
+                ],
+                [
+                  <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_set_join_l" r="l" />]} />,
+                  <Application fun="c_neset_join" args={[
+                    <R n="c_set_join_l"/>,
+                    <R n="c_set_join_right"/>,
+                  ]} />,
+                ],
+              ]}/>,
+            ]}
+          />
+        </Pseudocode>
+      <P>
+        The following explicit <R n="x_delete" /> pseudocode follows a very similar structure to Algorithm 1 from <Bib item="tarjan2021zip" />, though we use pattern matching here for consistency.
+      </P>
+
+      <Pseudocode n="code_explicit_delete" lineNumbering>
+        <FunctionItem
+          comment={<>Delete an <R n="item"/> from a <R n="gtree"/>.</>}
+          id={["delete", "x_delete"]}
+          generics={[
+            {
+              id: ["I", "x_delete_i"], 
+            }, {
+              id: [<><Mathfrak>S</Mathfrak></>, "x_delete_s"],
+              bounds: [<TypeApplication constr="c_neset" args={[<R n="x_delete_i"/>]}/>],
+            },
+          ]}
+          args={[
+            ["t", "x_delete_t", <TypeApplication constr="c_gtree" args={[<R n="x_delete_s"/>]} />],
+            ["item", "x_delete_item", <R n="x_delete_i"/>],
+          ]}
+          multilineArgs
+          ret={<TypeApplication constr="c_gtree" args={[<R n="x_delete_s"/>]} />}
+          body={[
+            <Match
+              exp={<R n="x_delete_t"/>}
+              cases={[
+                {
+                  commented: {
+                    comment: "Deletion in the empty tree is trivial.",
+                    dedicatedLine: true,
+                    segment: [
+                      <QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_empty" />,
+                      <>
+                        <Return><R n="c_gtree_empty"/></Return>
+                        <SpliceLoc/>
+                      </>,
+                    ],
+                  },
+                },
+
+                {
+                  commented: {
+                    comment: <>
+                      For non-empty trees, split the inner set.
+                    </>,
+                    dedicatedLine: true,
+                    segment: [
+                      <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} fields={[<DefValue n="x_delete_set" r="s" />]} />,
+                      <Match
+                        exp={<Application fun="c_neset_split" args={[
+                          <AccessStruct field="c_gtree_node_set"><R n="x_delete_set"/></AccessStruct>,
+                          <R n="x_delete_item"/>
+                        ]} />}
+                        cases={[
+                          {
+                            commented: {
+                              comment: <>The target <R n="x_delete_item"/> was found. Simply exclude it and zip the left and right subtrees together.</>,
+                              dedicatedLine: true,
+                              segment: [
+                                <Tuple multiline fields={[
+                                  <DefValue n="x_left_set_0" r="left_set"/>,
+                                  <Tuple name={<QualifiedMember type={<R n="Option"/>} member="OptionSome" />} fields={[<DefValue n="x_left_subtree_of_key" r="left_subtree_of_key" />]} />,
+                                  <DefValue n="x_right_set_0" r="right_set"/>,
+                                ]} />,
+                                <Return>
+                                  <Application fun="c_zip2" multilineArgs args={[
+                                    <Application fun="c_norm" args={[
+                                      <R n="x_left_set_0"/>,
+                                      <R n="x_left_subtree_of_key"/>,
+                                      <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>,
+                                    ]}/>,
+                                    <Application fun="c_norm" args={[
+                                      <R n="x_right_set_0"/>,
+                                      <AccessStruct field="c_gtree_node_right"><R n="x_delete_set"/></AccessStruct>,
+                                      <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>,
+                                    ]}/>,
+                                  ]}/>
+                                </Return>,
+                              ],
+                            },
+                          },
+
+                          {
+                            commented: {
+                              comment: <>The target <R n="x_delete_item"/> is strictly greater than all items in <AccessStruct field="c_gtree_node_set"><R n="x_delete_set"/></AccessStruct>, recurse into the <AccessStruct field="c_gtree_node_right"><R n="x_delete_set"/></AccessStruct> subtree and build from the left.</>,
+                              dedicatedLine: true,
+                              segment: [
+                                <Tuple fields={[
+                                  <DefValue n="x_left_set_1" r="left_set"/>,
+                                  <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
+                                  <QualifiedMember type={<R n="c_set"/>} member="c_set_empty" />,
+                                ]} />,
+                                [
+                                  <Return>
+                                    <Application fun="c_norm" multilineArgs args={[
+                                      <R n="x_left_set_1"/>,
+                                      <Application fun="x_delete" args={[
+                                        <AccessStruct field="c_gtree_node_right"><R n="x_delete_set"/></AccessStruct>,
+                                        <R n="x_delete_item"/>,
+                                      ]}/>,
+                                      <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>,
+                                    ]}/>
+                                  </Return>,
+                                ],
+                              ],
+                            },
+                          },
+
+                          {
+                            commented: {
+                              comment: <>The target <R n="x_delete_item"/> is strictly less than the <R n="x_leftmost_item" /> of <R n="x_r_0"/>, recurse down the left and build from the right.</>,
+                              dedicatedLine: true,
+                              segment: [
+                                <Tuple fields={[
+                                  <DefValue n="x_left_set_2" r="left_set"/>,
+                                  <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
+                                  <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="x_r_0" r="r"/>]}/>,
+                                ]}/>,
+                                [
+                                  <LetRaw lhs={<Tuple multiline fields={[
+                                    <Tuple fields={[<DefValue n="x_leftmost_item" r="leftmost_item"/>, <DefValue n="x_leftmost_subtree" r="leftmost_subtree"/>]}/>,
+                                    <DefValue n="x_remaining" r="remaining"/>,
+                                  ]}/>}>
+                                    <Application fun="c_neset_remove_min" args={[<R n="x_r_0"/>]} />
+                                  </LetRaw>,
+                                  <Let id={["new_right", "x_new_right"]}>
+                                    <Application fun="c_neset_insert_min" args={[
+                                      <R n="x_remaining"/>,
+                                      <Tuple multiline fields={[
+                                        <R n="x_leftmost_item"/>,
+                                        <Application fun="x_delete" args={[
+                                          <R n="x_leftmost_subtree"/>,
+                                          <R n="x_delete_item"/>,
+                                        ]}/>
+                                      ]}/>
+                                    ]} />
+                                  </Let>,
+                                  <Return>
+                                    <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                      <Struct name="c_gtree_node" multiline fields={[
+                                        ["c_gtree_node_set", <Application fun="c_set_join" args={[
+                                          <R n="x_left_set_2"/>,
+                                          <R n="x_new_right"/>,
+                                        ]}/>],
+                                        ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="x_delete_set"/></AccessStruct>],
+                                        ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="x_delete_set"/></AccessStruct>],
+                                      ]} />,
+                                    ]} />
+                                  </Return>,
+                                ]
+                              ],
+                            },                          
+                          },
+                        ]}
+                      />,
+                    ],
+                  },
+                },
+              ]}
+            />
+          ]}
+        />
+        {/*
+        cases={[
+          {
+            commented: {
+              comment: <>If <AccessStruct field="c_gtree_node_set"><R n="c_unzip_set"/></AccessStruct> does not contain the split point, but it does contain <Rs n="item"/> greater than the split point, then recursively split the <R n="gtree_left_subtree">leftmost subtree</R> of those greater <Rs n="item"/>.</>,
+              dedicatedLine: true,
+              segment: [
+                <Tuple fields={[
+                  <DefValue n="c_left_set_1" r="left_set"/>,
+                  <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
+                  <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="c_r_0" r="r"/>]}/>,
+                ]}/>,
+                [
+                  <LetRaw lhs={<Tuple multiline fields={[
+                    <Tuple fields={[<DefValue n="r_leftmost_item"/>, <DefValue n="r_leftmost_subtree"/>]}/>,
+                    <DefValue n="r_remaining"/>,
+                  ]}/>}>
+                    <Application fun="c_neset_remove_min" args={[<R n="c_r_0"/>]} />
+                  </LetRaw>,
+                  <LetRaw lhs={<Tuple multiline fields={[
+                    <DefValue n="c_left_1" r="left"/>,
+                    <DefValue n="c_right_1" r="right"/>,
+                  ]}/>}>
+                    <Application fun="c_unzip" args={[
+                      <R n="r_leftmost_subtree"/>,
+                      <R n="c_unzip_key"/>,
+                    ]} />
+                  </LetRaw>,
+                  <Return>
+                    <Tuple multiline fields={[
+                      <Application fun="c_norm" args={[
+                        <R n="c_left_set_1"/>,
+                        <R n="c_left_1"/>,
+                        <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>,
+                      ]}/>,
+                      <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} fields={[
+                        <Struct name="c_gtree_node" multiline fields={[
+                          ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="c_unzip_set"/></AccessStruct>],
+                          ["c_gtree_node_set", <Application fun="c_set_insert_min" multilineArgs args={[
+                            <R n="r_remaining"/>,
+                            <Tuple fields={[
+                              <R n="r_leftmost_item"/>,
+                              <R n="c_right_1"/>,
+                            ]}/>
+                          ]}/>],
+                          ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="c_unzip_set"/></AccessStruct>],
+                        ]} />,
+                      ]} />,
+                    ]}/>
+                  </Return>,
+                ],
+              ],
+            },
+          },
+        ]}
+        */}
+      </Pseudocode>
+      <P>
+        While the explicit insert function requires a bit more code, it also follows the same <Em>general structure</Em> of its original <R n="zip_tree"/> counterpart. The bulk of the additional code is devoted to operations on the inner set, whereas the matched patterns remain mostly equivalent.
+        <Todo>Insert the insert function here</Todo>
+      </P>
+    </Hsection>
+    <Hsection n="pseudorandom_rank_function" title="Appendix D: Pseudorandom Rank Functions" noNumbering>
+      <PreviewScope>
+        <P>
+          As stated in <Rc n="prelim_geometric_distribution"/>, we require a rank function <Rank p={<Def n="rand_p" r="p" />}><Def n="rand_arg_u" r="u"/></Rank> that, when given an input <M><R n="rand_arg_u" /></M>, outputs an integer value derived from a <R n="geometric_distribution"/> <GeoDistribution><R n="rand_p" /></GeoDistribution>, with parameter <M><R n="rand_p" /></M>. This output is a pseudorandom integer that is deterministically derived from <M><R n="rand_arg_u" /></M>.
+          A simple variant for <Rank p="(1/2)"><R n="rand_arg_u" /></Rank> based on hashing <R n="rand_arg_u" /> with a <Sidenote note={<>In practice, something like the SipHash family of hash functions <Bib item="aumasson2012siphash" /> provides sufficient security for this purpose.</>}>secure hash function</Sidenote> was previously provided.
+          {" "}However, it is of general interest to efficiently derive deterministic pseudorandom ranks for arbitrary <M><R n="rand_p" /></M>. 
+        </P>
+      </PreviewScope>
+      <P>
+        To start, we take the binary representation of the digest from <Hash><R n="rand_arg_u" /></Hash>, and treat it as a sequence of fair Bernoulli trials, each with <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>. If we assume that our hash function is indifferentiable from a random oracle, then each bit in the digest can be thought of as a result from a fair Bernoulli trial — either <M>0</M> (<Quotes>failure</Quotes>) or <M>1</M> (<Quotes>success</Quotes>).
+      </P>
+      <PreviewScope>
+        <P>
+          To simulate a <R n="geometric_distribution" /> with a probability that is not <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>, i.e., <M><R n="rand_p" /> = <MFrac num={"1"} de={<Def n="rand_k" r="k"/>} /></M>, we manipulate this sequence of fair trials to create <Em>groups</Em> of bits where the group collectively has success probability <M><MFrac num={"1"} de={<R n="rand_k" />} /></M>. To find the number of bits <M><Def n="rand_b" r="b" /></M> per group, we calculate the smallest <M><R n="rand_b" /></M> for which <M>2^<Curly><R n="rand_b" /></Curly> ≥ <R n="rand_k" /></M>, which is determined by <M><R n="rand_b" /> = <MCeil><MLog base="2"><R n="rand_k" /></MLog></MCeil></M>.
+        </P>
+      </PreviewScope>
+      <P>
+        The hash digest is then divided into groups of <M><R n="rand_b" /></M> bits, where each group is treated as a single trial with the desired success probability. For each group of <M><R n="rand_b" /></M> bits, we consider the trial a <Quotes>success</Quotes> if all <M><R n="rand_b" /></M> bits are <M>0</M>, which occurs with probability <M post="."><MParen><MFrac num={"1"} de={"2"} /></MParen>^<Curly><R n="rand_b" /></Curly></M> Thus, the count of groups until the first <Quotes>success</Quotes> is our geometric random variable.
+      </P>
+      <P>
+      <Todo>Should we bother including this here? It would need to be done up properly. I kind of like it, but could easily be convinced that its not worth it?</Todo>
+      <Code>
+/// Simulate a geometric distribution with probability p = 1 - (1 / m) using a series of fair<Br />
+/// Bernoulli trials (p = 1 / 2). The number of trials is limited to 256 independent trials.<Br />
+pub fn compute_rank(bytes: [u8; 32], m: u32) {"->"} Rank {"{"}<Br />
+    // Convert the series of fair trials into a series with desired probability<Br />
+    // Since we start with a random 256-bit slice (which can be thought of as a series of<Br />
+    // 256 fair Bernoulli trials), we need to group these trials with p = 1 / 2 into trials<Br />
+    // with p = 1 / m. To simulate a trial with probability p = 1 / m, consider a group of k<Br />
+    // fair trials, where k is chosen such that 1 / 2^k ≈ 1 / m. The smallest k such that<Br />
+    // 2^k ≥ m will be k = ⌈log_2(m)⌉.<Br />
+    // Compute ⌈log_2(m)⌉ = ceil(log_2(m)).<Br />
+    // let k = (m as f64).log2().ceil() as u32;<Br />
+    let k = (m + 1).ilog2();<Br />
+    // Number of batches  of k bits<Br />
+    let batch_count = 256 / k;<Br />
+    // Mask to extract k bits<Br />
+    let mask = (1u8 {"<<"} k) - 1;<Br />
+    // For each batch of k bits, we treat the batch as a "success" if all bits are 0 (which<Br />
+    // happens with probability 1 / 2^k). The number of batches until the first "success" is<Br />
+    // the desired geometrically distributed random variable.<Br />
+    for i in 0..batch_count {"{"}<Br />
+        let byte_index = (k * i) / 8;<Br />
+        let bit_index = (k * i) % 8;<Br />
+        // Extract k bits<Br />
+        let batch = (bytes[byte_index as usize] >> bit_index) & mask;<Br />
+        // batch != 0 means we are looking for the failure probability 1 / m<Br />
+        // whereas batch == 0 means we are looking for the success probability 1 / m<Br />
+        if batch != 0 {"{"}<Br />
+            return i + 1; // +1 because geometric distribution starts at 1<Br />
+        {"}"}<Br />
+    {"}"}<Br />
+    batch_count + 1<Br />
+{"}"}<Br />
+      </Code>
+      </P>
     </Hsection>
   </ArticleTemplate>
 );
