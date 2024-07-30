@@ -1,21 +1,13 @@
-import { expressions } from "macromaniajsx/jsx-runtime";
 import {
-  Access,
   AccessStruct,
   AccessTuple,
   Application,
-  ApplicationRaw,
   Bib,
   Bibliography,
-  BibScope,
   BlankPattern,
   Br,
-  ChoiceType,
-  Cite,
-  CommentLine,
   DefFunction,
   DefValue,
-  DefVariant,
   Dfn,
   Else,
   ElseIf,
@@ -30,59 +22,44 @@ import {
   Lt,
   Match,
   QualifiedMember,
-  RefLoc,
-  S,
   Self,
   SpliceLoc,
   Struct,
   StructDef,
   Sup,
-  Sub,
   Tuple,
-  TupleStruct,
   TupleType,
-  Type,
-  TypeAnnotation,
   TypeApplication,
-  While,
   Wip,
   Table,
   Tr,
   Td,
   Tbody,
   Th,
-  H5,
   Thead,
   H6,
-} from "../deps.ts";
+} from "macromaniajsx/jsx-runtime";
 import {
   A,
-  B,
   Code,
   Context,
   Counter,
-  CssDependency,
   Def,
   Em,
-  EscapeHtml,
   Expression,
   Expressions,
   FunctionItem,
-  H,
   Hsection,
-  JsDependency,
   Li,
   M,
   makeFigureMacro,
   makeNumberingRenderer,
   Marginale,
   MM,
-  Ol,
   P,
   PreviewScope,
   Pseudocode,
   R,
-  Rb,
   Rc,
   Rcb,
   ResolveAsset,
@@ -90,12 +67,9 @@ import {
   Rs,
   Rsb,
   Sidenote,
-  Sidenotes,
   Span,
-  Strong,
   Ul,
-  WaitForMarginales,
-} from "../deps.ts";
+} from "macromaniajsx/jsx-runtime";
 import { ArticleTemplate } from "./articleTemplate.tsx";
 import {
   BigO,
@@ -148,20 +122,6 @@ function Alj(
   );
 }
 
-function Cjqf(
-  { children, inline }: { children?: Expressions; inline?: boolean },
-): Expression {
-  return (
-    <Wip
-      fg="#67595E" // Coffee pot
-      bg="#EED6D3" // Dusty rose
-      wrap={(_ctx, inner) => <>cjqf: {inner}</>} // Carson John Quentry Farmer :)
-      children={children}
-      inline={inline}
-    />
-  );
-}
-
 /*
 Create macros for figures (which includes theorem-like blocks).
 */
@@ -188,33 +148,6 @@ const Definition = makeFigureMacro(ctx, {
     rb: "Definition",
     rs: "Definition",
     rsb: "Definition",
-    render: makeNumberingRenderer(),
-  },
-  isTheoremLike: true,
-});
-
-const Example = makeFigureMacro(ctx, {
-  figureCounter: thmCounter, // Shares the same counter as the `Theorem` macro.
-  numberingInfo: {
-    r: "Example",
-    rb: "Example",
-    rs: "Examples",
-    rsb: "Examples",
-    render: makeNumberingRenderer(),
-  },
-  isTheoremLike: true,
-});
-
-// Exercises are rendered as theorem-like blocks, but do not share the same counter.
-const exerciseCounter = new Counter("exercise-counter", 0);
-
-const Exercise = makeFigureMacro(ctx, {
-  figureCounter: exerciseCounter, // Different counter than the `Theorem` macro.
-  numberingInfo: {
-    r: "Exercise",
-    rb: "Exercise",
-    rs: "Exercises",
-    rsb: "Exercises",
     render: makeNumberingRenderer(),
   },
   isTheoremLike: true,
@@ -250,7 +183,7 @@ const exp = (
   >
     <Hsection n="introduction" title="Introduction">
       <P>
-        Randomized set data structures eschew self-balancing logic for more simple, probabilistic item organization.
+        Randomized set data structures eschew self-balancing logic for simpler, probabilistic item organization.
         When deriving the necessary randomness via pseudorandom functions of the stored items themselves, the resulting graphs depend on the stored set only, but not the order of insertions and deletions.
         This <Def n="history_independent"
           r="history-independent"
@@ -461,7 +394,7 @@ const exp = (
         <P>
           Several attempts have been made to find randomized data structures that perform well in an external memory model.
           Golovin<Bib item="golovin2009b" /> has proposed <Def n="b_treap" r="B-treap" rs="B-treaps">bushy treaps</Def> (<Def n="b_treap" fake>B-treaps</Def>) to approximate the behavior of B-trees via treaps.
-          Unfortunately, <Rs n="b_treap" /> are complicated enough that even their author recommends using more simple alternatives such as the <Def n="b_skip_list" r="B-skip-list" rs="B-skip-lists">B-skip-list</Def><Bib item="golovin2010b" />.
+          Unfortunately, <Rs n="b_treap" /> are complicated enough that even their author recommends using simpler alternatives such as the <Def n="b_skip_list" r="B-skip-list" rs="B-skip-lists">B-skip-list</Def><Bib item="golovin2010b" />.
           The <R n="b_skip_list" /> still involves a tuning parameter beyond the probability distribution for assigning node levels, a nontrivial invariant, and virtual memory management via hash tables rather than simple usage of pointers.
           In short, the conceptual complexity goes far beyond that of binary <Rs n="skip_list" /> or <Rs n="treap" />.
         </P>
@@ -490,7 +423,7 @@ const exp = (
         All prior work that <Em>does</Em> achieve sufficient simplicity buys it at the price of vertices that must store a dynamic, unbounded number of items.
         The <Rs n="skip_tree" /><Bib item="messeguer1997skip" /> are the first such data structure, effectively converting a <R n="skip_list"/> into a tree: each vertex stores sequences of items that are being skipped-over together in the corresponding <R n="skip_list"/>.
         The relatively unknown <Rs n="dense_skip_tree"/><Bib item="spiegel2009dense" /> provide two optimizations: expected node size can be increased by flipping coins of success probabilities <M post=","><MFrac num="1" de="k"/></M> and empty vertices are eliminated from the tree.
-        The <Rs n="mst">merkle-search-trees</Rs> (<Rs n="mst" />)<Bib item="auvolat2019merkle" /> independently reinvent <Rs n="skip_tree" /> with flexible probabilities but without the compression of empty vertices.
+        The <Rs n="mst">merkle-search-trees</Rs> (<Rs n="mst" />)<Bib item="auvolat2019merkle" /> independently reinvent <Rs n="skip_tree" /> with flexible probabilities similar to <Rs n="dense_skip_tree"/>, but without the compression of empty vertices.
       </P>
 
       <P>
@@ -614,8 +547,7 @@ const exp = (
         <P>
           In practice, <Rank p="(1/2)"><R n="geo_arg_u" /></Rank> can be implemented by hashing <R n="geo_arg_u" /> with a secure hash function and counting the number of trailing zeros in the binary representation of the digest.
           This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh and Teitelbaum<Bib item="pugh1989incremental" />.
-          For digests of length <M>l</M>, this <R n="truncated">truncates</R> the distribution to <M post="."><R n="geo_N" /> = 2^l</M>{" "}
-          Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers.
+          Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers. We provide an efficient alternative interpretation/implementation for <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> in <R n="practicalities">Appendix C</R>.
         </P>
       </Hsection>
 
@@ -1056,7 +988,6 @@ const exp = (
       <Hsection n="gtree_size" title="G-Tree Size">
         <PreviewScope>
           <P>
-            <Alj>Delete this section? We don't refer to or use the results anywhere.</Alj>
             The total expected number of <Rs n="gnode" /> in a <R n="gtree" /> is intuitively <M><E>|<R n="ana_T"/>|</E> = <MFrac num={<R n="ana_n"/>} de={<R n="ana_k"/>} /> + 1</M>. Given that <M><R n="ana_q"/> = <MFrac num={"1"} de={<R n="ana_k" />} /></M> this can also be expressed as <M><R n="ana_n"/><R n="ana_q"/> + 1</M>. While this expectation is intuitive, it can be estimated more directly as the sum of the expected number of <Rs n="gnode" /> at every possible <R n="rank" /> (plus a root node).
 
             Since the number of <Rs n="gnode" /> at <R n="rank" /> <R n="ana_r" /> is equal to the number of <Em><Rs n="item" /></Em> having <R n="rank" /> <M><R n="ana_r" /> + 1</M>, and since the <R n="rank" /> assignments for <Rs n="item" /> are independent, the number of <Rs n="gnode" /> with <R n="rank" /> <M><R n="ana_r" /></M> in a <R n="gtree" /> can be modeled as a binomial random variable <Def n="ana_Xr" r={<M>X_r</M>}/>, with parameters <M><R n="ana_n" /></M> (the number of trials, i.e., the number of <Rs n="item" />) and <M>p = (1 - <R n="ana_q" />)<R n="ana_q" />^<Curly><R n="ana_r" /></Curly></M> (the probability of success, i.e., the probability that a <R n="item" /> has <R n="rank" /> <M><R n="ana_r" /> + 1</M>).
@@ -1099,7 +1030,7 @@ const exp = (
           title="G-Node Counts"
           caption={
             <P>
-              Average number of <R n="gnode"/> in 200 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
+              Average number of <Rs n="gnode"/> in 200 randomly generated <Rs n="gtree"/>, for various combinations of <R n="ana_n"/> and <R n="ana_k"/>.
               The numbers in parentheses give the <A href="https://en.wikipedia.org/wiki/Variance">variance</A>. 
             </P>
           }
@@ -1147,6 +1078,10 @@ const exp = (
             </Tbody>
           </Table>
         </Fig>
+
+        This analysis provides some intuition for the practical efficiency and scalability of <Rs n="gtree"/>: the expected number of <Rs n="gnode"/> is linear in the number of <Rs n="item"/>, and is very close to a balanced tree structure.
+        By understanding the total number of nodes and their size distribution, we can optimize and parameterize <Rs n="gtree"/> to minimize disk accesses, align nodes with disk block sizes, and design effective caching and buffer management strategies. This ensures that the tree operations are performed with high I/O efficiency, reducing latency and increasing throughput. Moreover, it helps in predicting performance, identifying bottlenecks, and managing storage costs by ensuring efficient space allocation and utilization. 
+        Combined with the fixed size of the <Rs n="k_list" /> (see <Rc n="new_gtrees"/>) this makes <Rs n="gtree"/> potentially well-suited for external memory models while retaining much of their simplicity in practice.
       </Hsection>
     </Hsection>
 
@@ -1201,7 +1136,7 @@ const exp = (
         </P>
 
         <P>
-          A key intuition behind classic <Rs n="zip_tree"/> is that of choosing <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M><R n="geo_p"/> = <MFrac num="1" de="2"/></M> because this is the distribution of the height of a randomly chosen vertex in a perfectly balanced binary <R n="tree"/>.
+          A key intuition behind classic <Rs n="zip_tree"/> is that of choosing <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M><R n="geo_p"/> = 1 - <MFrac num="1" de="2"/> = <MFrac num="1" de="2"/></M> because this is the distribution of the height of a randomly chosen vertex in a perfectly balanced binary <R n="tree"/>.
           For <M>k</M>-ary trees, the same intuition instructs us to draw <Rs n="rank"/> from a <R n="geometric_distribution"/> with <M post=","><R n="geo_p"/> = 1 - <MFrac num="1" de="k"/></M> as this is the distribution of heights in a perfectly balanced <M>k</M>-ary <R n="tree"/>. Our <R n="analysis">analysis</R> confirmes that — with high probability — the resulting trees are of logarithmic height and their <Rs n="gnode"/> store <BigO>k</BigO> <Rs n="item"/>.
         </P>
 
@@ -1793,7 +1728,7 @@ const exp = (
       </Pseudocode>
 
       <P>
-        While it is possible to derive insertion and deletion algorithms by generalizing the original <R n="zip_tree"/> algorithms, we opt for a fully self-contained presentation. Zipping and unzipping are similar to the join and split functions of <Bib item="blelloch2016just">join-based tree algorithms</Bib>. We consistently use zip and unzip terminology when operating on <Rs n="gtree"/>, and join and split terminology when operating on the underlying set datastructure <R n="gtree_g"/>.
+        While it is possible to derive insertion and deletion algorithms by generalizing the original <R n="zip_tree"/> algorithms (see <R n="experiments"/> for examples), we opt for a fully self-contained presentation here. Zipping and unzipping are similar to the join and split functions of <Bib item="blelloch2016just">join-based tree algorithms</Bib>. We consistently use zip and unzip terminology when operating on <Rs n="gtree"/>, and join and split terminology when operating on the underlying set datastructure <R n="gtree_g"/>.
       </P>
 
       <P>
@@ -2308,7 +2243,7 @@ const exp = (
       </Pseudocode>
 
       <P>
-        We want to emphasize that our choice of algorithms optimizes for elegance, not for (non-asymptotic) efficiency. Implementations based on in-place mutations will outperform our immutable algorithms. A direct implementation of <R n="c_zip3"/> will outperform the reduction to two applications of <R n="c_zip2"/>. Iterative implementations might outperform recursive implementations. And finally, direct implementations of insertion and deletion should outperform those based off unzipping and zipping the full trees. The <Bib item="tarjan2021zip">original zip-tree paper</Bib> contains examples of direct algorithms that zip and unzip only parts of a tree, our algorithms can be adapted to work analogously.
+        We want to emphasize that our choice of algorithms optimizes for elegance, not for (non-asymptotic) efficiency. Implementations based on in-place mutations will outperform our immutable algorithms. A direct implementation of <R n="c_zip3"/> will outperform the reduction to two applications of <R n="c_zip2"/>. Iterative implementations might outperform recursive implementations. And finally, direct implementations of insertion and deletion should outperform those based off unzipping and zipping the full trees. The <Bib item="tarjan2021zip">original zip-tree paper</Bib> contains examples of direct algorithms that zip and unzip only parts of a tree, our algorithms can be adapted to work analogously, and we provide variants for <Rs n="gtree"/> in <R n="todo"/>.
       </P>
     </Hsection>
 
@@ -2518,69 +2453,6 @@ const exp = (
     </Hsection>
 
     <Hsection n="practicalities" title="Appendix C: Practicalities" noNumbering>
-      <Alj>Delete this appendix? It is not referenced anywhere right now.</Alj>
-      <Hsection n="truncation" title="Truncation" noNumbering>
-        <PreviewScope>
-          <P>
-            In a <R n="gtree_informal">geometric tree</R>, the <R n="rank"/> associated with an <R n="item"/> is drawn from a <R n="geometric_distribution"/>. In theory, this random variable <R n="geo_x"/> can take on arbitrarily large numbers, but we often need to represent <R n="geo_x" /> in a computer.
-            To this end, we work with a <Def n="truncated"/> <R n="geometric_distribution" />, which clamps <R n="geo_x" /> to integers between <M>1</M> and some maximum value <M><Def n="geo_N" r="N"/></M>.
-            Typically, <R n="geo_N" /> is a power of two, so that the possible values of <R n="geo_x" /> can be encoded in <M><MLog base="2"><R n="geo_N" /></MLog></M> bits.
-          </P>
-        </PreviewScope>
-
-        <PreviewScope>
-          <P>
-            In terms of probabilities, this only affects the <M><Pr><R n="geo_x"/> = <R n="geo_N" /></Pr></M>, which is equivalent to <M><Pr><R n="geo_x"/> ≥ <R n="geo_N" /></Pr></M> in a normal <R n="geometric_distribution"/>. This is simply the probability of not getting a success within the first <M><R n="geo_N"/> - 1</M> trials, which is <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
-            {" "}To determine the expected value of <R n="geo_x"/> for a <R n="truncated"/> <R n="geometric_distribution"/>, observe that since we <Quotes>stop</Quotes> the trials after <R n="geo_N"/> failures, we reduce the expected number of trials by <M><MFrac num={"1"} de={<>1 - <R n="geo_q"/></>}/></M> with probability <M post="."><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>
-            {" "}This leads to the truncated expected value <M post="."><E><R n="geo_x"/></E> = <MFrac num={<>1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></>} de={<>1 - <R n="geo_q"/></>}/> = <MFrac num={<>1 - <R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></>} de={<R n="geo_p"/>} /></M>
-            <Marginale>
-              This result makes intuitive sense, because if we had an unlimited number of trails, the expected value for <M><R n="geo_x"/></M> would be the usual <M>1 / <R n="geo_p"/></M>. However, since we are guaranteed to stop by the <M><R n="geo_N" /></M>th trail, and the probability of requiring this many trails to acheive a success in the first place is relatively small, we reduce the expected value of the truncated random variable by <M><R n="geo_q"/>^<Curly><R n="geo_N"/> - 1</Curly></M>.
-            </Marginale>
-            {" "}Truncation obviously affects the properties of <Rs n="gtree"/>, and our prior analyses would require adjustment. In practice however, this simply leads to shorter and wider trees, which are still efficient.
-          </P>
-        </PreviewScope>
-      </Hsection>
-      <Hsection n="pseudorandom_rank_functions" title="Pseudorandom Rank Functions" noNumbering>
-        <PreviewScope>
-          <P>
-            As stated in <Rc n="prelim_geometric_distribution"/>, we require a rank function <Rank p={<Def n="rand_p" r="p" />}><Def n="rand_arg_u" r="u"/></Rank> that, when given an input <M><R n="rand_arg_u" /></M>, outputs an integer value derived from a <R n="geometric_distribution"/> <GeoDistribution><R n="rand_p" /></GeoDistribution>, with parameter <M><R n="rand_p" /></M>. This output is a pseudorandom integer that is deterministically derived from <M><R n="rand_arg_u" /></M>.
-            A simple variant for <Rank p="(1/2)"><R n="rand_arg_u" /></Rank> based on hashing <R n="rand_arg_u" /> with a secure hash function was previously provided.
-            <Marginale>
-              Something about SipHash being sufficiently secure for this purpose.
-            </Marginale>
-            {" "}However, it is of general interest to efficiently derive deterministic pseudorandom ranks for arbitrary <M><R n="rand_p" /></M>. 
-          </P>
-        </PreviewScope>
-        <P>
-          To start, we take the binary representation of the digest from <Hash><R n="rand_arg_u" /></Hash>, and treat it as a sequence of fair Bernoulli trials, each with <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>. If we assume that our hash function is indifferentiable from a random oracle, then each bit in the digest can be thought of as a result from a fair Bernoulli trial — either <M>0</M> (<Quotes>failure</Quotes>) or <M>1</M> (<Quotes>success</Quotes>).
-        </P>
-        <PreviewScope>
-          <P>
-            To simulate a <R n="geometric_distribution" /> with a probability that is not <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>, i.e., <M><R n="rand_p" /> = <MFrac num={"1"} de={<Def n="rand_k" r="k"/>} /></M>, we manipulate this sequence of fair trials to create <Em>groups</Em> of bits where the group collectively has success probability <M><MFrac num={"1"} de={<R n="rand_k" />} /></M>. To find the number of bits <M><Def n="rand_b" r="b" /></M> per group, we calculate the smallest <M><R n="rand_b" /></M> for which <M>2^<Curly><R n="rand_b" /></Curly> ≥ <R n="rand_k" /></M>, which is determined by <M><R n="rand_b" /> = <MCeil><MLog base="2"><R n="rand_k" /></MLog></MCeil></M>.
-          </P>
-        </PreviewScope>
-        <P>
-          The hash digest is then divided into groups of <M><R n="rand_b" /></M> bits, where each group is treated as a single trial with the desired success probability. For each group of <M><R n="rand_b" /></M> bits, we consider the trial a <Quotes>success</Quotes> if all <M><R n="rand_b" /></M> bits are <M>0</M>, which occurs with probability <M><MParen><MFrac num={"1"} de={"2"} /></MParen>^<Curly><R n="rand_b" /></Curly></M>. Thus, the count of groups until the first <Quotes>success</Quotes> is our geometric random variable.
-
-          The following pseudocode should clarify the process:
-          </P>
-
-          <Pseudocode n="code_pseudorandom_rank" lineNumbering>
-            <FunctionItem
-              comment={<>Simulate a geometric distribution with probability p = 1 / k using a series of fair Bernoulli trials (p = <MFrac num={"1"} de={"2"} />). The number of trials is limited to 256 independent trials.</>}
-              id={["rank", "c_rank"]}
-              args={[
-                ["bytes", "c_rank_bytes", <M>[u8; 32]</M>],
-                ["k", "c_rank_k", <M>\N</M>],
-              ]}
-              multilineArgs
-              ret={<M>\N</M>}
-              body={[
-                <>TODO</>
-              ]}
-            />
-            <Loc/>
-          </Pseudocode>
 
           Explicit deletion and insertion helper functions:
 
@@ -2838,6 +2710,25 @@ const exp = (
             */}
           </Pseudocode>
       </Hsection>
+    <Hsection n="practicalities_two" title="Appendix C: Pseudorandom Rank Functions" noNumbering>
+      <PreviewScope>
+        <P>
+          As stated in <Rc n="prelim_geometric_distribution"/>, we require a rank function <Rank p={<Def n="rand_p" r="p" />}><Def n="rand_arg_u" r="u"/></Rank> that, when given an input <M><R n="rand_arg_u" /></M>, outputs an integer value derived from a <R n="geometric_distribution"/> <GeoDistribution><R n="rand_p" /></GeoDistribution>, with parameter <M><R n="rand_p" /></M>. This output is a pseudorandom integer that is deterministically derived from <M><R n="rand_arg_u" /></M>.
+          A simple variant for <Rank p="(1/2)"><R n="rand_arg_u" /></Rank> based on hashing <R n="rand_arg_u" /> with a <Sidenote note={<>In practice, something like the SipHash family of hash functions <Bib item="aumasson2012siphash" /> provides sufficient security for this purpose.</>}>secure hash function</Sidenote> was previously provided.
+          {" "}However, it is of general interest to efficiently derive deterministic pseudorandom ranks for arbitrary <M><R n="rand_p" /></M>. 
+        </P>
+      </PreviewScope>
+      <P>
+        To start, we take the binary representation of the digest from <Hash><R n="rand_arg_u" /></Hash>, and treat it as a sequence of fair Bernoulli trials, each with <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>. If we assume that our hash function is indifferentiable from a random oracle, then each bit in the digest can be thought of as a result from a fair Bernoulli trial — either <M>0</M> (<Quotes>failure</Quotes>) or <M>1</M> (<Quotes>success</Quotes>).
+      </P>
+      <PreviewScope>
+        <P>
+          To simulate a <R n="geometric_distribution" /> with a probability that is not <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>, i.e., <M><R n="rand_p" /> = <MFrac num={"1"} de={<Def n="rand_k" r="k"/>} /></M>, we manipulate this sequence of fair trials to create <Em>groups</Em> of bits where the group collectively has success probability <M><MFrac num={"1"} de={<R n="rand_k" />} /></M>. To find the number of bits <M><Def n="rand_b" r="b" /></M> per group, we calculate the smallest <M><R n="rand_b" /></M> for which <M>2^<Curly><R n="rand_b" /></Curly> ≥ <R n="rand_k" /></M>, which is determined by <M><R n="rand_b" /> = <MCeil><MLog base="2"><R n="rand_k" /></MLog></MCeil></M>.
+        </P>
+      </PreviewScope>
+      <P>
+        The hash digest is then divided into groups of <M><R n="rand_b" /></M> bits, where each group is treated as a single trial with the desired success probability. For each group of <M><R n="rand_b" /></M> bits, we consider the trial a <Quotes>success</Quotes> if all <M><R n="rand_b" /></M> bits are <M>0</M>, which occurs with probability <M post="."><MParen><MFrac num={"1"} de={"2"} /></MParen>^<Curly><R n="rand_b" /></Curly></M> Thus, the count of groups until the first <Quotes>success</Quotes> is our geometric random variable.
+      </P>
     </Hsection>
   </ArticleTemplate>
 );
