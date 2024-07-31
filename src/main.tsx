@@ -2261,7 +2261,7 @@ const exp = (
 
     <Hsection n="experiments" title="Appendix A: Code" noNumbering>
       <P>
-        We have published the code powering our experiments <A href="https://github.com/AljoschaMeyer/gtree_experiments">on github</A> (under the MIT license). The implementation written is in <A href="https://www.rust-lang.org/">rust</A>, and can be built with the <A href="https://doc.rust-lang.org/cargo/">cargo package manager</A>.
+        We have published the code powering our experiments <A href="https://github.com/g-trees/gtree_experiments">on github</A> (under the MIT license). The implementation written is in <A href="https://www.rust-lang.org/">rust</A>, and can be built with the <A href="https://doc.rust-lang.org/cargo/">cargo package manager</A>.
 
         Run <Code>cargo run --bin stats</Code> to replicate the experiments for <Rc n="fig_stats_gheight"/>, <Rc n="fig_stats_gnode_size"/>, <Rc n="fig_stats_gnode_count"/>, <Rc n="fig_kzip_height"/>, and <Rc n="fig_space_amplification"/>.
 
