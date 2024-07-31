@@ -130,52 +130,54 @@ export function ArticleTemplate(
       </Dir>
 
       <Dir name="build">
-        <ServerRoot url="g_trees">
-          <Dir name="assets">
-            {/* See https://github.com/worm-blossom/macromania-assets */}
-            <Assets input={["src", "assets"]} assets={{}} />
-          </Dir>
-          <PreviewScopePushWrapper
-            wrapper={(_ctx, preview) => {
-              return <Div id="wrapContent">{preview}</Div>;
-            }}
-          >
-            <File name="index.html">
-              <BibScope
-                style={citationStyle} // The citationStyle variable is set in the first line of this file. Look there for more information.
-                lang="en-US" // Valid strings for specifying the locales are of the form `xx-YY` for which https://github.com/citation-style-language/locales contains a `locales-xx-YY.xml` file. 
-                forceLang // Ensure the locale you specified is used even if the citation style specifies a default locale.
-                items={bib}
-              >
-                <Html5
-                  title="Geometric Search Trees"
-                  headContents={`<meta name="viewport" content="width=device-width, initial-scale=1"><script>
-  /*to prevent Firefox FOUC, this must be here*/
-  let FF_FOUC_FIX;
-</script>`}
+        <ServerRoot url="">
+          <Dir name="g_trees">
+            <Dir name="assets">
+              {/* See https://github.com/worm-blossom/macromania-assets */}
+              <Assets input={["src", "assets"]} assets={{}} />
+            </Dir>
+            <PreviewScopePushWrapper
+              wrapper={(_ctx, preview) => {
+                return <Div id="wrapContent">{preview}</Div>;
+              }}
+            >
+              <File name="index.html">
+                <BibScope
+                  style={citationStyle} // The citationStyle variable is set in the first line of this file. Look there for more information.
+                  lang="en-US" // Valid strings for specifying the locales are of the form `xx-YY` for which https://github.com/citation-style-language/locales contains a `locales-xx-YY.xml` file. 
+                  forceLang // Ensure the locale you specified is used even if the citation style specifies a default locale.
+                  items={bib}
                 >
-                  <CssDependency dep={["index.css"]} />
-                  <JsDependency
-                    dep={["toc.js"]}
-                    scriptProps={{ defer: true }}
-                  />
+                  <Html5
+                    title="Geometric Search Trees"
+                    headContents={`<meta name="viewport" content="width=device-width, initial-scale=1"><script>
+    /*to prevent Firefox FOUC, this must be here*/
+    let FF_FOUC_FIX;
+  </script>`}
+                  >
+                    <CssDependency dep={["index.css"]} />
+                    <JsDependency
+                      dep={["toc.js"]}
+                      scriptProps={{ defer: true }}
+                    />
 
-                  <Div id="wrapContent">
-                    <Hsection title={title} n={titleId}>
-                      <TableOfContents stopLevel={99} />
-                      <Div>
-                        <RenderAuthors authors={authors ?? []} />
-                      </Div>
-                      <Div>
-                        <RenderAbstract children={abstract} />
-                      </Div>
-                      <exps x={children} />
-                    </Hsection>
-                  </Div>
-                </Html5>
-              </BibScope>
-            </File>
-          </PreviewScopePushWrapper>
+                    <Div id="wrapContent">
+                      <Hsection title={title} n={titleId}>
+                        <TableOfContents stopLevel={99} />
+                        <Div>
+                          <RenderAuthors authors={authors ?? []} />
+                        </Div>
+                        <Div>
+                          <RenderAbstract children={abstract} />
+                        </Div>
+                        <exps x={children} />
+                      </Hsection>
+                    </Div>
+                  </Html5>
+                </BibScope>
+              </File>
+            </PreviewScopePushWrapper>
+          </Dir>
         </ServerRoot>
       </Dir>
     </Config>
