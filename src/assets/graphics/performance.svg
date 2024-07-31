@@ -100,7 +100,7 @@
 	<path stroke="black" d="M80.92,54.01 L80.92,662.40 L1086.41,662.40 L1086.41,54.01 L80.92,54.01 Z  "/></g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<g transform="translate(19.18,358.21) rotate(270)" stroke="none" fill="black" text-anchor="middle">
-		<text><tspan>Average time (Âµs)</tspan></text>
+		<text><tspan>Average time (µs)</tspan></text>
 	</g>
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
