@@ -2661,7 +2661,6 @@ const exp = (
       </Pseudocode>
       <P>
         While the explicit insert function requires a bit more code, it also follows the same <Em>general structure</Em> of its original <R n="zip_tree"/> counterpart. The bulk of the additional code is devoted to operations on the inner set, whereas the matched patterns remain mostly equivalent.
-        <Todo>Insert the insert function here</Todo>
       </P>
       <Pseudocode n="code_explicit_insert" lineNumbering>
         <FunctionItem
@@ -2810,7 +2809,7 @@ const exp = (
                                         ]}/>
                                       </LetRaw>,
                                       <Let id={["left_subtree", "y_left_subtree1"]}>
-                                        <Application fun="c_norm" args={[
+                                        <Application fun="c_norm" multilineArgs args={[
                                           <R n="y_left_set_1"/>,
                                           <R n="y_l_2"/>,
                                           <AccessStruct field="c_gtree_node_rank"><R n="y_insert_set"/></AccessStruct>,
@@ -2835,51 +2834,148 @@ const exp = (
                             },
                           },
 
-                          // {
-                          //   commented: {
-                          //     comment: <>The target <R n="y_insert_item"/> is strictly less than the <R n="x_leftmost_item" /> of <R n="x_r_0"/>, recurse down the left and build from the right.</>,
-                          //     dedicatedLine: true,
-                          //     segment: [
-                          //       <Tuple fields={[
-                          //         <DefValue n="x_left_set_2" r="left_set"/>,
-                          //         <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
-                          //         <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="x_r_0" r="r"/>]}/>,
-                          //       ]}/>,
-                          //       [
-                          //         <LetRaw lhs={<Tuple multiline fields={[
-                          //           <Tuple fields={[<DefValue n="x_leftmost_item" r="leftmost_item"/>, <DefValue n="x_leftmost_subtree" r="leftmost_subtree"/>]}/>,
-                          //           <DefValue n="x_remaining" r="remaining"/>,
-                          //         ]}/>}>
-                          //           <Application fun="c_neset_remove_min" args={[<R n="x_r_0"/>]} />
-                          //         </LetRaw>,
-                          //         <Let id={["new_right", "x_new_right"]}>
-                          //           <Application fun="c_neset_insert_min" args={[
-                          //             <R n="x_remaining"/>,
-                          //             <Tuple multiline fields={[
-                          //               <R n="x_leftmost_item"/>,
-                          //               <Application fun="y_insert" args={[
-                          //                 <R n="x_leftmost_subtree"/>,
-                          //                 <R n="y_insert_item"/>,
-                          //               ]}/>
-                          //             ]}/>
-                          //           ]} />
-                          //         </Let>,
-                          //         <Return>
-                          //           <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
-                          //             <Struct name="c_gtree_node" multiline fields={[
-                          //               ["c_gtree_node_set", <Application fun="c_set_join" args={[
-                          //                 <R n="x_left_set_2"/>,
-                          //                 <R n="x_new_right"/>,
-                          //               ]}/>],
-                          //               ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="y_insert_set"/></AccessStruct>],
-                          //               ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="y_insert_set"/></AccessStruct>],
-                          //             ]} />,
-                          //           ]} />
-                          //         </Return>,
-                          //       ]
-                          //     ],
-                          //   },                          
-                          // },
+                          {
+                            commented: {
+                              comment: <>The <R n="c_neset"/> of the current <R n="c_gtree_node"/> does contain <Rs n="item"/> greater than <R n="y_insert_item"/>.</>,
+                              dedicatedLine: true,
+                              segment: [
+                                <Tuple multiline fields={[
+                                  <DefValue n="y_left_set_2" r="left_set"/>,
+                                  <QualifiedMember type={<R n="Option"/>} member="OptionNone" />,
+                                  <Tuple name={<QualifiedMember type={<R n="c_set"/>} member="c_set_nonempty" />} fields={[<DefValue n="y_right_set_2" r="right_set"/>]} />,
+                                ]} />,
+                                [
+                                  <LetRaw lhs={<Tuple multiline fields={[
+                                    <Tuple fields={[<DefValue n="y_leftmost_item" r="leftmost_item"/>, <DefValue n="y_leftmost_subtree" r="leftmost_subtree"/>]}/>,
+                                    <DefValue n="y_remaining" r="remaining"/>,
+                                  ]}/>}>
+                                    <Application fun="c_neset_remove_min" args={[<R n="y_right_set_2"/>]} />
+                                  </LetRaw>,
+                                  <>
+                                    <If
+                                      cond={<><R n="y_insert_rank"/> <Lt/> <AccessStruct field="c_gtree_node_rank"><R n="y_insert_set"/></AccessStruct></>}
+                                      body={[
+                                        <Let id={["new_subtree", "y_new_subtree"]}>
+                                          <Application fun="y_insert" multilineArgs args={[
+                                            <R n="y_leftmost_subtree"/>,
+                                            <R n="y_insert_item"/>,
+                                            <R n="y_insert_rank"/>,
+                                          ]} />
+                                        </Let>,
+                                        <Let id={["new_right", "y_new_right"]}>
+                                          <Application fun="c_set_insert_min" multilineArgs args={[
+                                            <R n="y_remaining"/>,
+                                            <Tuple fields={[
+                                              <R n="y_leftmost_item"/>,
+                                              <R n="y_new_subtree"/>,
+                                            ]}/>
+                                          ]} />
+                                        </Let>,
+                                        <Return>
+                                          <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                            <Struct name="c_gtree_node" multiline fields={[
+                                              ["c_gtree_node_set", <Application fun="c_set_join"  args={[
+                                                <R n="y_left_set_2"/>,
+                                                <R n="y_new_right"/>,
+                                              ]}/>],
+                                              ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="y_insert_set"/></AccessStruct>],
+                                              ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="y_insert_set"/></AccessStruct>],
+                                            ]} />,
+                                          ]} />
+                                        </Return>
+                                      ]}
+                                    />{" "}
+                                    <ElseIf
+                                      cond={<><R n="y_insert_rank"/> <M>=</M> <AccessStruct field="c_gtree_node_rank"><R n="y_insert_set"/></AccessStruct></>}
+                                      body={[
+                                        <LetRaw lhs={<Tuple fields={[
+                                          <DefValue n="y_l_3" r="l"/>,
+                                          <DefValue n="y_r_3" r="r"/>,
+                                        ]}/>}>
+                                          <Application fun="c_unzip" args={[
+                                            <R n="y_leftmost_item"/>,
+                                            <R n="y_insert_item"/>,
+                                          ]}/>
+                                        </LetRaw>,
+                                        <Let id={["new_right", "y_new_right2"]}>
+                                        <Application fun="c_neset_insert_min" multilineArgs args={[
+                                          <Application fun="c_neset_insert_min" args={[
+                                            <R n="y_remaining"/>,
+                                            <Tuple fields={[
+                                              <R n="y_leftmost_item"/>,
+                                              <R n="y_r_3"/>,
+                                            ]}/>
+                                          ]}/>,
+                                          <Tuple fields={[
+                                            <R n="y_insert_item"/>,
+                                            <R n="y_l_3"/>,
+                                          ]}/>
+                                        ]} />
+                                      </Let>,
+                                        <Return>
+                                          <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                            <Struct name="c_gtree_node" multiline fields={[
+                                              ["c_gtree_node_set", <Application fun="c_set_join" args={[
+                                                <R n="y_left_set_2"/>,
+                                                <R n="y_new_right2"/>,
+                                              ]}/>],
+                                              ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="y_insert_set"/></AccessStruct>],
+                                              ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="y_insert_set"/></AccessStruct>],
+                                            ]} />,
+                                          ]} />
+                                        </Return>
+                                      ]}
+                                    />{" "}
+                                    <Else body={[
+                                      <LetRaw lhs={<Tuple fields={[
+                                        <DefValue n="y_l_4" r="l"/>,
+                                        <DefValue n="y_r_4" r="r"/>,
+                                      ]}/>}>
+                                        <Application fun="c_unzip" args={[
+                                          <R n="y_leftmost_item"/>,
+                                          <R n="y_insert_item"/>,
+                                        ]}/>
+                                      </LetRaw>,
+                                      <Let id={["left_subtree", "y_left_subtree2"]}>
+                                        <Application fun="c_norm" multilineArgs args={[
+                                          <R n="y_left_set_2"/>,
+                                          <R n="y_l_4"/>,
+                                          <AccessStruct field="c_gtree_node_rank"><R n="y_insert_set"/></AccessStruct>,
+                                        ]}/>
+                                      </Let>,
+                                      <Let id={["right_subtree", "y_right_subtree2"]}>
+                                        <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                          <Struct name="c_gtree_node" multiline fields={[
+                                            ["c_gtree_node_set", <Application fun="c_neset_insert_min" multilineArgs args={[
+                                              <R n="y_remaining"/>,
+                                              <Tuple fields={[
+                                                <R n="y_leftmost_item"/>,
+                                                <R n="y_r_4"/>,
+                                              ]}/>
+                                            ]}/>],
+                                            ["c_gtree_node_right", <AccessStruct field="c_gtree_node_right"><R n="y_insert_set"/></AccessStruct>],
+                                            ["c_gtree_node_rank", <AccessStruct field="c_gtree_node_rank"><R n="y_insert_set"/></AccessStruct>],
+                                          ]} />,
+                                        ]} />
+                                      </Let>,
+                                      <Return>
+                                        <Tuple name={<QualifiedMember type={<R n="c_gtree"/>} member="c_gtree_nonempty" />} multiline fields={[
+                                          <Struct name="c_gtree_node" multiline fields={[
+                                            ["c_gtree_node_set", <Application fun="c_neset_singleton" args={[
+                                              <R n="y_insert_item"/>,
+                                              <R n="y_left_subtree2"/>,
+                                            ]}/>],
+                                            ["c_gtree_node_right", <R n="y_right_subtree2"/>,],
+                                            ["c_gtree_node_rank", <R n="y_insert_rank"/>,],
+                                          ]} />,
+                                        ]} />
+                                      </Return>,
+                                    ]}/>
+                                  </>
+                                ],
+                              ],
+                            },
+                          },
                         ]}
                       />,
                     ],
