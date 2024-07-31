@@ -245,7 +245,6 @@ const exp = (
         While <Em>binary</Em> trees are highly efficient in theory, they are less efficient on actual hardware than trees that store more than one item per vertex.
         Unfortunately, generalizing binary randomized data structures to higher-arity counterparts has proven more difficult than in the case of deterministically self-balancing trees.
         Providing a simple such generalization is the impetus for our work.
-        <Todo>Obviously we need a better quality version of this figure...</Todo>
         {" "}<Rcb n="fig_search_performance"/> plots lookup performance of a <R n="zip_informal"/> versus a 32-ary tree of ours; our tree is roughly twice as fast (note the logarithmic y-axis). On secondary storage, we can expect the performance difference to be even more pronounced.
       </P>
       <Fig
@@ -261,7 +260,7 @@ const exp = (
           }
         >
           <Img
-            src={<ResolveAsset asset={["graphics", "search_performance.png"]} />}
+            src={<ResolveAsset asset={["graphics", "performance.svg"]} />}
             alt="A plot showing search performance of a zip-tree versus a 32-zip-tree; the latter is roughly twice as fast."
           />
         </Fig>
