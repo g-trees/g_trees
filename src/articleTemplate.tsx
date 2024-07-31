@@ -130,7 +130,7 @@ export function ArticleTemplate(
       </Dir>
 
       <Dir name="build">
-        <ServerRoot url="">
+        <ServerRoot url="g_trees">
           <Dir name="assets">
             {/* See https://github.com/worm-blossom/macromania-assets */}
             <Assets input={["src", "assets"]} assets={{}} />
