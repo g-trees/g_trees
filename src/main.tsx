@@ -1078,9 +1078,11 @@ const exp = (
           </Table>
         </Fig>
 
-        This analysis provides some intuition for the practical efficiency and scalability of <Rs n="gtree"/>: the expected number of <Rs n="gnode"/> is linear in the number of <Rs n="item"/>, and is very close to a balanced tree structure.
-        By understanding the total number of nodes and their size distribution, we can optimize and parameterize <Rs n="gtree"/> to minimize disk accesses, align nodes with disk block sizes, and design effective caching and buffer management strategies. This ensures that the tree operations are performed with high I/O efficiency, reducing latency and increasing throughput. Moreover, it helps in predicting performance, identifying bottlenecks, and managing storage costs by ensuring efficient space allocation and utilization. 
-        Combined with the fixed size of the <Rs n="k_list" /> (see <Rc n="new_gtrees"/>) this makes <Rs n="gtree"/> potentially well-suited for external memory models while retaining much of their simplicity in practice.
+        <P>
+          This analysis provides some intuition for the practical efficiency and scalability of <Rs n="gtree"/>: the expected number of <Rs n="gnode"/> is linear in the number of <Rs n="item"/>, and is very close to a balanced tree structure.
+          By understanding the total number of nodes and their size distribution, we can optimize and parameterize <Rs n="gtree"/> to minimize disk accesses, align nodes with disk block sizes, and design effective caching and buffer management strategies. This ensures that the tree operations are performed with high I/O efficiency, reducing latency and increasing throughput. Moreover, it helps in predicting performance, identifying bottlenecks, and managing storage costs by ensuring efficient space allocation and utilization. 
+          Combined with the fixed size of the <Rs n="k_list" /> (see <Rc n="new_gtrees"/>) this makes <Rs n="gtree"/> potentially well-suited for external memory models while retaining much of their simplicity in practice.
+        </P>
       </Hsection>
     </Hsection>
 
