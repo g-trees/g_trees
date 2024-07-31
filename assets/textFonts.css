@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'Linux Libertine';
   /* normal */
-  src: url('/assets/fonts/LinLibertine_R.woff') format('woff');
+  src: url('/g_trees/assets/fonts/LinLibertine_R.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -9,7 +9,7 @@
 @font-face {
   font-family: 'Linux Libertine';
   /* italic */
-  src: url('/assets/fonts/LinLibertine_RI.woff') format('woff');
+  src: url('/g_trees/assets/fonts/LinLibertine_RI.woff') format('woff');
   font-weight: normal;
   font-style: italic;
 }
@@ -17,7 +17,7 @@
 @font-face {
   font-family: 'Linux Libertine';
   /* bold */
-  src: url('/assets/fonts/LinLibertine_RB.woff') format('woff');
+  src: url('/g_trees/assets/fonts/LinLibertine_RB.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -25,7 +25,7 @@
 @font-face {
   font-family: 'Linux Libertine';
   /* bold italic */
-  src: url('/assets/fonts/LinLibertine_RBI.woff') format('woff');
+  src: url('/g_trees/assets/fonts/LinLibertine_RBI.woff') format('woff');
   font-weight: bold;
   font-style: italic;
 }
@@ -33,7 +33,7 @@
 @font-face {
   font-family: 'Monaspace Neon';
   /* normal */
-  src: url('/assets/fonts/MonaspaceNeon-Regular.woff') format('woff');
+  src: url('/g_trees/assets/fonts/MonaspaceNeon-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -41,7 +41,7 @@
 @font-face {
   font-family: 'Monaspace Neon';
   /* italic */
-  src: url('/assets/fonts/MonaspaceNeon-Italic.woff') format('woff');
+  src: url('/g_trees/assets/fonts/MonaspaceNeon-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
 }
@@ -49,7 +49,7 @@
 @font-face {
   font-family: 'Monaspace Neon';
   /* bold */
-  src: url('/assets/fonts/MonaspaceNeon-Bold.woff') format('woff');
+  src: url('/g_trees/assets/fonts/MonaspaceNeon-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -57,7 +57,7 @@
 @font-face {
   font-family: 'Monaspace Neon';
   /* bold italic */
-  src: url('/assets/fonts/MonaspaceNeon-BoldItalic.woff') format('woff');
+  src: url('/g_trees/assets/fonts/MonaspaceNeon-BoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
 }
@@ -65,7 +65,7 @@
 @font-face {
   font-family: 'Monaspace Xenon';
   /* normal */
-  src: url('/assets/fonts/MonaspaceXenon-Regular.woff') format('woff');
+  src: url('/g_trees/assets/fonts/MonaspaceXenon-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -73,7 +73,7 @@
 @font-face {
   font-family: 'Monaspace Xenon';
   /* italic */
-  src: url('/assets/fonts/MonaspaceXenon-Italic.woff') format('woff');
+  src: url('/g_trees/assets/fonts/MonaspaceXenon-Italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
 }
@@ -81,7 +81,7 @@
 @font-face {
   font-family: 'Monaspace Xenon';
   /* bold */
-  src: url('/assets/fonts/MonaspaceXenon-Bold.woff') format('woff');
+  src: url('/g_trees/assets/fonts/MonaspaceXenon-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -89,7 +89,7 @@
 @font-face {
   font-family: 'Monaspace Xenon';
   /* bold italic */
-  src: url('/assets/fonts/MonaspaceXenon-BoldItalic.woff') format('woff');
+  src: url('/g_trees/assets/fonts/MonaspaceXenon-BoldItalic.woff') format('woff');
   font-weight: bold;
   font-style: italic;
 }
