@@ -547,7 +547,7 @@ const exp = (
         <P>
           In practice, <Rank p="(1/2)"><R n="geo_arg_u" /></Rank> can be implemented by hashing <R n="geo_arg_u" /> with a secure hash function and counting the number of trailing zeros in the binary representation of the digest.
           This can also be interpreted as the largest power of two that divides the digest of <R n="geo_arg_u" />, as used by Pugh and Teitelbaum<Bib item="pugh1989incremental" />.
-          Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers. We provide an efficient alternative interpretation/implementation for <GeoDistribution>\frac<Curly>1</Curly><Curly>k</Curly></GeoDistribution> in <R n="pseudorandom_rank_function">Appendix D</R>.
+          Auvolat and Taïani<Bib item="auvolat2019merkle" /> generalize this construction to distributions <GeoDistribution>\frac<Curly>1</Curly><Curly>2^k</Curly></GeoDistribution> by counting trailing or leading zeroes in the base-<M>k</M> representation of uniformly distributed pseudorandom integers. This is equivalent to counting all-zero groupings of <M>k</M> successive digits in a binary representation.
         </P>
       </Hsection>
 
@@ -2986,63 +2986,6 @@ const exp = (
           ]}
         />
       </Pseudocode>
-    </Hsection>
-    <Hsection n="pseudorandom_rank_function" title="Appendix D: Pseudorandom Rank Functions" noNumbering>
-      <PreviewScope>
-        <P>
-          As stated in <Rc n="prelim_geometric_distribution"/>, we require a rank function <Rank p={<Def n="rand_p" r="p" />}><Def n="rand_arg_u" r="u"/></Rank> that, when given an input <M><R n="rand_arg_u" /></M>, outputs an integer value derived from a <R n="geometric_distribution"/> <GeoDistribution><R n="rand_p" /></GeoDistribution>, with parameter <M><R n="rand_p" /></M>. This output is a pseudorandom integer that is deterministically derived from <M><R n="rand_arg_u" /></M>.
-          A simple variant for <Rank p="(1/2)"><R n="rand_arg_u" /></Rank> based on hashing <R n="rand_arg_u" /> with a <Sidenote note={<>In practice, something like the SipHash family of hash functions <Bib item="aumasson2012siphash" /> provides sufficient security for this purpose.</>}>secure hash function</Sidenote> was previously provided.
-          {" "}However, it is of general interest to efficiently derive deterministic pseudorandom ranks for arbitrary <M><R n="rand_p" /></M>. 
-        </P>
-      </PreviewScope>
-      <P>
-        To start, we take the binary representation of the digest from <Hash><R n="rand_arg_u" /></Hash>, and treat it as a sequence of fair Bernoulli trials, each with <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>. If we assume that our hash function is indifferentiable from a random oracle, then each bit in the digest can be thought of as a result from a fair Bernoulli trial — either <M>0</M> (<Quotes>failure</Quotes>) or <M>1</M> (<Quotes>success</Quotes>).
-      </P>
-      <PreviewScope>
-        <P>
-          To simulate a <R n="geometric_distribution" /> with a probability that is not <M><R n="rand_p" /> = <MFrac num={"1"} de={"2"} /></M>, i.e., <M><R n="rand_p" /> = <MFrac num={"1"} de={<Def n="rand_k" r="k"/>} /></M>, we manipulate this sequence of fair trials to create <Em>groups</Em> of bits where the group collectively has success probability <M><MFrac num={"1"} de={<R n="rand_k" />} /></M>. To find the number of bits <M><Def n="rand_b" r="b" /></M> per group, we calculate the smallest <M><R n="rand_b" /></M> for which <M>2^<Curly><R n="rand_b" /></Curly> ≥ <R n="rand_k" /></M>, which is determined by <M><R n="rand_b" /> = <MCeil><MLog base="2"><R n="rand_k" /></MLog></MCeil></M>.
-        </P>
-      </PreviewScope>
-      <P>
-        The hash digest is then divided into groups of <M><R n="rand_b" /></M> bits, where each group is treated as a single trial with the desired success probability. For each group of <M><R n="rand_b" /></M> bits, we consider the trial a <Quotes>success</Quotes> if all <M><R n="rand_b" /></M> bits are <M>0</M>, which occurs with probability <M post="."><MParen><MFrac num={"1"} de={"2"} /></MParen>^<Curly><R n="rand_b" /></Curly></M> Thus, the count of groups until the first <Quotes>success</Quotes> is our geometric random variable.
-      </P>
-      <P>
-      <Todo>Should we bother including this here? It would need to be done up properly. I kind of like it, but could easily be convinced that its not worth it?</Todo>
-      <Code>
-/// Simulate a geometric distribution with probability p = 1 - (1 / m) using a series of fair<Br />
-/// Bernoulli trials (p = 1 / 2). The number of trials is limited to 256 independent trials.<Br />
-pub fn compute_rank(bytes: [u8; 32], m: u32) {"->"} Rank {"{"}<Br />
-    // Convert the series of fair trials into a series with desired probability<Br />
-    // Since we start with a random 256-bit slice (which can be thought of as a series of<Br />
-    // 256 fair Bernoulli trials), we need to group these trials with p = 1 / 2 into trials<Br />
-    // with p = 1 / m. To simulate a trial with probability p = 1 / m, consider a group of k<Br />
-    // fair trials, where k is chosen such that 1 / 2^k ≈ 1 / m. The smallest k such that<Br />
-    // 2^k ≥ m will be k = ⌈log_2(m)⌉.<Br />
-    // Compute ⌈log_2(m)⌉ = ceil(log_2(m)).<Br />
-    // let k = (m as f64).log2().ceil() as u32;<Br />
-    let k = (m + 1).ilog2();<Br />
-    // Number of batches  of k bits<Br />
-    let batch_count = 256 / k;<Br />
-    // Mask to extract k bits<Br />
-    let mask = (1u8 {"<<"} k) - 1;<Br />
-    // For each batch of k bits, we treat the batch as a "success" if all bits are 0 (which<Br />
-    // happens with probability 1 / 2^k). The number of batches until the first "success" is<Br />
-    // the desired geometrically distributed random variable.<Br />
-    for i in 0..batch_count {"{"}<Br />
-        let byte_index = (k * i) / 8;<Br />
-        let bit_index = (k * i) % 8;<Br />
-        // Extract k bits<Br />
-        let batch = (bytes[byte_index as usize] >> bit_index) & mask;<Br />
-        // batch != 0 means we are looking for the failure probability 1 / m<Br />
-        // whereas batch == 0 means we are looking for the success probability 1 / m<Br />
-        if batch != 0 {"{"}<Br />
-            return i + 1; // +1 because geometric distribution starts at 1<Br />
-        {"}"}<Br />
-    {"}"}<Br />
-    batch_count + 1<Br />
-{"}"}<Br />
-      </Code>
-      </P>
     </Hsection>
   </ArticleTemplate>
 );

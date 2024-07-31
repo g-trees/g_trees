@@ -926,32 +926,4 @@ export const bib: BibItemDeclaration[] = [
       </>
     ),
   },
-  {
-    item: `@InProceedings{aumasson2012siphash,
-author="Aumasson, Jean-Philippe and Bernstein, Daniel J.",
-editor="Galbraith, Steven and Nandi, Mridul",
-title="SipHash: A Fast Short-Input PRF",
-booktitle="Progress in Cryptology - INDOCRYPT 2012",
-year="2012",
-publisher="Springer Berlin Heidelberg",
-address="Berlin, Heidelberg",
-pages="489--508"
-}`,
-    asset: ["references", "aumasson2012siphash.pdf"],
-    href: "https://eprint.iacr.org/2012/351",
-    blurb: (
-      <>
-        <P>
-        SipHash is a family of pseudorandom functions optimized for short inputs. Target 
-        applications include network traffic authentication and hash-table lookups protected 
-        against hash-flooding denial-of-service attacks. SipHash is simpler than MACs based on 
-        universal hashing, and faster on short inputs. Compared to dedicated designs for 
-        hash-table lookup, SipHash has well-defined security goals and competitive performance. 
-        For example, SipHash processes a 16-byte input with a fresh key in 140 cycles on an AMD 
-        FX-8150 processor, which is much faster than state-of-the-art MACs. We propose that hash 
-        tables switch to SipHash as a hash function.
-        </P>
-      </>
-    ),
-  }
 ];
