@@ -13,7 +13,6 @@ import {
   Enum,
   Gt,
   If,
-  CommentLine,
   Img,
   Interface,
   Let,
@@ -30,7 +29,6 @@ import {
   Tuple,
   TupleType,
   TypeApplication,
-  Wip,
   Table,
   Tr,
   Td,
@@ -46,8 +44,6 @@ import {
   Counter,
   Def,
   Em,
-  Expression,
-  Expressions,
   FunctionItem,
   Hsection,
   Li,
@@ -91,7 +87,6 @@ import {
   Np,
   MParen,
   OpName,
-  Hash,
   Orange,
   Pink,
   Quotes,
@@ -104,23 +99,6 @@ import { TreeItems } from "./macros.tsx";
 import { GeoDistribution } from "./macros.tsx";
 
 const ctx = new Context();
-
-/*
-Create a custom annotation macro.
-*/
-function Todo(
-  { children, inline }: { children?: Expressions; inline?: boolean },
-): Expression {
-  return (
-    <Wip
-      fg="#6804cc"
-      bg="#ecdbfc"
-      wrap={(_ctx, inner) => <>TODO: {inner}</>}
-      children={children}
-      inline={inline}
-    />
-  );
-}
 
 /*
 Create macros for figures (which includes theorem-like blocks).
@@ -161,7 +139,7 @@ const exp = (
     abstract={
       <>
         <P>
-          We describe the G-trees, a family of randomized, history-independent search tree data structures. The G-trees encompass several independently-discovered data structures such as zip-trees, zip-zip-trees, and dense skip-trees.
+          We describe G-trees, a family of randomized, history-independent search tree data structures. The G-trees encompass several independently-discovered data structures such as zip-trees, zip-zip-trees, and dense skip-trees.
           The family further contains novel trees of arity greater than two, which are significantly more efficient in the presence of cache hierarchies or block storage than zip-trees.
           Traditionally, such randomized trees have been significantly more complex than their binary counterparts, whereas our <M>k</M>-ary G-trees have no additional conceptual overhead at all.
           We generalize the zip and unzip operations of zip-trees to provide a uniform, simple, and efficient implementation technique for all members of our family of data structures.
