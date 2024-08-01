@@ -309,7 +309,7 @@ const exp = (
 
       <P>
         Our key insight is to take a byproduct of the usual definition of <Rs n="zip_informal" />, turn it into a defining property of its own, and to then generalize it.
-        <Rsb n="zip_informal" />{" "} assign geometrically chosen <Rs n="rank_informal" /> to their items, and use these <Rs n="rank_informal" /> for probabilistic balancing.
+        {" "}<Rsb n="zip_informal" />{" "}assign geometrically chosen <Rs n="rank_informal" /> to their items, and use these <Rs n="rank_informal" /> for probabilistic balancing.
         A consequence of their balancing mechanism is that certain sequences of items with colliding <Rs n="rank_informal" /> form sorted linked lists.
         It turns out we can view and even <Em>define</Em> <Rs n="zip_informal" /> as collections of such linked lists.
       </P>
