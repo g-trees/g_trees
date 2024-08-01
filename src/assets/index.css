@@ -170,7 +170,7 @@ dfn>a[data-preview-anchor] {
   background: inherit;
   box-shadow: 5px 5px 10px 0px rgba(68, 68, 68, 0.80);
   overflow: hidden;
-  animation: fadeIn 0.4s;
+  animation: fadeIn 0.1s;
   width: 100%;
 }
 
@@ -184,7 +184,7 @@ iframe {
 .previewFadeout {
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s 0.2s, opacity 0.2s linear;
+  transition: visibility 0s 0.07s, opacity 0.07s linear;
 }
 
 [data-hl][data-preview-anchor] {
