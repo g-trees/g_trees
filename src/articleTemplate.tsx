@@ -92,7 +92,7 @@ export function ArticleTemplate(
           }}
         />,
         <ConfigPreviews
-        previewPath={["build", "previews"]}
+        previewPath={["build", "g_trees", "previews"]}
           cssDeps={[{ dep: ["index.css"] }]}
           jsDeps={[prettyPreviewsInfo]}
         />,
