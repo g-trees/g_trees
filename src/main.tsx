@@ -153,7 +153,7 @@ const exp = (
         email: <A href="mailto:carson@textile.io">carson@textile.io</A>,
       },
       {
-        name: "Aljoscha Meyer",
+        name: <A href="https://aljoscha-meyer.de/">Aljoscha Meyer</A>,
         affiliation: "TU Berlin",
         email: <A href="mailto:research@aljoscha-meyer.de">research@aljoscha-meyer.de</A>,
       },
