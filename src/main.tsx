@@ -308,7 +308,7 @@ const exp = (
             preview={
               <>
                 <P>
-                  The <Def n="prolly_tree" fake>prolly-trees</Def><Bib item="auvolat2019merkle" /> are another form of randomized search tree where the
+                  The <Def n="prolly_tree" fake>prolly-trees</Def><Bib item="boodman2016prolly" /> are another form of randomized search tree where the
                   set of values in each node is determined by the output of a rolling hash function over the values, rather than via split and join
                   operations when upper and lower bounds are exceeded.
                 </P>
