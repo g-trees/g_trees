@@ -876,12 +876,12 @@ export const bib: BibItemDeclaration[] = [
   {
     item: `@inbook{dubhashiChernoff2009,
       place={Cambridge},
-      title={Chernoff–Hoeffding Bounds},
+      title={Chernoff-Hoeffding Bounds},
       booktitle={Concentration of Measure for the Analysis of Randomized Algorithms},
       publisher={Cambridge University Press},
       author={Dubhashi, Devdatt P. and Panconesi, Alessandro},
       year={2009},
-      pages={1–15}
+      pages={1--15}
     }
 `,
     // A free, older version is available here http://wwwusers.di.uniroma1.it/~ale/Papers/master.pdf
@@ -892,7 +892,7 @@ export const bib: BibItemDeclaration[] = [
         their increasingly widespread use in modern applications. This book presents a coherent 
         and unified treatment of probabilistic techniques for obtaining high probability estimates 
         on the performance of randomized algorithms. It covers the basic toolkit from the
-        Chernoff–Hoeffding bounds to more sophisticated techniques like martingales and
+        Chernoff-Hoeffding bounds to more sophisticated techniques like martingales and
         isoperimetric inequalities, as well as some recent developments like Talagrand's
         inequality, transportation cost inequalities and log-Sobolev inequalities. Along the way,
         variations on the basic theme are examined, such as Chernoff–Hoeffding bounds in dependent
@@ -916,7 +916,8 @@ export const bib: BibItemDeclaration[] = [
     blurb: (
       <>
         <P>
-        We introduce the dense skip tree, a novel cache-conscious randomized data structure. Algorithms for search, insertion, and deletion are presented, and they are shown to have expected
+        We introduce the dense skip tree, a novel cache-conscious randomized data structure. Algorithms 
+        for search, insertion, and deletion are presented, and they are shown to have expected
         cost <BigO>\log n</BigO>. The dense skip tree obeys the same asymptotic properties as the skip list and
         the skip tree. A series of properties on the dense skip tree is proven, in order to show the
         probabilistic organization of data in a cache-conscious design. Performance benchmarks show
@@ -926,4 +927,26 @@ export const bib: BibItemDeclaration[] = [
       </>
     ),
   },
+  {
+    item: `@misc{boodman2016prolly,
+      title         = {Prolly Trees: Probabilistic B-Trees},
+      author        = {Aaron Boodman and Rafael Weinstein and Erik Arvidsson and Chris Masone and Dan Willhite and Benjamin Kalman},
+      howpublished  = {Documentation},
+      organization  = {Attic Labs},
+      year          = {2016},
+      url           = {https://github.com/attic-labs/noms/blob/master/doc/intro.md\#prolly-trees-probabilistic-b-trees}
+    }`,
+    href: "https://github.com/attic-labs/noms/blob/master/doc/intro.md\#prolly-trees-probabilistic-b-trees",
+    blurb: (
+      <P>
+        A Prolly Tree is a search tree where the number of values stored in each node is determined
+        probabilistically, based on the data which is stored in the tree.
+        A Prolly Tree is similar in many ways to a B-Tree, except that the number of values in each
+        node has a probabilistic average rather than an enforced upper and lower bound, and the set
+        of values in each node is determined by the output of a rolling hash function over the values,
+        rather than via split and join operations when upper and lower bounds are exceeded.
+        Like B-Trees, Prolly Trees can model lists, maps, tables, and sets.
+      </P>
+    )
+  }
 ];

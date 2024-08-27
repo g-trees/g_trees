@@ -286,7 +286,7 @@ const exp = (
             }
           >
             dense skip-trees
-          </Def><Bib item="spiegel2009dense" />, and <Def
+          </Def><Bib item="spiegel2009dense" />, <Def
             n="mst"
             r="MST"
             rs="MSTs"
@@ -301,7 +301,22 @@ const exp = (
             }
           >
             merkle-search-trees
-          </Def><Bib item="auvolat2019merkle" />.
+          </Def><Bib item="auvolat2019merkle" />, and <Def
+            n="prolly_tree"
+            r="prolly-tree"
+            rs="prolly-trees"
+            preview={
+              <>
+                <P>
+                  The <Def n="prolly_tree" fake>prolly-trees</Def><Bib item="auvolat2019merkle" /> are another form of randomized search tree where the
+                  set of values in each node is determined by the output of a rolling hash function over the values, rather than via split and join
+                  operations when upper and lower bounds are exceeded.
+                </P>
+              </>
+            }
+          >
+            prolly-trees
+          </Def><Bib item="boodman2016prolly" />.
           Our framework allows us to trivially define efficient trees that store a bounded number of items per vertex.
           These trees are arguably the first such randomized search trees whose conceptual complexity is just as low as that of their binary counterparts.
         </P>
@@ -401,6 +416,7 @@ const exp = (
         The <Rs n="skip_tree" /><Bib item="messeguer1997skip" /> are the first such data structure, effectively converting a <R n="skip_list"/> into a tree: each vertex stores sequences of items that are being skipped-over together in the corresponding <R n="skip_list"/>.
         The relatively unknown <Rs n="dense_skip_tree"/><Bib item="spiegel2009dense" /> provide two optimizations: expected node size can be increased by flipping coins of success probabilities <M post=","><MFrac num="1" de="k"/></M> and empty vertices are eliminated from the tree.
         The <Rs n="mst">merkle-search-trees</Rs> (<Rs n="mst" />)<Bib item="auvolat2019merkle" /> independently reinvent <Rs n="skip_tree" /> with flexible probabilities similar to <Rs n="dense_skip_tree"/>, but without the compression of empty vertices.
+        Additionally, <Rs n="prolly_tree">prolly-trees</Rs> <Bib item="boodman2016prolly" /> provide a slightly different take, where a rolling hash function over the keys/values is used to determine the set of items in each node, rather than via explicit split and join operations.
       </P>
 
       <P>
