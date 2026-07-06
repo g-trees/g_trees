@@ -470,7 +470,7 @@ const exp = (
                 all <Rs n="item" /> in <TreeChild tree={<R n="tree_t" />}><M>0</M></TreeChild> are less than <TreeItem tree={<R n="tree_t" />}><M>0</M></TreeItem>,
               </Li>
               <Li>
-                for all <M post=",">0 \lt <Def n="searchtree_i" r="i" /> \lt <R n="tree_c" /> - 1</M> all <Rs n="item" /> in <TreeChild tree={<R n="tree_t" />}><M><R n="searchtree_i" /></M></TreeChild> are less than <TreeItem tree={<R n="tree_t" />}><M><R n="searchtree_i" /> + 1</M></TreeItem> and greater than <NoWrap><TreeItem tree={<R n="tree_t" />}><M><R n="searchtree_i" /> - 1</M></TreeItem>,</NoWrap> and
+                for all <M post=",">0 \lt <Def n="searchtree_i" r="i" /> \lt <R n="tree_c" /> - 1</M> all <Rs n="item" /> in <TreeChild tree={<R n="tree_t" />}><M><R n="searchtree_i" /></M></TreeChild> are less than <TreeItem tree={<R n="tree_t" />}><M><R n="searchtree_i" /></M></TreeItem> and greater than <NoWrap><TreeItem tree={<R n="tree_t" />}><M><R n="searchtree_i" /> - 1</M></TreeItem>,</NoWrap> and
               </Li>
               <Li>
                 all <Rs n="item" /> in <TreeChild tree={<R n="tree_t" />}><M><R n="tree_c" /> - 1</M></TreeChild> are greater than <TreeItem tree={<R n="tree_t" />}><M><R n="tree_c" /> - 2</M></TreeItem>.
@@ -2987,7 +2987,3 @@ const exp = (
 // Evaluate the expression. This has exciting side-effects,
 // like creating a directory that contains a website!
 ctx.evaluate(exp);
-
-/*
-what, why (link), sync/nb/nb_send, basics: producer-buffered-bulk, consumer-buffered-bulk, piping, wrappers, feature flags, queues, converters
-*/
